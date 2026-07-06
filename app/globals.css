@@ -39,8 +39,10 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
+
+
 /* Fixed photographic background with a dark scrim for legibility */
-body::before {
+/* body::before {
   content: "";
   position: fixed;
   inset: 0;
@@ -55,7 +57,7 @@ body::before {
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
-}
+} */
 
 /* Dashed section divider used between sections */
 .divider {

@@ -83,6 +83,11 @@ export const profile: Profile = {
   photoHover: "/cat.png", // hover the photo to crossfade to this
 };
 
+/* ───────────────────────────  BACKGROUND  ─────────────────────────── */
+// Lower = darker background scrim, higher = lighter background scrim.
+// export const backgroundOverlay = 0.86;
+export const backgroundOverlay = 0.6;
+
 /* ────────────────────────────  BADGES  ───────────────────────────── */
 
 export const statusBadges: StatusBadge[] = [

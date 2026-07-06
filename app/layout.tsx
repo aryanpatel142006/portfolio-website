@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { EB_Garamond, Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { profile } from "@/lib/content";
+import BackgroundFrame from "@/components/BackgroundFrame";
 import ScrollProgress from "@/components/ScrollProgress";
 import CommandPalette from "@/components/CommandPalette";
 
@@ -41,7 +42,8 @@ export default function RootLayout({
       lang="en"
       className={`${serif.variable} ${sans.variable} ${mono.variable} h-full antialiased`}
     >
-      <body className="min-h-full">
+      <body className="relative min-h-full bg-background">
+        <BackgroundFrame />
         <ScrollProgress />
         {children}
         <CommandPalette />
