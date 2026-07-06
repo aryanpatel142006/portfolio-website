@@ -1,26 +1,179 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Dark, desaturated teal-charcoal palette */
+  --background: #191e1e;
+  --foreground: #e8e8e3;
+  --muted: #8b938f;
+  --muted-strong: #a7ada9;
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --card: rgba(255, 255, 255, 0.02);
+  --card-hover: rgba(255, 255, 255, 0.045);
+  --accent: #5fb2a1;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-muted-strong: var(--muted-strong);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+  --color-accent: var(--accent);
+
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Fixed photographic background with a dark scrim for legibility */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: linear-gradient(
+      180deg,
+      rgba(13, 16, 17, 0.9) 0%,
+      rgba(16, 20, 20, 0.8) 38%,
+      rgba(14, 18, 18, 0.86) 100%
+    ),
+    url("/bg.png");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+/* Dashed section divider used between sections */
+.divider {
+  border: 0;
+  border-top: 1px dashed var(--border-strong);
+}
+
+/* Infinite awards marquee */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee 40s linear infinite;
+  width: max-content;
+}
+
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+
+@media (hover: hover) {
+  .marquee-group:hover .marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+/* Project modal enter animations */
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-overlay-in {
+  animation: overlay-in 0.18s ease-out;
+}
+
+.animate-panel-in {
+  animation: panel-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Section entrance — fade + rise on load */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.fade-up {
+  animation: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* "Live" pulsing dot for the current role */
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(95, 178, 161, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(95, 178, 161, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(95, 178, 161, 0);
+  }
+}
+
+.pulse-dot {
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+  .animate-overlay-in,
+  .animate-panel-in,
+  .fade-up,
+  .pulse-dot {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
 }
