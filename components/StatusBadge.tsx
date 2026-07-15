@@ -39,7 +39,7 @@ export function BadgeIcon({
 
 export default function StatusBadge({ badge }: { badge: StatusBadgeType }) {
   return (
-    <div className="inline-flex cursor-pointer items-center gap-2.5 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-3 backdrop-blur-sm transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.06]">
+    <div className="inline-flex items-center gap-2.5 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-3 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.06]">
       <BadgeIcon icon={badge.icon} iconUrl={badge.iconUrl} alt={badge.iconAlt ?? badge.org} size={badge.size ?? 18} />
       <span className="flex flex-col leading-tight">
         <span className="text-[13px] font-medium text-foreground">

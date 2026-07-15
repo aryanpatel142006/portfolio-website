@@ -41,6 +41,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${serif.variable} ${sans.variable} ${mono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="relative min-h-full bg-background">
         <BackgroundFrame />

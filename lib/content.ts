@@ -217,8 +217,87 @@ export const stack: SkillGroup[] = [
   },
 ];
 
-/* ────────────────────────  CHATBOT CONTEXT  ──────────────────────── */
+/* ──────────────────────  OFF-DUTY (the secret)  ──────────────────── */
 /**
+ * The hidden "beyond the code" section. Unlock it any of four ways:
+ *   • the ⌘K palette — type "whoami", "sudo", "off-duty", or "human"
+ *   • click your hero photo 5 times
+ *   • the Konami code:  ↑ ↑ ↓ ↓ ← → ← → B A
+ * Once found it stays unlocked (saved in the browser).
+ * Everything below is yours to edit — swap the placeholders for real life.
+ */
+
+export type NowItem = {
+  label: string; // e.g. "reading", "learning", "playing", "obsessed with"
+  value: string; // the thing itself
+};
+
+export type MediaItem = {
+  title: string;
+  creator?: string; // author / artist / director
+  kind: "book" | "music" | "show" | "film" | "podcast";
+  take?: string; // your one-line hot take
+};
+
+export type CatPhoto = {
+  src: string; // image path in /public
+  caption?: string; // optional hover caption
+};
+
+export const offDuty = {
+  // A short, human intro line shown under the heading.
+  intro:
+    "the version of me that isn't staring at a terminal. currently caffeinated, probably losing to my cat.",
+
+  // ── /now — what's true this week. Keep it fresh; it's the point. ──
+  now: [
+    { label: "reading", value: "«swap me» — a book you're actually reading" },
+    { label: "learning", value: "«swap me» — a skill / topic you're picking up" },
+    { label: "playing", value: "«swap me» — a game / instrument / sport" },
+    { label: "obsessed with", value: "«swap me» — the current rabbit hole" },
+  ] as NowItem[],
+
+  // ── hobbies — quick, low-commitment tags. Emoji optional. ──
+  hobbies: [
+    "☕ chai",
+    "🐱 cat dad",
+    "🎧 music",
+    "📷 photography",
+    "🍜 finding the best ramen",
+    "🎮 gaming",
+  ],
+
+  // ── bookshelf / media diet — the stuff in rotation, with takes. ──
+  media: [
+    {
+      title: "«a book»",
+      creator: "author",
+      kind: "book",
+      take: "one-line take that shows your taste",
+    },
+    {
+      title: "«an album»",
+      creator: "artist",
+      kind: "music",
+      take: "the one on repeat right now",
+    },
+    {
+      title: "«a show»",
+      creator: "creator",
+      kind: "show",
+      take: "the comfort rewatch, no notes",
+    },
+  ] as MediaItem[],
+
+  // ── cat corner — drop photos in /public and reference them here. ──
+  catPhotos: [
+    { src: "/cat.png", caption: "the boss" },
+    // { src: "/cat2.png", caption: "3am zoomies" },
+    // { src: "/travel.png", caption: "somewhere green" },
+  ] as CatPhoto[],
+};
+
+/* ────────────────────────  CHATBOT CONTEXT  ──────────────────────── *//**
  * The `bio` below is the grounding context for the "query me" AI chatbot.
  * It answers ONLY from this + the structured content above — edit freely.
  */

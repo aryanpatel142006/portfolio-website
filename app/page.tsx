@@ -7,6 +7,7 @@ import Projects from "@/components/Projects";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import TechStack from "@/components/TechStack";
+import OffDuty from "@/components/OffDuty";
 
 export default function Home() {
   return (
@@ -41,6 +42,8 @@ export default function Home() {
       </Reveal>
 
       <div className="mx-auto max-w-2xl">
+        {/* Hidden until unlocked (⌘K "whoami" · tap the photo 5× · Konami code) */}
+        <OffDuty />
         <Footer />
       </div>
     </main>

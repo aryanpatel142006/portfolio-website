@@ -39,6 +39,19 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
+/* Keyboard focus indicator */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Cursor spotlight is meaningless without a pointer — hide on touch */
+@media (hover: none) {
+  .spotlight {
+    display: none;
+  }
+}
+
 
 
 /* Fixed photographic background with a dark scrim for legibility */
@@ -173,6 +186,9 @@ body {
   .animate-panel-in,
   .fade-up,
   .pulse-dot {
+    animation: none;
+  }
+  .animate-pulse {
     animation: none;
   }
   html {

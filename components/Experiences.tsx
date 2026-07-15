@@ -14,7 +14,7 @@ export default function Experiences() {
           <div
             key={exp.role + exp.org}
             className={[
-              "group flex min-h-[100px] cursor-pointer items-center justify-between gap-5 rounded-xl border px-5 py-5 backdrop-blur-sm transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.06]",
+              "group flex min-h-[100px] items-center justify-between gap-5 rounded-xl border px-5 py-5 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.06]",
               exp.active
                 ? "border-accent/40 bg-accent/[0.07]"
                 : "border-white/[0.08] bg-white/[0.03]",

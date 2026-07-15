@@ -3,11 +3,11 @@ import { awards } from "@/lib/content";
 
 function AwardPill({ name, logo }: { name: string; logo?: string }) {
   return (
-    <div className="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 backdrop-blur-sm transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.06] hover:shadow-[0_10px_28px_-12px_rgba(0,0,0,0.6)]">
+    <div className="flex shrink-0 items-center gap-2.5 rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.06] hover:shadow-[0_10px_28px_-12px_rgba(0,0,0,0.6)]">
       {logo ? (
         <Image
           src={logo}
-          alt={name}
+          alt=""
           width={20}
           height={20}
           className="h-5 w-5 rounded object-contain"

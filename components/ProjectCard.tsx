@@ -25,12 +25,12 @@ export default function ProjectCard({
       onMouseMove={trackCursor}
       aria-label={`Open ${project.title}`}
       style={{ "--mx": "50%", "--my": "50%" } as CSSProperties}
-      className="group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.03] p-3 text-left backdrop-blur-md transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.06] hover:shadow-[0_18px_50px_-18px_rgba(95,178,161,0.30)]"
+      className="group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.04] p-3 text-left transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.06] hover:shadow-[0_18px_50px_-18px_rgba(95,178,161,0.30)]"
     >
       {/* Cursor-following spotlight */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        className="spotlight pointer-events-none absolute inset-0 z-0 rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
           background:
             "radial-gradient(240px circle at var(--mx) var(--my), rgba(255,255,255,0.10), transparent 65%)",
@@ -52,7 +52,7 @@ export default function ProjectCard({
         {project.image ? (
           <Image
             src={project.image}
-            alt={project.title}
+            alt=""
             fill
             sizes="(max-width: 640px) 100vw, 320px"
             className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { socials, profile } from "@/lib/content";
+import { unlockOffDuty } from "@/lib/offduty";
 import { SocialGlyph } from "./icons";
 
 type Command = {
@@ -75,6 +76,17 @@ export default function CommandPalette() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return commands;
+    // Secret: typing an identity word surfaces the hidden off-duty section.
+    const secretWords = ["whoami", "sudo", "off-duty", "offduty", "human"];
+    if (secretWords.some((w) => w.includes(q) || q.includes(w))) {
+      const secret: Command = {
+        id: "offduty",
+        label: "whoami — the off-duty me",
+        hint: "secret",
+        run: () => unlockOffDuty(),
+      };
+      return [secret, ...commands.filter((c) => c.label.toLowerCase().includes(q))];
+    }
     return commands.filter((c) => c.label.toLowerCase().includes(q));
   }, [commands, query]);
 
@@ -95,14 +107,16 @@ export default function CommandPalette() {
     };
   }, []);
 
-  // When open: focus, lock scroll
+  // When open: focus, lock scroll, restore focus on close
   useEffect(() => {
     if (!open) return;
+    const prevActive = document.activeElement as HTMLElement | null;
     inputRef.current?.focus();
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = prev;
+      prevActive?.focus();
     };
   }, [open]);
 
@@ -153,8 +167,9 @@ export default function CommandPalette() {
         >
           <button
             aria-label="Close"
+            tabIndex={-1}
             onClick={close}
-            className="absolute inset-0 cursor-default bg-black/70 backdrop-blur-sm"
+            className="absolute inset-0 cursor-default bg-black/40 backdrop-blur-md"
           />
           <div className="animate-panel-in relative z-10 w-full max-w-lg overflow-hidden rounded-xl border border-white/[0.12] bg-[#1b2121]/95 shadow-2xl backdrop-blur-xl">
             <input
@@ -175,7 +190,7 @@ export default function CommandPalette() {
                 <button
                   key={cmd.id}
                   data-idx={i}
-                  onMouseMove={() => setActive(i)}
+                  onMouseMove={() => active !== i && setActive(i)}
                   onClick={() => {
                     cmd.run();
                     if (cmd.id !== "copy-email") close();

@@ -18,7 +18,7 @@ export default function TechStack() {
               {group.items.map((item) => (
                 <span
                   key={item}
-                  className="cursor-default rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 font-mono text-[12px] text-muted-strong backdrop-blur-sm transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-accent/40 hover:bg-accent/[0.08] hover:text-foreground hover:shadow-[0_10px_24px_-12px_rgba(95,178,161,0.4)]"
+                  className="cursor-default rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 font-mono text-[12px] text-muted-strong transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-accent/40 hover:bg-accent/[0.08] hover:text-foreground hover:shadow-[0_10px_24px_-12px_rgba(95,178,161,0.4)]"
                 >
                   {item}
                 </span>
