@@ -74,7 +74,28 @@ export default function OffDuty() {
     }
   }, [justUnlocked]);
 
-  if (!unlocked) return null;
+  // Locked: show a friendly invitation to reveal the off-duty side.
+  if (!unlocked) {
+    return (
+      <div className="mt-16 flex justify-center">
+        <button
+          type="button"
+          onClick={() => unlockOffDuty()}
+          className="group flex flex-col items-center gap-1.5 rounded-2xl border border-white/[0.08] bg-white/[0.03] px-6 py-5 text-center transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/30 hover:bg-accent/[0.05]"
+        >
+          <span className="text-[13px] text-muted-strong transition-colors group-hover:text-foreground">
+            wanna know me when i&rsquo;m not geeking out over code?
+          </span>
+          <span className="inline-flex items-center gap-1.5 font-mono text-[11px] text-accent">
+            the off-duty me
+            <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-0.5">
+              &rarr;
+            </span>
+          </span>
+        </button>
+      </div>
+    );
+  }
 
   return (
     <section

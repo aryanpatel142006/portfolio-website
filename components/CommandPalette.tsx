@@ -41,10 +41,8 @@ export default function CommandPalette() {
   const commands: Command[] = useMemo(() => {
     const nav: Command[] = [
       { id: "top", label: "Go to top", hint: "section", run: () => window.scrollTo({ top: 0, behavior: "smooth" }) },
-      { id: "awards", label: "Awards", hint: "section", run: () => scrollToLabel("Awards") },
       { id: "query", label: "Ask me anything", hint: "section", run: () => scrollToLabel("Ask me anything") },
       { id: "exp", label: "Experiences", hint: "section", run: () => scrollToLabel("Experiences") },
-      { id: "stack", label: "Stack", hint: "section", run: () => scrollToLabel("Tech stack") },
       { id: "projects", label: "Projects", hint: "section", run: () => scrollToLabel("Projects") },
     ];
     const links: Command[] = socials.map((s) => ({
