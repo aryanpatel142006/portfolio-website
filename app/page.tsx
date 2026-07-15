@@ -10,7 +10,7 @@ import OffDuty from "@/components/OffDuty";
 
 export default function Home() {
   return (
-    <main className="mx-auto w-full max-w-2xl px-5 py-16 sm:px-8 sm:py-24">
+    <main className="mx-auto w-[92%] py-16 sm:w-[90%] sm:py-24 lg:w-[80%] xl:w-[60%] 2xl:w-[40%]">
       <Reveal>
         <Hero />
       </Reveal>
