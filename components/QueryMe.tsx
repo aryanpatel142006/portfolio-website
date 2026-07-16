@@ -42,7 +42,7 @@ export default function QueryMe() {
     <section aria-label="Ask me anything">
       <SectionHeading>query me</SectionHeading>
 
-      <div className="flex flex-col rounded-xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-md">
+      <div className="field-focus flex flex-col rounded-xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-md">
         {/* Conversation area */}
         <div
           ref={scrollRef}

@@ -6,6 +6,7 @@
 
 export const OFFDUTY_STORAGE_KEY = "portfolio-offduty-unlocked";
 export const OFFDUTY_UNLOCK_EVENT = "offduty:unlock";
+export const OFFDUTY_RELOCK_EVENT = "offduty:relock";
 export const OFFDUTY_ANCHOR_LABEL = "Off duty";
 
 /** Fire from any trigger. Persists + notifies the mounted section to reveal + scroll. */
@@ -14,6 +15,14 @@ export function unlockOffDuty() {
     window.localStorage.setItem(OFFDUTY_STORAGE_KEY, "1");
   } catch {}
   window.dispatchEvent(new CustomEvent(OFFDUTY_UNLOCK_EVENT));
+}
+
+/** "Back to work mode" — collapse the warm off-duty world back to the teaser. */
+export function relockOffDuty() {
+  try {
+    window.localStorage.removeItem(OFFDUTY_STORAGE_KEY);
+  } catch {}
+  window.dispatchEvent(new CustomEvent(OFFDUTY_RELOCK_EVENT));
 }
 
 /** The Konami sequence: ↑ ↑ ↓ ↓ ← → ← → B A */
