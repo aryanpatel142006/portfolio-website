@@ -1,52 +1,42 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
 import { offDuty } from "@/lib/content";
+import NonMainstream from "@/components/NonMainstream";
+import AnimeStats from "@/components/AnimeStats";
+import { prefetchTracks } from "@/lib/tracks-client";
 import {
   KONAMI_SEQUENCE,
   OFFDUTY_ANCHOR_LABEL,
   OFFDUTY_RELOCK_EVENT,
-  OFFDUTY_STORAGE_KEY,
   OFFDUTY_UNLOCK_EVENT,
   relockOffDuty,
   unlockOffDuty,
 } from "@/lib/offduty";
 
-const kindGlyph: Record<string, string> = {
-  book: "📖",
-  music: "🎵",
-  show: "📺",
-  film: "🎬",
-  podcast: "🎙️",
-};
-
-// External store: the persisted unlock flag. SSR + first client render read
-// `false` (getServerSnapshot) so there's no hydration mismatch; the real value
-// arrives after commit.
-function subscribe(onChange: () => void) {
-  window.addEventListener(OFFDUTY_UNLOCK_EVENT, onChange);
-  window.addEventListener(OFFDUTY_RELOCK_EVENT, onChange);
-  window.addEventListener("storage", onChange);
-  return () => {
-    window.removeEventListener(OFFDUTY_UNLOCK_EVENT, onChange);
-    window.removeEventListener(OFFDUTY_RELOCK_EVENT, onChange);
-    window.removeEventListener("storage", onChange);
-  };
-}
-function getSnapshot() {
-  return window.localStorage.getItem(OFFDUTY_STORAGE_KEY) === "1";
-}
-
 export default function OffDuty() {
-  const unlocked = useSyncExternalStore(subscribe, getSnapshot, () => false);
+  // Session-only reveal — no persistence, so a reload returns to the teaser
+  // and the easter egg can be found again.
+  const [unlocked, setUnlocked] = useState(false);
   const [justUnlocked, setJustUnlocked] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
-  // A live unlock (this session) should reveal + scroll; a restored one shouldn't.
+  // Warm the song-shelf cache the moment the page loads — long before the user
+  // unlocks off-duty — so the cards are already resolved when the shelf mounts.
   useEffect(() => {
-    const onUnlock = () => setJustUnlocked(true);
-    const onRelock = () => setJustUnlocked(false);
+    prefetchTracks();
+  }, []);
+
+  // Reveal on any unlock trigger; collapse on relock.
+  useEffect(() => {
+    const onUnlock = () => {
+      setUnlocked(true);
+      setJustUnlocked(true);
+    };
+    const onRelock = () => {
+      setUnlocked(false);
+      setJustUnlocked(false);
+    };
     window.addEventListener(OFFDUTY_UNLOCK_EVENT, onUnlock);
     window.addEventListener(OFFDUTY_RELOCK_EVENT, onRelock);
     return () => {
@@ -148,35 +138,14 @@ export default function OffDuty() {
         {offDuty.intro}
       </p>
 
-      {/* now */}
-      {offDuty.now.length > 0 && (
-        <div className="mb-8">
-          <p className="mb-3 font-mono text-[11px] uppercase tracking-wider text-muted">
-            now
-          </p>
-          <div className="flex flex-col gap-2">
-            {offDuty.now.map((item) => (
-              <div
-                key={item.label}
-                className="flex items-baseline gap-3 rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.06]"
-              >
-                <span className="w-28 shrink-0 pt-0.5 font-mono text-[11px] uppercase tracking-wide text-accent">
-                  {item.label}
-                </span>
-                <span className="font-serif text-[16px] text-foreground/90">
-                  {item.value}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* anime — live AniList stats + currently watching */}
+      <AnimeStats />
 
       {/* hobbies */}
       {offDuty.hobbies.length > 0 && (
         <div className="mb-8">
           <p className="mb-3 font-mono text-[11px] uppercase tracking-wider text-muted">
-            when i&rsquo;m not coding
+            things i like when i&rsquo;m not coding
           </p>
           <div className="flex flex-wrap gap-2">
             {offDuty.hobbies.map((h) => (
@@ -191,69 +160,8 @@ export default function OffDuty() {
         </div>
       )}
 
-      {/* bookshelf / media diet */}
-      {offDuty.media.length > 0 && (
-        <div className="mb-8">
-          <p className="mb-3 font-mono text-[11px] uppercase tracking-wider text-muted">
-            in rotation
-          </p>
-          <div className="flex flex-col gap-2">
-            {offDuty.media.map((m) => (
-              <div
-                key={m.kind + m.title}
-                className="flex items-start gap-3 rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.06]"
-              >
-                <span aria-hidden className="text-base leading-none">
-                  {kindGlyph[m.kind] ?? "•"}
-                </span>
-                <div className="flex flex-col leading-snug">
-                  <span className="font-serif text-[16px] text-foreground">
-                    {m.title}
-                    {m.creator && (
-                      <span className="text-muted"> · {m.creator}</span>
-                    )}
-                  </span>
-                  {m.take && (
-                    <span className="mt-0.5 font-serif text-[13px] italic text-muted">
-                      {m.take}
-                    </span>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* cat corner */}
-      {offDuty.catPhotos.length > 0 && (
-        <div>
-          <p className="mb-3 font-mono text-[11px] uppercase tracking-wider text-muted">
-            cat corner
-          </p>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {offDuty.catPhotos.map((photo, i) => (
-              <figure
-                key={photo.src + i}
-                className="group relative aspect-square overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.03]"
-              >
-                <Image
-                  src={photo.src}
-                  alt={photo.caption ?? ""}
-                  fill
-                  sizes="(max-width: 640px) 45vw, 200px"
-                  className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                />
-                {photo.caption && (
-                  <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-3 pb-2 pt-6 font-mono text-[10px] text-white/90 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    {photo.caption}
-                  </figcaption>
-                )}
-              </figure>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* non-mainstream songs — Spotify-powered shelf */}
+      <NonMainstream />
     </section>
   );
 }

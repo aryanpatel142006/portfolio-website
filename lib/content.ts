@@ -111,9 +111,9 @@ export const socials: Social[] = [
 export const awards: Award[] = [
   { name: "National Science & Technology Exhibition" },
   { name: "Rutgers Honors College — Dean's List" },
-  { name: "HerLaunch Hackathon" },
-  { name: "Rutgers University" },
-  { name: "Blueprint @ Rutgers" },
+  { name: "HackRU" },
+  { name: "Break Through Tech" },
+  { name: "Blueprint" },
   { name: "SEED2S" },
 ];
 
@@ -219,82 +219,87 @@ export const stack: SkillGroup[] = [
 
 /* ──────────────────────  OFF-DUTY (the secret)  ──────────────────── */
 /**
- * The hidden "beyond the code" section. Unlock it any of four ways:
+ * The hidden "beyond the code" section. Unlock it any of three ways:
  *   • the ⌘K palette — type "whoami", "sudo", "off-duty", or "human"
  *   • click your hero photo 5 times
  *   • the Konami code:  ↑ ↑ ↓ ↓ ← → ← → B A
- * Once found it stays unlocked (saved in the browser).
- * Everything below is yours to edit — swap the placeholders for real life.
+ * It's session-only — a reload hides it again so it stays an easter egg.
+ *
+ * ⇩ Everything below is the ONE place to edit this section. Swap the values,
+ *   add/remove list items freely — the UI renders whatever's here.
  */
 
 export type NowItem = {
-  label: string; // e.g. "reading", "learning", "playing", "obsessed with"
+  label: string; // e.g. "training", "watching", "learning", "obsessed with"
   value: string; // the thing itself
 };
 
-export type MediaItem = {
-  title: string;
-  creator?: string; // author / artist / director
-  kind: "book" | "music" | "show" | "film" | "podcast";
-  take?: string; // your one-line hot take
-};
-
-export type CatPhoto = {
-  src: string; // image path in /public
-  caption?: string; // optional hover caption
-};
+// A song for the "non-mainstream songs" shelf. Paste a Spotify link/URI, OR a
+// plain "Song Name — Artist" string (resolved via Spotify search server-side).
+export type SongEntry = string;
 
 export const offDuty = {
   // A short, human intro line shown under the heading.
   intro:
-    "the version of me that isn't staring at a terminal. currently caffeinated, probably losing to my cat.",
-
-  // ── /now — what's true this week. Keep it fresh; it's the point. ──
-  now: [
-    { label: "reading", value: "«swap me» — a book you're actually reading" },
-    { label: "learning", value: "«swap me» — a skill / topic you're picking up" },
-    { label: "playing", value: "«swap me» — a game / instrument / sport" },
-    { label: "obsessed with", value: "«swap me» — the current rabbit hole" },
-  ] as NowItem[],
+    "the version of me that isn't staring at a terminal — chasing progress in the gym, queuing up an anime, listening to the most random songs, and doing garba till my legs give out.",
 
   // ── hobbies — quick, low-commitment tags. Emoji optional. ──
   hobbies: [
-    "☕ chai",
-    "🐱 cat dad",
+    "🏋️ gym",
+    "🇯🇵 anime",
+    "💃 garba",
     "🎧 music",
-    "📷 photography",
-    "🍜 finding the best ramen",
-    "🎮 gaming",
+    // "🎮 gaming",
+    // "🍜 finding the best ramen",
   ],
 
-  // ── bookshelf / media diet — the stuff in rotation, with takes. ──
-  media: [
-    {
-      title: "«a book»",
-      creator: "author",
-      kind: "book",
-      take: "one-line take that shows your taste",
-    },
-    {
-      title: "«an album»",
-      creator: "artist",
-      kind: "music",
-      take: "the one on repeat right now",
-    },
-    {
-      title: "«a show»",
-      creator: "creator",
-      kind: "show",
-      take: "the comfort rewatch, no notes",
-    },
-  ] as MediaItem[],
+  // ── non-mainstream songs — the shelf under off-duty. Paste Spotify links
+  //    (open.spotify.com/track/… or spotify:track:…) OR plain "Song — Artist"
+  //    names. Server resolves album art + artist via the Spotify API. ──
+  nonMainstream: [
+    "https://open.spotify.com/track/3StShCGECtZMW2yp9XkFYv", // THER IT IS 
+    "https://open.spotify.com/track/1Xp2sxCBpDFCcerKKh1ik7", // MAJJA NI LIFE
+    "https://open.spotify.com/track/4N7LGbba3i05Ymt3lUN4IT", // car keys — Tsumyoki, Venserto, lil help
+    "https://open.spotify.com/track/6vH6xKa1vh9ihWrLYZAmU8?autoplay_ok=1", // Banda kaam ka
+    "https://open.spotify.com/track/0pMACt1jSBlH8mKdaE1TSv", // Don't even text - gini
+    "https://open.spotify.com/track/4TFYFMssJiMwREPUauwWbt", // SAVEEREN
 
-  // ── cat corner — drop photos in /public and reference them here. ──
-  catPhotos: [
-    { src: "/cat.png", caption: "the boss" },
-    // { src: "/cat2.png", caption: "3am zoomies" },
-    // { src: "/travel.png", caption: "somewhere green" },
-  ] as CatPhoto[],
+    // ── desi indie / bollymood deep cuts ──
+    // "https://open.spotify.com/track/51EAvQ6RYU14VwUaMJHsnD", // ROOP — NAYEL, Hasan Raheem
+    // "https://open.spotify.com/track/5ThyDv6aRVU8AH4vXQNldF", // Finding Her — Kushagra, Bharath, Saaheal
+    // "https://open.spotify.com/track/4DEbmP6I9FTUDD6uXmlhVc", // Doobey — OAFF, Savera, Lothika
+    "https://open.spotify.com/track/2oSnGQbI4tZxImmCs2c4PP", // Nasamajh — Aditya Rikhari
+    // "https://open.spotify.com/track/0qPoQiQIhgyMaP7X78hxri", // Akhiyaan Gulaab — Mitraz
+    "https://open.spotify.com/track/7eQoMQdE4JqngwYDOqLBU0", // Superstar — dox, JASKARAN, Rita Kim
+    // "https://open.spotify.com/track/5cCKdYNQtM3TC8PXQljxyA", // kidhar? — Maanu, Talal Qureshi, Zahra Paracha
+    // "https://open.spotify.com/track/03BjH2SL1lAB2M55Gcj2pV", // Bardali — Sushant KC
+    // "https://open.spotify.com/track/2YrSozvJeJCMqEaQ9EVLfD", // Bheegi Bheegi — James (Gangster)
+    // ── japanese city pop (JAP) ──
+    "https://open.spotify.com/album/48I17j8JwxGEe2FQAiQ75P", // STAY WITH ME
+    "https://open.spotify.com/track/3x4378ztiLvFmm2nuzEI0C", // EVENGELION
+    "https://open.spotify.com/track/0kdqcbwei4MDWFEX5f33yG", // bling bang bang born
+    "https://open.spotify.com/track/1rN9QoVxw5U7TJkyaUR8C1", // TOKYO GOHUL OPENING
+    "https://open.spotify.com/track/6bfjEGSR7DyC8MK8cp3ZCp", // Blood Blockade Battlefront (S1 ED)
+    // ── english ──
+    // "https://open.spotify.com/track/1NXbNEAcPvY5G1xvfN57aA", // Dracula — Tame Impala
+    // "https://open.spotify.com/track/1TSxLktSlIdEsjTGWB4Fub", // It's Only — ODESZA, Zyra
+    // "https://open.spotify.com/track/2P5tq6IKBKjlFSZ6FZlZk6", // Make Way For The Sun — O & The Mo
+    // ── rap ──
+    "https://open.spotify.com/track/1Jsos1mzwTwYGOndYN5h8V", // Farebi — Chaar Diwaari, Raftaar
+    "https://open.spotify.com/track/7CVw4gVPpH1TPQttQGVmhZ", // Maharani — Karun, Lambo Drive, Arpit Bala
+    // "https://open.spotify.com/track/2FDTHlrBguDzQkp7PVj16Q", // Sprinter — Dave, Central Cee
+    // "https://open.spotify.com/track/7H5CsjEafNygkvcm69RevN", // COLD — Nemzzz
+  ] as SongEntry[],
+
+  // ── anime stats — live from AniList (public profile, no auth needed). ──
+  //  username: the AniList handle to pull stats from. Empty/placeholder hides
+  //  the whole section. showStats: master toggle. comparisons: optional custom
+  //  "i could've done X in this much time" jokes, picked by hours watched.
+  anilist: {
+    username: "aryanpatel142006",
+    showStats: true,
+    comparisons: [] as { hours: number; line: string }[],
+  },
 };
 
 /* ────────────────────────  CHATBOT CONTEXT  ──────────────────────── *//**
