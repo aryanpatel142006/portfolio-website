@@ -1,6 +1,6 @@
 import Hero from "@/components/Hero";
 import Divider from "@/components/Divider";
-import AwardsMarquee from "@/components/AwardsMarquee";
+import TechMarquee from "@/components/TechMarquee";
 import QueryMe from "@/components/QueryMe";
 import Experiences from "@/components/Experiences";
 import Projects from "@/components/Projects";
@@ -16,7 +16,7 @@ export default function Home() {
       </Reveal>
       <Divider />
       <Reveal>
-        <AwardsMarquee />
+        <TechMarquee />
       </Reveal>
       <div className="h-14 sm:h-16" />
       <Reveal delay={60}>

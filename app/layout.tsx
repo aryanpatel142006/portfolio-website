@@ -44,6 +44,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="relative min-h-full bg-background">
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/devicon@2.16.0/devicon.min.css"
+        />
         <BackgroundFrame />
         <ScrollProgress />
         {children}
