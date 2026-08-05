@@ -15,7 +15,9 @@ import {
 } from "@/lib/content";
 
 // Model is a Vercel AI Gateway string. Override with CHAT_MODEL if desired.
-const MODEL = process.env.CHAT_MODEL ?? "anthropic/claude-haiku-4.5";
+// const MODEL = process.env.CHAT_MODEL ?? "anthropic/claude-haiku-4.5";
+// const MODEL = process.env.CHAT_MODEL ?? "anthropic/claude-3-haiku";
+const MODEL = process.env.CHAT_MODEL ?? "google/gemini-2.5-flash";
 
 // Allow streaming responses up to 30s
 export const maxDuration = 30;
