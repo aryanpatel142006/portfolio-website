@@ -4,7 +4,9 @@ import {
   convertToModelMessages,
   createUIMessageStream,
   createUIMessageStreamResponse,
+  type LanguageModel,
 } from "ai";
+import { google } from "@ai-sdk/google";
 import {
   profile,
   bio,
@@ -27,14 +29,27 @@ import {
  * As of 2026-08 these are the only two models this account's free tier
  * actually serves — everything else returns rate-limited immediately.
  */
-const MODEL_CHAIN = (
+type ChainEntry = { id: string; model: string | LanguageModel };
+
+const MODEL_CHAIN: ChainEntry[] = (
   process.env.CHAT_MODELS ??
   process.env.CHAT_MODEL ??
   "google/gemini-2.5-flash,google/gemini-2.5-flash-lite"
 )
   .split(",")
   .map((m) => m.trim())
-  .filter(Boolean);
+  .filter(Boolean)
+  .map((id) => ({ id, model: id }));
+
+// Independent free pool: a direct Google AI Studio key (free tier: ~10 req/min,
+// hundreds/day) sits below the Gateway models. Zero config here — just add
+// GOOGLE_GENERATIVE_AI_API_KEY to the env and these activate.
+if (process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+  MODEL_CHAIN.push(
+    { id: "google-direct/gemini-2.5-flash", model: google("gemini-2.5-flash") },
+    { id: "google-direct/gemini-2.5-flash-lite", model: google("gemini-2.5-flash-lite") },
+  );
+}
 
 // How long a rate-limited model sits out before we try it again.
 const COOLDOWN_MS = 90_000;
@@ -130,32 +145,32 @@ export async function POST(req: Request) {
   let text: string | null = null;
   let modelUsed = "none";
   const now = Date.now();
-  const eligible = MODEL_CHAIN.filter((m) => (benchedUntil.get(m) ?? 0) < now);
+  const eligible = MODEL_CHAIN.filter((e) => (benchedUntil.get(e.id) ?? 0) < now);
   // If literally everything is benched, still try the full chain — the
   // ledger may be stale (limits can reset before our cooldown lapses).
   const attempts = eligible.length > 0 ? eligible : MODEL_CHAIN;
 
-  for (const model of attempts) {
+  for (const entry of attempts) {
     try {
       const result = await generateText({
-        model,
+        model: entry.model,
         system,
         messages: modelMessages,
         maxRetries: 0, // fail fast — the fallback IS the retry strategy
       });
       text = result.text;
-      modelUsed = model;
-      benchedUntil.delete(model);
+      modelUsed = entry.id;
+      benchedUntil.delete(entry.id);
       break;
     } catch (err) {
       if (isRateLimit(err)) {
-        benchedUntil.set(model, Date.now() + COOLDOWN_MS);
+        benchedUntil.set(entry.id, Date.now() + COOLDOWN_MS);
         continue; // next model in the chain
       }
-      // Non-rate-limit errors (bad key, network) won't be fixed by a
-      // different model behind the same gateway — use the friendly fallback.
-      console.error("chat: non-rate-limit failure on", model, err);
-      break;
+      // A non-rate-limit error on one provider can still be worth retrying
+      // on the next entry (e.g. gateway outage vs direct key) — log and move on.
+      console.error("chat: failure on", entry.id, err);
+      continue;
     }
   }
 

@@ -44,7 +44,7 @@ export default function QueryMe() {
       <SectionHeading
         index="02"
         label="query me"
-        title="Don't read about me. Interrogate me."
+        title="Don't just read about me — ask me."
       />
       <p className="-mt-4 mb-6 max-w-md text-[13.5px] leading-relaxed text-muted">
         A live model, grounded in my actual resume — it only knows what&rsquo;s
