@@ -13,6 +13,14 @@ export default function Experiences() {
         title="Where I've been useful."
       />
 
+      {/* epigraph — a wink above the receipts */}
+      <p className="-mt-4 mb-8 max-w-md font-serif text-[15px] italic leading-relaxed text-muted">
+        &ldquo;experience is the name everyone gives to their mistakes.&rdquo;
+        <span className="ml-2 whitespace-nowrap font-mono text-[10px] uppercase not-italic tracking-[0.12em]">
+          &mdash; oscar wilde
+        </span>
+      </p>
+
       <div className="flex flex-col">
         {experiences.map((exp, i) => (
           <article

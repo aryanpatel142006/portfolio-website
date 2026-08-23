@@ -164,6 +164,15 @@ export default function OffDuty() {
 
       {/* non-mainstream songs — Spotify-powered shelf */}
       <NonMainstream />
+
+      {/* closing epigraph — the easter egg's mic drop */}
+      <p className="mt-10 max-w-md font-serif text-[15px] italic leading-relaxed text-muted">
+        &ldquo;in order to be irreplaceable, one must always be
+        different.&rdquo;
+        <span className="ml-2 whitespace-nowrap font-mono text-[10px] uppercase not-italic tracking-[0.12em]">
+          &mdash; coco chanel
+        </span>
+      </p>
     </section>
   );
 }
