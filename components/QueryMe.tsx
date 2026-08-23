@@ -119,7 +119,7 @@ export default function QueryMe() {
             <p className="mt-4 whitespace-pre-wrap text-[12px] text-red-500/90">
               {error.message && error.message !== "An error occurred."
                 ? error.message
-                : "couldn't reach the model — check AI_GATEWAY_API_KEY (and that AI Gateway billing is enabled)."}
+                : "hmm, something went sideways — give it another try, or just email me instead."}
             </p>
           )}
         </div>
