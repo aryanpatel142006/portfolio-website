@@ -1,5 +1,6 @@
 import { profile, statusBadges, socials } from "@/lib/content";
 import HeroPhoto from "./HeroPhoto";
+import LogoMark from "./LogoMark";
 import { ArrowUpRight } from "./icons";
 
 export default function Hero() {
@@ -12,9 +13,14 @@ export default function Hero() {
       <div className="mt-6 flex flex-col-reverse items-start gap-10 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-3xl">
           <h1 className="display text-[17vw] text-foreground sm:text-7xl md:text-8xl xl:text-[7rem]">
-            Aryan
-            <br />
-            Patel<span className="text-accent">.</span>
+            <span className="sr-only">Aryan Patel.</span>
+            {/* visual layer: the hand-drawn glyph stands in for the first A */}
+            <span aria-hidden>
+              <LogoMark size="0.74em" className="inline-block mr-[-0.1em]" />
+              ryan
+              <br />
+              Patel<span className="text-accent">.</span>
+            </span>
           </h1>
 
           {profile.pronunciation && (
