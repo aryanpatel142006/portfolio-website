@@ -3,6 +3,7 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { Moon, SunMedium } from "lucide-react";
 import { profile } from "@/lib/content";
+import LogoMark from "./LogoMark";
 
 /* New Brunswick wall clock — first tick is deferred a frame so the server
    and client never disagree about the time. */
@@ -82,10 +83,10 @@ export default function SiteHeader() {
       <div className="mx-auto flex w-[94%] items-center justify-between py-3 sm:w-[90%] lg:w-[82%] xl:w-[70%] 2xl:w-[58%]">
         <a
           href="#top"
-          aria-label="Back to top"
-          className="font-serif text-[17px] font-semibold tracking-tight text-foreground"
+          aria-label="Aryan Patel — back to top"
+          className="text-foreground transition-opacity hover:opacity-70"
         >
-          AP<span className="text-accent">.</span>
+          <LogoMark size={22} />
         </a>
 
         <div className="flex items-center gap-4">
