@@ -35,7 +35,7 @@ function Art({ src, title }: { src: string | null; title: string }) {
   return (
     <span
       aria-hidden
-      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-white/10 bg-accent/[0.06] text-accent"
+      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-border bg-accent/[0.06] text-accent"
       title={title}
     >
       ♪
@@ -69,7 +69,7 @@ function Card({ track }: { track: Track }) {
   );
 
   const cls =
-    "group flex items-center gap-3 rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/40 hover:bg-accent/[0.08]";
+    "group flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/40 hover:bg-accent/[0.08]";
 
   if (track.url) {
     return (
@@ -83,11 +83,11 @@ function Card({ track }: { track: Track }) {
 
 function Skeleton() {
   return (
-    <div className="flex items-center gap-3 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3">
-      <span className="h-12 w-12 shrink-0 animate-pulse rounded-md bg-white/[0.06]" />
+    <div className="flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-3">
+      <span className="h-12 w-12 shrink-0 animate-pulse rounded-md bg-card-hover" />
       <div className="flex flex-col gap-1.5">
-        <span className="h-3 w-32 animate-pulse rounded bg-white/[0.06]" />
-        <span className="h-2.5 w-20 animate-pulse rounded bg-white/[0.05]" />
+        <span className="h-3 w-32 animate-pulse rounded bg-card-hover" />
+        <span className="h-2.5 w-20 animate-pulse rounded bg-card-hover" />
       </div>
     </div>
   );

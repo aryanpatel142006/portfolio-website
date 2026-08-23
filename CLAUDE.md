@@ -18,7 +18,9 @@ There is no test suite. Env setup: `cp .env.example .env.local` and fill in keys
 
 ## Architecture
 
-A minimalist single-page portfolio (App Router + TypeScript + Tailwind CSS v4 via PostCSS). `app/page.tsx` assembles section components; `app/layout.tsx` owns fonts (serif/sans/mono CSS variables), metadata, and always-mounted chrome (`BackgroundFrame`, `ScrollProgress`, `CommandPalette`).
+An editorial single-page portfolio (App Router + TypeScript + Tailwind CSS v4 via PostCSS) — paper/ink design, numbered sections, Fraunces display serif. `app/page.tsx` assembles section components; `app/layout.tsx` owns fonts (serif/sans/mono CSS variables), metadata, an inline no-flash theme script, and always-mounted chrome (`SiteHeader`, `ScrollProgress`, `CommandPalette`).
+
+**Theming**: `html[data-theme="light"|"dark"]` drives every color through tokens in `globals.css` (`--background`, `--accent`, `--card`, …). Components must use token classes (`bg-card`, `border-border`, `text-muted`) — never hardcoded palette values like `bg-white/5` — or the light theme breaks. The toggle lives in `SiteHeader` (mirrors the attribute via `useSyncExternalStore`; persisted in `localStorage.theme`). Note: `eslint-config-next` 16 enforces `react-hooks/set-state-in-effect` — don't call setState synchronously in effects.
 
 **`lib/content.ts` is the single source of truth for all site data** — name, bio, badges, socials, experiences, projects, awards, and off-duty config. Components and the chatbot's system prompt all read from it; content changes go there, not into components.
 

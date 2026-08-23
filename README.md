@@ -31,8 +31,8 @@ vercel --prod                # production deploy
 
 ## Structure
 
-- `app/layout.tsx` — fonts (serif / sans / mono), metadata, background
-- `app/page.tsx` — assembles the sections
+- `app/layout.tsx` — fonts (Fraunces / Inter / Geist Mono), theme init, header, metadata
+- `app/page.tsx` — assembles the numbered editorial sections
 - `app/api/chat/route.ts` — AI streaming endpoint (grounded in `lib/content.ts`)
-- `components/` — Hero, AwardsMarquee, QueryMe, Experiences, Projects, Footer, icons
-- `lib/content.ts` — **your data**
+- `components/` — Hero, TechMarquee, QueryMe (terminal), Experiences, CaseStudies, Recognition, Footer
+- `lib/content.ts` — **your data** (profile, experience bullets, projects, education, certs, off-duty)

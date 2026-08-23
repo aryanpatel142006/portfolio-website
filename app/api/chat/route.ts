@@ -12,6 +12,8 @@ import {
   experiences,
   projects,
   awards,
+  certifications,
+  education,
 } from "@/lib/content";
 
 // Model is a Vercel AI Gateway string. Override with CHAT_MODEL if desired.
@@ -28,7 +30,12 @@ function buildSystemPrompt(): string {
     .join(", ");
 
   const exp = experiences
-    .map((e) => `- ${e.role} at ${e.org} (${e.period})`)
+    .map((e) => {
+      const bullets = e.bullets?.length
+        ? `\n${e.bullets.map((b) => `    • ${b}`).join("\n")}`
+        : "";
+      return `- ${e.role} at ${e.org} (${e.period})${bullets}`;
+    })
     .join("\n");
 
   const proj = projects
@@ -40,7 +47,15 @@ function buildSystemPrompt(): string {
     })
     .join("\n");
 
-  const awardList = awards.map((a) => a.name).join(", ");
+  const awardList = awards
+    .map((a) => (a.detail ? `${a.name} (${a.detail})` : a.name))
+    .join(", ");
+
+  const certList = certifications
+    .map((c) => `${c.name} — ${c.issuer}`)
+    .join(", ");
+
+  const edu = `${education.degree} at ${education.school} (${education.period}, GPA ${education.gpa}, ${education.honors.join(", ")})`;
 
   return [
     `You are ${profile.name}'s personal website assistant. You answer questions about ${profile.name} in the first person, as if you are ${profile.name} speaking casually.`,
@@ -52,11 +67,15 @@ function buildSystemPrompt(): string {
     ``,
     badges ? `Currently: ${badges}.` : ``,
     ``,
+    `=== EDUCATION ===\n${edu}`,
+    ``,
     experiences.length ? `=== EXPERIENCE ===\n${exp}` : ``,
     ``,
     projects.length ? `=== PROJECTS ===\n${proj}` : ``,
     ``,
     awards.length ? `=== AWARDS / RECOGNITION ===\n${awardList}` : ``,
+    ``,
+    certifications.length ? `=== CERTIFICATIONS ===\n${certList}` : ``,
   ]
     .filter(Boolean)
     .join("\n");

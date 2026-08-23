@@ -89,7 +89,7 @@ export default function OffDuty() {
         <button
           type="button"
           onClick={() => unlockOffDuty()}
-          className="group flex flex-col items-center gap-1.5 rounded-2xl border border-white/[0.08] bg-white/[0.03] px-6 py-5 text-center transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/30 hover:bg-accent/[0.05]"
+          className="group flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-card px-6 py-5 text-center transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/30 hover:bg-accent/[0.05]"
         >
           <span className="text-[13px] text-muted-strong transition-colors group-hover:text-foreground">
             wanna know me when i&rsquo;m not geeking out over code?
@@ -115,17 +115,19 @@ export default function OffDuty() {
 
       <div className="mb-7 flex items-end justify-between gap-4">
         <div>
-          <p className="mb-1.5 font-mono text-[11px] tracking-wide text-accent">
+          <p className="kicker mb-2">
+            <span className="text-accent">07</span>
+            <span aria-hidden> / </span>
             off the clock
           </p>
-          <h2 className="font-serif text-3xl font-medium italic text-foreground sm:text-4xl">
-            off duty
+          <h2 className="display text-3xl italic text-foreground sm:text-4xl">
+            the off-duty me
           </h2>
         </div>
         <button
           type="button"
           onClick={backToWork}
-          className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 px-3.5 py-1.5 font-mono text-[11px] text-muted transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:border-accent/40 hover:text-foreground"
+          className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border px-3.5 py-1.5 font-mono text-[11px] text-muted transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:border-accent/40 hover:text-foreground"
         >
           <span aria-hidden className="transition-transform duration-300 group-hover:-translate-x-0.5">
             &larr;
@@ -151,7 +153,7 @@ export default function OffDuty() {
             {offDuty.hobbies.map((h) => (
               <span
                 key={h}
-                className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-[12px] text-muted-strong transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/40 hover:bg-accent/[0.08] hover:text-foreground"
+                className="rounded-lg border border-border bg-card px-3 py-1.5 text-[12px] text-muted-strong transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/40 hover:bg-accent/[0.08] hover:text-foreground"
               >
                 {h}
               </span>
