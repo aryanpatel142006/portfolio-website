@@ -1,5 +1,4 @@
 import { profile, socials } from "@/lib/content";
-import LogoMark from "./LogoMark";
 import { ArrowUpRight } from "./icons";
 
 export default function Footer() {
@@ -40,21 +39,9 @@ export default function Footer() {
           </a>
         )}
 
-        {/* signed, like the end of a letter */}
-        <div className="mt-14">
-          <span className="sr-only">— Aryan</span>
-          <div aria-hidden className="origin-left -rotate-2">
-            <p className="font-serif text-[15px] italic text-muted">yours,</p>
-            <p className="mt-1.5 text-4xl text-foreground">
-              <LogoMark size="0.8em" className="inline-block mr-[-0.1em]" />
-              <span className="font-serif italic tracking-tight">ryan</span>
-            </p>
-          </div>
-        </div>
-
         <nav
           aria-label="Social links"
-          className="mt-12 flex flex-wrap gap-x-6 gap-y-2"
+          className="mt-10 flex flex-wrap gap-x-6 gap-y-2"
         >
           {socials.map((s) => (
             <a
