@@ -90,7 +90,7 @@ export const profile: Profile = {
   name: "Aryan Patel",
   pronunciation: "/ah-ri-an/",
   tagline:
-    "cs & data science student at rutgers, building things that make technology more human.",
+    "cs & data science student at rutgers — building data pipelines, ml tools, and interfaces that make technology more human.",
   location: "New Brunswick, NJ",
   photo: "/pfp.png", // your photo
   photoHover: "/cat.png", // hover the photo to crossfade to this
@@ -157,8 +157,8 @@ export const experiences: Experience[] = [
     active: true,
     bullets: [
       "Modeling multi-facility financial transaction data in a normalized relational database — replacing Excel-based revenue tracking with a single source of truth for downstream analytics.",
-      "Building automated Python + Pandas ETL pipelines over daily revenue time series, targeting a 99%+ cut in manual reporting hours.",
-      "Shipping a live revenue dashboard surfacing time-series trends, backed by data validation, role-based access, and audit trails projected to all but eliminate entry errors.",
+      "Building automated Python + Pandas ETL pipelines over daily revenue time series — a day of hand-built spreadsheet reporting becomes a one-click run.",
+      "Shipping a live revenue dashboard surfacing time-series trends, backed by data validation, role-based access, and audit trails.",
     ],
     iconUrl: "https://img.logo.dev/njnbpa.org?token=pk_FNeueCUtR0qx7cHP9ZPGrA&format=webp&retina=true",
     icon: "🅿️",
@@ -280,12 +280,12 @@ export type SkillGroup = {
 
 export const stack: SkillGroup[] = [
   {
-    label: "languages",
-    items: ["Python", "Java", "C", "SQL", "TypeScript", "JavaScript", "R", "HTML/CSS"],
-  },
-  {
     label: "quantitative & ml",
     items: ["Pandas", "NumPy", "Scikit-learn", "TensorFlow", "Matplotlib", "Seaborn", "ETL pipelines", "data modeling", "time-series analysis"],
+  },
+  {
+    label: "languages",
+    items: ["Python", "Java", "C", "SQL", "TypeScript", "JavaScript", "R", "HTML/CSS"],
   },
   {
     label: "frameworks",
@@ -392,8 +392,8 @@ conferencing system, and in early 2025 I was a Software Engineering Fellow at Bl
 I'm also a member of SEED2S (Student Equity, Excellence and Diversity in Data Science).
 
 At NBPA I'm architecting a normalized relational database to replace Excel-based revenue
-tracking and building automated Python + Pandas ETL pipelines targeting a 99%+ cut in manual
-reporting hours, with validation, role-based access, audit trails, and a live revenue dashboard.
+tracking and building automated Python + Pandas ETL pipelines that turn a day of manual
+reporting into a one-click run, with validation, role-based access, audit trails, and a live revenue dashboard.
 
 A couple of projects I'm proud of:
 - VoxIQ, an adaptive accessibility assessment platform (Python, MySQL, OpenCV, MediaPipe,
