@@ -131,7 +131,7 @@ function exhaustedMessage(): string {
   const email = socials
     .find((s) => s.type === "email")
     ?.href.replace("mailto:", "");
-  return `whoa — i'm getting a lot of questions right now and my free-tier brain needs a minute to cool down. try me again in a bit${
+  return `whoa — i'm getting a lot of questions right now and need a minute to catch my breath. try me again in a bit${
     email ? `, or just email the real me: ${email}` : ""
   } 🙂`;
 }
