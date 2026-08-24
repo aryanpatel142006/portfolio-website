@@ -156,9 +156,9 @@ export const experiences: Experience[] = [
     period: "June 2026 → Present",
     active: true,
     bullets: [
-      "Architecting a normalized relational database to replace Excel-based revenue tracking, modeling multi-facility financial transaction data for reliable downstream analytics.",
-      "Building automated Python + Pandas ETL pipelines over daily revenue feeds, targeting a 99%+ cut in manual reporting hours.",
-      "Shipping validation, role-based access, and audit trails projected to all but eliminate entry errors — plus one-click reports and a live revenue dashboard.",
+      "Modeling multi-facility financial transaction data in a normalized relational database — replacing Excel-based revenue tracking with a single source of truth for downstream analytics.",
+      "Building automated Python + Pandas ETL pipelines over daily revenue time series, targeting a 99%+ cut in manual reporting hours.",
+      "Shipping a live revenue dashboard surfacing time-series trends, backed by data validation, role-based access, and audit trails projected to all but eliminate entry errors.",
     ],
     iconUrl: "https://img.logo.dev/njnbpa.org?token=pk_FNeueCUtR0qx7cHP9ZPGrA&format=webp&retina=true",
     icon: "🅿️",
