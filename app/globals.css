@@ -264,29 +264,8 @@ html[data-theme="dark"] .offduty-world {
   }
 }
 
-/* Reduced motion: don't freeze the belt mid-frame — collapse it into a tidy
-   wrapped grid (single copy, no mask) so it reads as designed, not stopped. */
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track {
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: center;
-    row-gap: 2.25rem;
-  }
-  .marquee-track > ul {
-    flex-wrap: wrap;
-    justify-content: center;
-    row-gap: 2.25rem;
-    width: 100%;
-  }
-  .marquee-track > ul[aria-hidden="true"] {
-    display: none;
-  }
-  .marquee-mask {
-    mask-image: none;
-    -webkit-mask-image: none;
-  }
-}
+/* Reduced motion: the belt simply rests (animation is killed in the master
+   reduced-motion block below) — a paused marquee with its edge fade intact. */
 
 /* Overlay / panel entrances (palette) */
 @keyframes overlay-in {
