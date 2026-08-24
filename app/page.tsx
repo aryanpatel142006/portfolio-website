@@ -12,10 +12,9 @@ import OffDuty from "@/components/OffDuty";
 
 export default function Home() {
   return (
-    <main id="top" className="fade-up mx-auto w-[92%] py-10 sm:w-[88%] sm:py-14">
-      <Reveal>
-        <Hero />
-      </Reveal>
+    <main id="top" className="mx-auto w-[92%] py-10 sm:w-[88%] sm:py-14">
+      {/* hero choreographs its own entrance with pure CSS — no Reveal */}
+      <Hero />
 
       <Divider />
 
@@ -32,15 +31,12 @@ export default function Home() {
 
       <Divider />
 
-      <Reveal>
-        <Experiences />
-      </Reveal>
+      {/* experiences + case studies reveal per-entry inside the component */}
+      <Experiences />
 
       <Divider />
 
-      <Reveal>
-        <CaseStudies />
-      </Reveal>
+      <CaseStudies />
 
       <Divider />
 

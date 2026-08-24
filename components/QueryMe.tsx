@@ -52,7 +52,7 @@ export default function QueryMe() {
       </p>
 
       {/* the terminal */}
-      <div className="field-focus overflow-hidden rounded-lg border border-border-strong bg-surface shadow-[var(--shadow)]">
+      <div className="terminal-in field-focus overflow-hidden rounded-lg border border-border-strong bg-surface shadow-[var(--shadow)]">
         {/* title bar */}
         <div className="flex items-center gap-2 border-b border-border px-4 py-2.5">
           <span aria-hidden className="flex gap-1.5">
@@ -88,7 +88,7 @@ export default function QueryMe() {
                 key={q}
                 onClick={() => submit(q)}
                 disabled={busy}
-                className="hitbox rounded-md border border-border bg-card px-3 py-1.5 text-[12px] text-muted-strong transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/50 hover:bg-card-hover hover:text-foreground disabled:opacity-50"
+                className="pressable hitbox rounded-md border border-border bg-card px-3 py-1.5 text-[12px] text-muted-strong transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/50 hover:bg-card-hover hover:text-foreground disabled:opacity-50"
               >
                 {q}
               </button>
@@ -156,7 +156,7 @@ export default function QueryMe() {
               type="button"
               onClick={() => stop()}
               aria-label="Stop generating"
-              className="hitbox text-muted transition-colors hover:text-foreground"
+              className="pressable hitbox text-muted transition-colors hover:text-foreground"
             >
               <span
                 aria-hidden
@@ -168,7 +168,7 @@ export default function QueryMe() {
               type="submit"
               disabled={!input.trim()}
               aria-label="Send"
-              className="hitbox text-muted transition-colors hover:text-foreground disabled:opacity-40"
+              className="pressable hitbox text-muted transition-colors hover:text-foreground disabled:opacity-40"
             >
               <SendIcon width={16} height={16} />
             </button>

@@ -63,7 +63,7 @@ function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
-      className="hitbox inline-flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-strong transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:text-foreground"
+      className="pressable hitbox inline-flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-strong transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:text-foreground"
     >
       {theme === "dark" ? (
         <SunMedium className="h-4 w-4" aria-hidden />
@@ -76,7 +76,7 @@ function ThemeToggle() {
 
 export default function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
+    <header className="header-in sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex w-[94%] items-center justify-between py-3 sm:w-[90%] lg:w-[82%] xl:w-[70%] 2xl:w-[58%]">
         <a
           href="#top"
@@ -108,7 +108,7 @@ export default function SiteHeader() {
             type="button"
             onClick={() => window.dispatchEvent(new CustomEvent("cmdk:open"))}
             aria-label="Open command palette"
-            className="hitbox hidden items-center gap-1.5 rounded-full border border-border px-2.5 py-1 font-mono text-[11px] text-muted transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:text-foreground sm:inline-flex"
+            className="pressable hitbox hidden items-center gap-1.5 rounded-full border border-border px-2.5 py-1 font-mono text-[11px] text-muted transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:text-foreground sm:inline-flex"
           >
             <kbd>⌘</kbd>
             <kbd>K</kbd>

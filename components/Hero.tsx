@@ -6,13 +6,13 @@ import { ArrowUpRight } from "./icons";
 export default function Hero() {
   return (
     <section aria-label="Introduction" className="pt-4 sm:pt-10">
-      <p className="kicker">
+      <p className="rise kicker">
         portfolio · {profile.location.toLowerCase()}
       </p>
 
       <div className="mt-6 flex flex-col-reverse items-start gap-10 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-3xl">
-          <h1 className="display text-[17vw] text-foreground sm:text-7xl md:text-8xl xl:text-[7rem]">
+          <h1 className="rise rise-1 display text-[17vw] text-foreground sm:text-7xl md:text-8xl xl:text-[7rem]">
             <span className="sr-only">Aryan Patel.</span>
             {/* visual layer: the hand-drawn glyph stands in for the first A */}
             <span aria-hidden>
@@ -24,18 +24,18 @@ export default function Hero() {
           </h1>
 
           {profile.pronunciation && (
-            <p className="mt-3 font-serif text-lg italic text-muted">
+            <p className="rise rise-2 mt-3 font-serif text-lg italic text-muted">
               ({profile.pronunciation})
             </p>
           )}
 
-          <p className="mt-6 max-w-md text-[15px] leading-relaxed text-muted-strong">
+          <p className="rise rise-3 mt-6 max-w-md text-[15px] leading-relaxed text-muted-strong">
             {profile.tagline}
           </p>
 
           {/* currently — live roles, straight from the content file */}
           {statusBadges.length > 0 && (
-            <div className="mt-8">
+            <div className="rise rise-4 mt-8">
               <p className="kicker mb-2.5">currently</p>
               <ul className="flex flex-col gap-1.5">
                 {statusBadges.map((b) => (
@@ -52,7 +52,7 @@ export default function Hero() {
           )}
 
           {/* editorial text links instead of icon soup */}
-          <nav aria-label="Social links" className="mt-8 flex flex-wrap gap-x-6 gap-y-2">
+          <nav aria-label="Social links" className="rise rise-5 mt-8 flex flex-wrap gap-x-6 gap-y-2">
             {socials.map((s) => (
               <a
                 key={s.type + s.href}
@@ -69,11 +69,13 @@ export default function Hero() {
         </div>
 
         {profile.photo && (
-          <HeroPhoto
-            photo={profile.photo}
-            photoHover={profile.photoHover}
-            name={profile.name}
-          />
+          <div className="polaroid-in">
+            <HeroPhoto
+              photo={profile.photo}
+              photoHover={profile.photoHover}
+              name={profile.name}
+            />
+          </div>
         )}
       </div>
     </section>

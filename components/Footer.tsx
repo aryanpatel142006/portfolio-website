@@ -1,4 +1,5 @@
 import { profile, socials } from "@/lib/content";
+import Reveal from "./Reveal";
 import { ArrowUpRight } from "./icons";
 
 export default function Footer() {
@@ -11,12 +12,12 @@ export default function Footer() {
     <footer id="contact" aria-label="Contact" className="mt-10 scroll-mt-20">
       <hr className="divider" />
 
-      <div className="py-16 sm:py-20">
+      <Reveal className="py-16 sm:py-20">
         <p className="kicker">06 / contact</p>
         <h2 className="display mt-4 text-5xl text-foreground sm:text-6xl md:text-7xl">
           Let&rsquo;s build
           <br />
-          something <span className="italic text-accent">human</span>.
+          something <span className="draw-word italic text-accent">human</span>.
         </h2>
 
         <p className="mt-6 max-w-md text-[14px] leading-relaxed text-muted-strong">
@@ -27,7 +28,7 @@ export default function Footer() {
         {email && (
           <a
             href={`mailto:${email}`}
-            className="group mt-8 inline-flex items-center gap-3 border border-border-strong bg-surface px-6 py-4 font-mono text-[13px] text-foreground shadow-[var(--shadow)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:border-accent hover:text-accent"
+            className="group pressable mt-8 inline-flex items-center gap-3 border border-border-strong bg-surface px-6 py-4 font-mono text-[13px] text-foreground shadow-[var(--shadow)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:border-accent hover:text-accent"
           >
             {email}
             <ArrowUpRight
@@ -55,7 +56,7 @@ export default function Footer() {
             </a>
           ))}
         </nav>
-      </div>
+      </Reveal>
 
       <div className="flex flex-col gap-1.5 border-t border-border py-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="font-mono text-[11px] text-muted">

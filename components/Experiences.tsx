@@ -1,5 +1,6 @@
 import { experiences } from "@/lib/content";
 import BadgeIcon from "./BadgeIcon";
+import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
 
 export default function Experiences() {
@@ -7,26 +8,30 @@ export default function Experiences() {
 
   return (
     <section id="experience" aria-label="Experiences" className="scroll-mt-20">
-      <SectionHeading
-        index="03"
-        label="experience"
-        title="The work so far."
-      />
+      <Reveal>
+        <SectionHeading
+          index="03"
+          label="experience"
+          title="The work so far."
+        />
 
-      {/* epigraph — a wink above the receipts */}
-      <p className="-mt-4 mb-8 max-w-md font-serif text-[15px] italic leading-relaxed text-muted">
-        &ldquo;experience is the name everyone gives to their mistakes.&rdquo;
-        <span className="ml-2 whitespace-nowrap font-mono text-[10px] uppercase not-italic tracking-[0.12em]">
-          &mdash; oscar wilde
-        </span>
-      </p>
+        {/* epigraph — a wink above the receipts */}
+        <p className="-mt-4 mb-8 max-w-md font-serif text-[15px] italic leading-relaxed text-muted">
+          &ldquo;experience is the name everyone gives to their mistakes.&rdquo;
+          <span className="ml-2 whitespace-nowrap font-mono text-[10px] uppercase not-italic tracking-[0.12em]">
+            &mdash; oscar wilde
+          </span>
+        </p>
+      </Reveal>
 
       <div className="flex flex-col">
         {experiences.map((exp, i) => (
-          <article
+          <Reveal
             key={exp.role + exp.org}
-            className="group grid grid-cols-1 gap-x-8 gap-y-3 border-b border-border py-8 first:border-t sm:grid-cols-[56px_1fr_auto]"
+            delay={(i % 2) * 90}
+            className="border-b border-border first:border-t"
           >
+          <article className="group grid grid-cols-1 gap-x-8 gap-y-3 py-8 sm:grid-cols-[56px_1fr_auto]">
             {/* index */}
             <span className="kicker pt-1.5 sm:pt-2">
               {String(i + 1).padStart(2, "0")}
@@ -78,6 +83,7 @@ export default function Experiences() {
               {exp.period}
             </span>
           </article>
+          </Reveal>
         ))}
       </div>
     </section>

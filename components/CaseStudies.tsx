@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { projects } from "@/lib/content";
 import ProjectPlate from "./ProjectPlate";
+import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
 import { ArrowUpRight, TrophyIcon } from "./icons";
 
@@ -9,18 +10,21 @@ export default function CaseStudies() {
 
   return (
     <section id="work" aria-label="Projects" className="scroll-mt-20">
-      <SectionHeading
-        index="04"
-        label="selected work"
-        title="Problems I've chased from idea to shipped."
-      />
+      <Reveal>
+        <SectionHeading
+          index="04"
+          label="selected work"
+          title="Problems I've chased from idea to shipped."
+        />
+      </Reveal>
 
       <div className="flex flex-col">
         {projects.map((p, i) => (
-          <article
+          <Reveal
             key={p.title}
-            className="group border-b border-border py-10 first:border-t"
+            className="border-b border-border first:border-t"
           >
+          <article className="group py-10">
             {/* meta row */}
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
               <span className="kicker">
@@ -139,6 +143,7 @@ export default function CaseStudies() {
               </div>
             </div>
           </article>
+          </Reveal>
         ))}
       </div>
     </section>
