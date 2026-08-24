@@ -10,7 +10,7 @@ export default function Experiences() {
       <SectionHeading
         index="03"
         label="experience"
-        title="Where I've been useful."
+        title="The work so far."
       />
 
       {/* epigraph — a wink above the receipts */}
