@@ -47,3 +47,4 @@ next-env.d.ts
 # local assistant/tooling files — never publish
 CLAUDE.md
 .claude/
+Quant Project Roadmap.pdf
