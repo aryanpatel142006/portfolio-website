@@ -23,7 +23,6 @@ export default function QueryMe() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const busy = status === "submitted" || status === "streaming";
-  const started = messages.length > 0;
   const me = firstName(profile.name).toLowerCase();
 
   useEffect(() => {
