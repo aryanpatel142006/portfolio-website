@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: import.meta.dirname,
   },
+  // Let phones on the LAN load dev-server assets (Next blocks cross-origin
+  // dev requests by default, which silently kills hydration on 192.168.x.x).
+  allowedDevOrigins: ["192.168.68.61"],
   images: {
     // Allow first-party SVG placeholders (e.g. the profile photo placeholder).
     dangerouslyAllowSVG: true,
