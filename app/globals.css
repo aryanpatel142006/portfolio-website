@@ -117,12 +117,6 @@ textarea:focus-visible {
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 14%, transparent);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .field-focus {
-    transition: none;
-  }
-}
-
 /* ── Editorial furniture ─────────────────────────────────────────── */
 
 /* Page column: hairline rules on both edges, like a set page. */
@@ -264,8 +258,6 @@ html[data-theme="dark"] .offduty-world {
   }
 }
 
-/* Reduced motion: the belt simply rests (animation is killed in the master
-   reduced-motion block below) — a paused marquee with its edge fade intact. */
 
 /* Overlay / panel entrances (palette) */
 @keyframes overlay-in {
@@ -343,7 +335,7 @@ html[data-theme="dark"] .offduty-world {
 /* ── Project-plate animations ────────────────────────────────────
    Each motion depicts the system working: a CV scanline sweeping, a
    fingertip lock pulsing, a rocket flying the launch curve, dashes
-   marching. Slow, small, and all disabled under reduced motion. */
+   marching. Slow and small — always on, by the owner's choice. */
 
 @keyframes plate-scan {
   0%,
@@ -467,40 +459,3 @@ html[data-theme="dark"] .offduty-world {
   animation: eq-bounce 0.9s ease-in-out infinite;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track,
-  .animate-overlay-in,
-  .animate-panel-in,
-  .fade-up,
-  .pulse-dot,
-  .eq-bar,
-  .caret-blink,
-  .warm-in,
-  .plate-scan,
-  .plate-ping,
-  .plate-wave,
-  .plate-wave-2,
-  .plate-dash,
-  .plate-rocket,
-  .plate-dot-1,
-  .plate-dot-2,
-  .plate-dot-3 {
-    animation: none;
-  }
-  /* with the flight animation off, show the static rocket at the apex */
-  .plate-rocket {
-    display: none !important;
-  }
-  .plate-rocket-static {
-    display: initial !important;
-  }
-  .animate-pulse {
-    animation: none;
-  }
-  .draw-link {
-    transition: none;
-  }
-  html {
-    scroll-behavior: auto;
-  }
-}
