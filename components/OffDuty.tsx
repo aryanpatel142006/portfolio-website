@@ -116,7 +116,7 @@ export default function OffDuty() {
       <div className="mb-7 flex items-end justify-between gap-4">
         <div>
           <p className="kicker mb-2">
-            <span className="text-accent">07</span>
+            <span className="text-accent">appendix</span>
             <span aria-hidden> / </span>
             off the clock
           </p>

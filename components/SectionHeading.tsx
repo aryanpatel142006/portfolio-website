@@ -15,10 +15,13 @@ export default function SectionHeading({
         <span aria-hidden> / </span>
         {label}
       </p>
-      {title && (
+      {title ? (
         <h2 className="display mt-2 text-3xl text-foreground sm:text-4xl">
           {title}
         </h2>
+      ) : (
+        // keep the document outline intact for screen readers
+        <h2 className="sr-only">{label}</h2>
       )}
     </div>
   );

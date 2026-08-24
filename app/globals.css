@@ -442,18 +442,4 @@ html[data-theme="dark"] .offduty-world {
   animation: plate-blip 1.2s ease-in-out 0.4s infinite;
 }
 
-/* "Now listening" equalizer bars */
-@keyframes eq-bounce {
-  0%,
-  100% {
-    height: 4px;
-  }
-  50% {
-    height: 14px;
-  }
-}
-.eq-bar {
-  height: 14px;
-  animation: eq-bounce 0.9s ease-in-out infinite;
-}
 

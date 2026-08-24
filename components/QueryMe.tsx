@@ -18,7 +18,7 @@ function firstName(name: string) {
 }
 
 export default function QueryMe() {
-  const { messages, sendMessage, status, error } = useChat();
+  const { messages, sendMessage, status, error, stop } = useChat();
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -82,19 +82,19 @@ export default function QueryMe() {
             />
           </p>
 
-          {!started && (
-            <div className="mt-3 flex flex-wrap gap-2">
-              {SUGGESTIONS.map((q) => (
-                <button
-                  key={q}
-                  onClick={() => submit(q)}
-                  className="rounded-md border border-border bg-card px-3 py-1.5 text-[12px] text-muted-strong transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/50 hover:bg-card-hover hover:text-foreground"
-                >
-                  {q}
-                </button>
-              ))}
-            </div>
-          )}
+          {/* suggestion chips stay available for follow-ups, not just openers */}
+          <div className="mt-3 flex flex-wrap gap-2">
+            {SUGGESTIONS.map((q) => (
+              <button
+                key={q}
+                onClick={() => submit(q)}
+                disabled={busy}
+                className="hitbox rounded-md border border-border bg-card px-3 py-1.5 text-[12px] text-muted-strong transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/50 hover:bg-card-hover hover:text-foreground disabled:opacity-50"
+              >
+                {q}
+              </button>
+            ))}
+          </div>
 
           {messages.map((m) => {
             const text = m.parts
@@ -149,18 +149,31 @@ export default function QueryMe() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="send a message..."
-            disabled={busy}
             aria-label="Ask a question"
-            className="flex-1 bg-transparent font-mono text-[13px] text-foreground placeholder:text-muted focus:outline-none disabled:opacity-50"
+            className="flex-1 bg-transparent font-mono text-[13px] text-foreground placeholder:text-muted focus:outline-none"
           />
-          <button
-            type="submit"
-            disabled={busy || !input.trim()}
-            aria-label="Send"
-            className="text-muted transition-colors hover:text-foreground disabled:opacity-40"
-          >
-            <SendIcon width={16} height={16} />
-          </button>
+          {busy ? (
+            <button
+              type="button"
+              onClick={() => stop()}
+              aria-label="Stop generating"
+              className="hitbox text-muted transition-colors hover:text-foreground"
+            >
+              <span
+                aria-hidden
+                className="block h-3 w-3 rounded-[2px] bg-current"
+              />
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={!input.trim()}
+              aria-label="Send"
+              className="hitbox text-muted transition-colors hover:text-foreground disabled:opacity-40"
+            >
+              <SendIcon width={16} height={16} />
+            </button>
+          )}
         </form>
       </div>
     </section>

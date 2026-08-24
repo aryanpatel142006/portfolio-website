@@ -231,7 +231,7 @@ export const projects: Project[] = [
     badges: [{ label: "National Award" }],
     plate: "vision",
     tags: ["Python", "MySQL", "OpenCV", "MediaPipe", "Tkinter", "PyAutoGUI", "Pyttsx3"],
-    // links: [{ label: "github", href: "https://github.com/..." }],
+    links: [{ label: "github", href: "https://github.com/aryanpatel142006/CBSE-SCIENCE-EXHIBITION" }],
     image: "/VoxIQ.png",
   },
   {
@@ -249,7 +249,10 @@ export const projects: Project[] = [
     badges: [{ label: "Hackathon", icon: "⚡" }],
     plate: "launch",
     tags: ["React", "TypeScript", "Supabase", "Gemini API", "Fiserv API", "Tailwind", "Figma"],
-    // links: [{ label: "devpost", href: "https://devpost.com/..." }],
+    links: [
+      { label: "devpost", href: "https://devpost.com/software/herlaunch" },
+      { label: "github", href: "https://github.com/aryanpatel142006/HackHers-2026" },
+    ],
     image: "/HerLaunch.png",
   },
   {
