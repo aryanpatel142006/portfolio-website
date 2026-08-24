@@ -270,12 +270,14 @@ html[data-theme="dark"] .offduty-world {
   animation: panel-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Section entrance — fade + rise on scroll. Long tail on an expo-out curve:
-   most of the movement happens immediately, the settle is gentle. */
+/* Section entrance — fade + rise. Expo-out: brisk start, long gentle
+   settle, so the motion is felt without ever blocking reading. Also used
+   as the pure-CSS page-load entrance on <main> (runs without JS, so it
+   can never gate content). */
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
@@ -283,7 +285,7 @@ html[data-theme="dark"] .offduty-world {
   }
 }
 .fade-up {
-  animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* "Live" pulsing dot for current roles */

@@ -37,9 +37,9 @@ export default function Reveal({
           io.disconnect();
         }
       },
-      // Positive bottom margin starts the animation just BEFORE the section
-      // scrolls into view, so it's already mid-rise when visible — no pop-in.
-      { threshold: 0, rootMargin: "0px 0px 15% 0px" },
+      // Fire the moment the first pixel enters the viewport — the rise is
+      // long and eased, and it happens where the visitor can see it.
+      { threshold: 0, rootMargin: "0px" },
     );
     io.observe(el);
     return () => io.disconnect();

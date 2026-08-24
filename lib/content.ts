@@ -118,7 +118,7 @@ export const socials: Social[] = [
 
 export const education = {
   school: "Rutgers University",
-  degree: "B.S. Computer Science · minors in Business Administration & Data Science",
+  degree: "B.S. Computer Science & Data Science · minor in Business Administration",
   period: "Sep 2024 → May 2028",
   location: "New Brunswick, NJ",
   gpa: "3.5",
