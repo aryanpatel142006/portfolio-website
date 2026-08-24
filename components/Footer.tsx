@@ -59,10 +59,10 @@ export default function Footer() {
 
       <div className="flex flex-col gap-1.5 border-t border-border py-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="font-mono text-[11px] text-muted">
-          © 2026 {profile.name} · {profile.location.toLowerCase()}
+          © 2026 {profile.name}
         </p>
         <p className="font-mono text-[11px] text-muted">
-          set in fraunces & geist mono · next.js 16
+          next.js 16
           {github && (
             <>
               {" · "}

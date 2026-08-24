@@ -28,8 +28,6 @@ function LocalTime() {
 
   return (
     <span className="hidden font-mono text-[11px] tracking-[0.14em] text-muted sm:inline">
-      {profile.location.toUpperCase()}
-      <span aria-hidden> — </span>
       <span className="tabular-nums">{time ?? "--:--"}</span>
     </span>
   );
