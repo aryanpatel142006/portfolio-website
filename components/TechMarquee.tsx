@@ -39,15 +39,15 @@ export default function TechMarquee() {
     <section aria-label="Tech stack">
       <SectionHeading index="01" label="the toolkit" />
 
-      {/* Generous -my/py keeps the hover lift AND the tooltip (which sits above
-          the icons) from being clipped by the overflow-hidden the loop requires. */}
-      <div className="marquee-group marquee-mask -my-10 overflow-hidden border-y border-border py-10">
-        <div className="marquee-track flex items-center gap-10">
+      {/* Compact belt — the header row of the skills exhibit below. Generous
+          -my/py keeps hover lifts and tooltips from being clipped. */}
+      <div className="marquee-group marquee-mask -mt-8 overflow-hidden border-y border-border pt-8 pb-5">
+        <div className="marquee-track flex items-center gap-8">
           {/* Two identical copies produce a seamless -50% loop */}
           {[0, 1].map((copy) => (
             <ul
               key={copy}
-              className="flex shrink-0 items-center gap-10"
+              className="flex shrink-0 items-center gap-8"
               aria-hidden={copy === 1}
             >
               {ICONS.map((icon) => (
@@ -63,7 +63,7 @@ export default function TechMarquee() {
                     {icon.name}
                   </span>
                   <i
-                    className={`${icon.className} inline-block text-4xl text-foreground/40 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover/icon:-translate-y-1 group-hover/icon:text-accent`}
+                    className={`${icon.className} inline-block text-3xl text-foreground/55 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover/icon:-translate-y-1 group-hover/icon:text-accent`}
                     role="img"
                     aria-label={copy === 0 ? icon.name : undefined}
                   />

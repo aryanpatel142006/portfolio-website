@@ -5,11 +5,11 @@ export default function StackGroups() {
   if (stack.length === 0) return null;
 
   return (
-    <div className="mt-14 flex flex-col">
+    <div className="flex flex-col">
       {stack.map((group) => (
         <div
           key={group.label}
-          className="grid grid-cols-1 gap-1.5 border-b border-border py-4 first:border-t sm:grid-cols-[180px_1fr] sm:gap-6"
+          className="grid grid-cols-1 gap-1.5 border-b border-border py-4 sm:grid-cols-[180px_1fr] sm:gap-6"
         >
           <span className="kicker pt-0.5">{group.label}</span>
           <p className="text-[13.5px] leading-relaxed text-muted-strong">
