@@ -66,7 +66,7 @@ function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
-      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-strong transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:text-foreground"
+      className="hitbox inline-flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-strong transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:text-foreground"
     >
       {theme === "dark" ? (
         <SunMedium className="h-4 w-4" aria-hidden />
@@ -95,7 +95,7 @@ export default function SiteHeader() {
             type="button"
             onClick={() => window.dispatchEvent(new CustomEvent("cmdk:open"))}
             aria-label="Open command palette"
-            className="hidden items-center gap-1.5 rounded-full border border-border px-2.5 py-1 font-mono text-[11px] text-muted transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:text-foreground sm:inline-flex"
+            className="hitbox hidden items-center gap-1.5 rounded-full border border-border px-2.5 py-1 font-mono text-[11px] text-muted transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:text-foreground sm:inline-flex"
           >
             <kbd>⌘</kbd>
             <kbd>K</kbd>

@@ -14,7 +14,7 @@
   /* paper & ink */
   --background: #f4f1e9;
   --foreground: #1c1a15;
-  --muted: #7b776b;
+  --muted: #67634f; /* 5.3:1 on paper — the metadata layer must pass AA */
   --muted-strong: #57544a;
   --border: rgba(28, 26, 21, 0.14);
   --border-strong: rgba(28, 26, 21, 0.26);
@@ -147,6 +147,17 @@ textarea:focus-visible {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--muted);
+}
+
+/* Invisible touch hit-area extender: keeps small controls visually small
+   while meeting the 44px target for thumbs. */
+.hitbox {
+  position: relative;
+}
+.hitbox::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
 }
 
 /* Underline that draws in on hover, for editorial links. */

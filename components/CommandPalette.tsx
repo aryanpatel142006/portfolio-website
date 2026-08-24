@@ -129,6 +129,12 @@ export default function CommandPalette() {
 
   function onListKey(e: React.KeyboardEvent) {
     if (e.key === "Escape") return close();
+    // The palette is a single-input surface: trap Tab so keyboard focus
+    // never escapes behind the overlay.
+    if (e.key === "Tab") {
+      e.preventDefault();
+      return;
+    }
     if (e.key === "ArrowDown") {
       e.preventDefault();
       setActive((a) => Math.min(a + 1, filtered.length - 1));

@@ -69,6 +69,8 @@ export default function QueryMe() {
         {/* conversation */}
         <div
           ref={scrollRef}
+          role="log"
+          aria-live="polite"
           className="min-h-[280px] max-h-[440px] overflow-y-auto p-5 font-mono text-[13px] leading-relaxed"
         >
           <p className="text-muted-strong">
