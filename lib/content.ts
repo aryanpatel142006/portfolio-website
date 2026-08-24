@@ -68,6 +68,7 @@ export type Project = {
   stat?: { value: string; label: string }; // the headline metric on the card
   description?: string;
   highlights?: string[]; // 2–3 bullet-sized proof points
+  plate?: "vision" | "launch" | "meta"; // blueprint figure (see ProjectPlate); wins over image
   image?: string; // preview image path in /public
   badges?: ProjectBadge[];
   tags?: string[]; // tech-stack chips
@@ -228,6 +229,7 @@ export const projects: Project[] = [
       "Won a National Award and was showcased at a national Science & Technology Exhibition.",
     ],
     badges: [{ label: "National Award" }],
+    plate: "vision",
     tags: ["Python", "MySQL", "OpenCV", "MediaPipe", "Tkinter", "PyAutoGUI", "Pyttsx3"],
     // links: [{ label: "github", href: "https://github.com/..." }],
     image: "/VoxIQ.png",
@@ -245,6 +247,7 @@ export const projects: Project[] = [
       "Responsive React UI on a Supabase backend — auth, storage, and real-time updates.",
     ],
     badges: [{ label: "Hackathon", icon: "⚡" }],
+    plate: "launch",
     tags: ["React", "TypeScript", "Supabase", "Gemini API", "Fiserv API", "Tailwind", "Figma"],
     // links: [{ label: "devpost", href: "https://devpost.com/..." }],
     image: "/HerLaunch.png",
@@ -261,6 +264,7 @@ export const projects: Project[] = [
       "Live integrations: Spotify song shelf and AniList anime stats, resolved server-side with graceful fallbacks.",
       "Hidden off-duty world behind a ⌘K command, a Konami code, or tapping my photo five times.",
     ],
+    plate: "meta",
     tags: ["Next.js 16", "TypeScript", "Tailwind v4", "Vercel AI SDK", "Spotify", "AniList"],
     links: [{ label: "github", href: "https://github.com/aryanpatel142006/portfolio-website" }],
   },

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { projects } from "@/lib/content";
+import ProjectPlate from "./ProjectPlate";
 import SectionHeading from "./SectionHeading";
 import { ArrowUpRight, TrophyIcon } from "./icons";
 
@@ -118,16 +119,22 @@ export default function CaseStudies() {
                     <p className="kicker mt-1">{p.stat.label}</p>
                   </div>
                 )}
-                {p.image && (
-                  <div className="relative aspect-[16/10] w-full overflow-hidden border border-border bg-card">
-                    <Image
-                      src={p.image}
-                      alt={`${p.title} preview`}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 300px"
-                      className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
-                    />
+                {p.plate ? (
+                  <div className="aspect-[16/10] w-full overflow-hidden border border-border bg-card transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.02]">
+                    <ProjectPlate kind={p.plate} />
                   </div>
+                ) : (
+                  p.image && (
+                    <div className="relative aspect-[16/10] w-full overflow-hidden border border-border bg-card">
+                      <Image
+                        src={p.image}
+                        alt={`${p.title} preview`}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 300px"
+                        className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                      />
+                    </div>
+                  )
                 )}
               </div>
             </div>

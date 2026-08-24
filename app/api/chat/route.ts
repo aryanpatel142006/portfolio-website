@@ -41,14 +41,16 @@ const MODEL_CHAIN: ChainEntry[] = (
   .filter(Boolean)
   .map((id) => ({ id, model: id }));
 
-// Independent free pool: a direct Google AI Studio key (free tier: ~10 req/min,
-// hundreds/day) sits below the Gateway models. Zero config here — just add
-// GOOGLE_GENERATIVE_AI_API_KEY to the env and these activate.
+// Independent free pool: a direct Google AI Studio key (free tier: ~10
+// req/min, hundreds/day — far roomier than the Gateway free tier) LEADS the
+// chain, since it also serves a newer model. Gateway entries become backup.
+// Zero config here — just set GOOGLE_GENERATIVE_AI_API_KEY in the env.
+// (Only gemini-3.6-flash is open to new free keys; lite variants are gated.)
 if (process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
-  MODEL_CHAIN.push(
-    { id: "google-direct/gemini-2.5-flash", model: google("gemini-2.5-flash") },
-    { id: "google-direct/gemini-2.5-flash-lite", model: google("gemini-2.5-flash-lite") },
-  );
+  MODEL_CHAIN.unshift({
+    id: "google-direct/gemini-3.6-flash",
+    model: google("gemini-3.6-flash"),
+  });
 }
 
 // How long a rate-limited model sits out before we try it again.
