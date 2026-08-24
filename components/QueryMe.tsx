@@ -3,6 +3,7 @@
 import { useChat } from "@ai-sdk/react";
 import { useEffect, useRef, useState } from "react";
 import { profile } from "@/lib/content";
+import ChatRichText from "./ChatRichText";
 import SectionHeading from "./SectionHeading";
 import { SendIcon } from "./icons";
 
@@ -93,19 +94,26 @@ export default function QueryMe() {
             </div>
           )}
 
-          {messages.map((m) => (
-            <div key={m.id} className="mt-4">
-              <span className={m.role === "user" ? "text-accent" : "text-live"}>
-                {m.role === "user" ? "you" : me}
-                <span className="text-muted"> &gt; </span>
-              </span>
-              <span className="whitespace-pre-wrap text-foreground">
-                {m.parts
-                  .map((p) => (p.type === "text" ? p.text : ""))
-                  .join("")}
-              </span>
-            </div>
-          ))}
+          {messages.map((m) => {
+            const text = m.parts
+              .map((p) => (p.type === "text" ? p.text : ""))
+              .join("");
+            return (
+              <div key={m.id} className="mt-4">
+                <span className={m.role === "user" ? "text-accent" : "text-live"}>
+                  {m.role === "user" ? "you" : me}
+                  <span className="text-muted"> &gt; </span>
+                </span>
+                {m.role === "assistant" ? (
+                  <ChatRichText text={text} />
+                ) : (
+                  <span className="whitespace-pre-wrap text-foreground">
+                    {text}
+                  </span>
+                )}
+              </div>
+            );
+          })}
 
           {busy && messages[messages.length - 1]?.role === "user" && (
             <div className="mt-4 text-muted">
