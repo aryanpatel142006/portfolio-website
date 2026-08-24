@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { Moon, SunMedium } from "lucide-react";
-import { profile } from "@/lib/content";
 import LogoMark from "./LogoMark";
 
 /* New Brunswick wall clock — first tick is deferred a frame so the server
