@@ -8,7 +8,7 @@ export default function CaseStudies() {
   if (projects.length === 0) return null;
 
   return (
-    <section aria-label="Projects">
+    <section id="work" aria-label="Projects" className="scroll-mt-20">
       <SectionHeading
         index="04"
         label="selected work"

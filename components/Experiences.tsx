@@ -6,7 +6,7 @@ export default function Experiences() {
   if (experiences.length === 0) return null;
 
   return (
-    <section aria-label="Experiences">
+    <section id="experience" aria-label="Experiences" className="scroll-mt-20">
       <SectionHeading
         index="03"
         label="experience"

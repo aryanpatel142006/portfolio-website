@@ -41,7 +41,7 @@ export default function QueryMe() {
   }
 
   return (
-    <section aria-label="Ask me anything">
+    <section id="chat" aria-label="Ask me anything" className="scroll-mt-20">
       <SectionHeading
         index="02"
         label="query me"

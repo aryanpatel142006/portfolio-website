@@ -89,6 +89,22 @@ export default function SiteHeader() {
           <LogoMark size={22} />
         </a>
 
+        <nav aria-label="Sections" className="flex items-center gap-4 sm:gap-5">
+          {[
+            ["work", "#work"],
+            ["experience", "#experience"],
+            ["contact", "#contact"],
+          ].map(([label, href]) => (
+            <a
+              key={href}
+              href={href}
+              className="draw-link hitbox font-mono text-[11px] lowercase tracking-[0.1em] text-muted transition-colors hover:text-foreground"
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
+
         <div className="flex items-center gap-4">
           <LocalTime />
           <button

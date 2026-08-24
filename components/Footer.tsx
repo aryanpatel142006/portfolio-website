@@ -8,7 +8,7 @@ export default function Footer() {
   const github = socials.find((s) => s.type === "github")?.href;
 
   return (
-    <footer aria-label="Contact" className="mt-10">
+    <footer id="contact" aria-label="Contact" className="mt-10 scroll-mt-20">
       <hr className="divider" />
 
       <div className="py-16 sm:py-20">

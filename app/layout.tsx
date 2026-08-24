@@ -57,6 +57,12 @@ export default function RootLayout({
     >
       <body className="relative min-h-full bg-background">
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
+        <a
+          href="#top"
+          className="sr-only z-[100] rounded-md border border-border-strong bg-surface px-4 py-2 font-mono text-[12px] text-foreground focus:not-sr-only focus:fixed focus:left-3 focus:top-3"
+        >
+          skip to content
+        </a>
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/devicon@2.16.0/devicon.min.css"

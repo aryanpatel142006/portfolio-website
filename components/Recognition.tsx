@@ -4,7 +4,7 @@ import SectionHeading from "./SectionHeading";
 /** Education and certifications — the receipts, set like a colophon. */
 export default function Recognition() {
   return (
-    <section aria-label="Recognition">
+    <section id="record" aria-label="Recognition" className="scroll-mt-20">
       <SectionHeading index="05" label="the record" />
 
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
