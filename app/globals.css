@@ -237,6 +237,10 @@ html[data-theme="dark"] .offduty-world {
 .marquee-track {
   animation: marquee 44s linear infinite;
   width: max-content;
+  /* own GPU layer — iOS Safari can fail to composite an animated child
+     inside a masked ancestor without this */
+  will-change: transform;
+  transform: translateZ(0);
 }
 .marquee-mask {
   -webkit-mask-image: linear-gradient(
