@@ -157,7 +157,7 @@ export const experiences: Experience[] = [
     active: true,
     bullets: [
       "Modeling multi-facility financial transaction data in a normalized relational database — replacing Excel-based revenue tracking with a single source of truth for downstream analytics.",
-      "Building automated Python + Pandas ETL pipelines over daily, weekly, and monthly revenue time series, a 99%+ cut in manual reporting time, saving 150+ hours a year.",
+      "Building automated Python + Pandas ETL pipelines over daily, weekly, and monthly revenue time series, a 99%+ cut in manual reporting time, saving 300+ hours a year.",
       "Shipping a live revenue dashboard surfacing time-series trends, backed by data validation, role-based access, and audit trails.",
     ],
     iconUrl: "https://img.logo.dev/njnbpa.org?token=pk_FNeueCUtR0qx7cHP9ZPGrA&format=webp&retina=true",
@@ -396,7 +396,7 @@ I'm also a member of SEED2S (Student Equity, Excellence and Diversity in Data Sc
 
 At NBPA I'm architecting a normalized relational database to replace Excel-based revenue
 tracking and building automated Python + Pandas ETL pipelines over daily, weekly, and
-monthly revenue data that cut manual reporting time by 99%+ — saving 150+ hours a year —
+monthly revenue data that cut manual reporting time by 99%+ — saving 300+ hours a year —
 with validation, role-based access, audit trails, and a live revenue dashboard.
 
 A couple of projects I'm proud of:
