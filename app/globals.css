@@ -260,6 +260,30 @@ html[data-theme="dark"] .offduty-world {
   }
 }
 
+/* Reduced motion: don't freeze the belt mid-frame — collapse it into a tidy
+   wrapped grid (single copy, no mask) so it reads as designed, not stopped. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 2.25rem;
+  }
+  .marquee-track > ul {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 2.25rem;
+    width: 100%;
+  }
+  .marquee-track > ul[aria-hidden="true"] {
+    display: none;
+  }
+  .marquee-mask {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+}
+
 /* Overlay / panel entrances (palette) */
 @keyframes overlay-in {
   from {
@@ -286,11 +310,12 @@ html[data-theme="dark"] .offduty-world {
   animation: panel-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Section entrance — fade + rise on scroll */
+/* Section entrance — fade + rise on scroll. Long tail on an expo-out curve:
+   most of the movement happens immediately, the settle is gentle. */
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -298,7 +323,7 @@ html[data-theme="dark"] .offduty-world {
   }
 }
 .fade-up {
-  animation: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* "Live" pulsing dot for current roles */

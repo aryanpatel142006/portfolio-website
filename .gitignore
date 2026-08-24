@@ -48,3 +48,8 @@ next-env.d.ts
 CLAUDE.md
 .claude/
 Quant Project Roadmap.pdf
+
+# design tooling context (local only)
+PRODUCT.md
+DESIGN.md
+.impeccable/

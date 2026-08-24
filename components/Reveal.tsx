@@ -25,7 +25,9 @@ export default function Reveal({
           io.disconnect();
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+      // Positive bottom margin starts the animation just BEFORE the section
+      // scrolls into view, so it's already mid-rise when visible — no pop-in.
+      { threshold: 0, rootMargin: "0px 0px 15% 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
