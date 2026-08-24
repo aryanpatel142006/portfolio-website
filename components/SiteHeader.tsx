@@ -81,7 +81,7 @@ export default function SiteHeader() {
         <a
           href="#top"
           aria-label="Aryan Patel — back to top"
-          className="text-foreground transition-opacity hover:opacity-70"
+          className="hitbox text-foreground transition-opacity hover:opacity-70"
         >
           <LogoMark size={22} />
         </a>

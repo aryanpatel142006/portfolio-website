@@ -149,6 +149,12 @@ textarea:focus-visible {
   color: var(--muted);
 }
 
+/* Tailwind v4's preflight leaves buttons on the UA arrow cursor; every
+   enabled button here is a real action — signal it. */
+button:not(:disabled) {
+  cursor: pointer;
+}
+
 /* Invisible touch hit-area extender: keeps small controls visually small
    while meeting the 44px target for thumbs. */
 .hitbox {
