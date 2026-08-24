@@ -38,6 +38,26 @@ function Chip({ type }: { type: string }) {
   );
 }
 
+// **bold** spans from the model's (allowed) markdown emphasis.
+const BOLD_SPLIT_RE = /(\*\*[^*]+\*\*)/g;
+
+function TextWithBold({ text }: { text: string }) {
+  const parts = text.split(BOLD_SPLIT_RE);
+  return (
+    <>
+      {parts.map((part, i) =>
+        part.startsWith("**") && part.endsWith("**") && part.length > 4 ? (
+          <strong key={i} className="font-semibold text-foreground">
+            {part.slice(2, -2)}
+          </strong>
+        ) : (
+          part
+        ),
+      )}
+    </>
+  );
+}
+
 export default function ChatRichText({ text }: { text: string }) {
   const clean = text.replace(PARTIAL_RE, "");
   const parts = clean.split(TOKEN_SPLIT_RE);
@@ -48,7 +68,7 @@ export default function ChatRichText({ text }: { text: string }) {
         part.startsWith("[[") && part.endsWith("]]") ? (
           <Chip key={i} type={part.slice(2, -2)} />
         ) : (
-          part
+          <TextWithBold key={i} text={part} />
         ),
       )}
     </span>

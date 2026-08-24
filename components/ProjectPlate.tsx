@@ -106,6 +106,18 @@ function VisionPlate() {
         <path d="M330 234 V252 H312" />
       </g>
 
+      {/* scanline sweeping the viewfinder */}
+      <line
+        x1="152"
+        y1="64"
+        x2="328"
+        y2="64"
+        stroke="var(--accent)"
+        strokeOpacity="0.45"
+        strokeWidth="1.5"
+        className="plate-scan"
+      />
+
       {/* hand skeleton */}
       <g stroke="currentColor" strokeOpacity="0.8" strokeWidth="2" strokeLinecap="round" fill="none">
         {chains.map((c, i) => (
@@ -119,16 +131,17 @@ function VisionPlate() {
       </g>
 
       {/* tracked fingertip + leader to confidence chip */}
+      <circle cx="218" cy="120" r="8" fill="none" stroke="var(--accent)" strokeOpacity="0.6" className="plate-ping" />
       <circle cx="218" cy="120" r="8" fill="none" stroke="var(--accent)" strokeOpacity="0.45" />
       <circle cx="218" cy="120" r="3.5" fill="var(--accent)" />
       <line x1="226" y1="116" x2="292" y2="104" stroke="var(--accent)" strokeOpacity="0.5" strokeDasharray="3 3" />
       <rect x="294" y="92" width="112" height="22" rx="4" fill="var(--accent)" fillOpacity="0.1" stroke="var(--accent)" strokeOpacity="0.4" />
       <Label x={303} y={106} accent>GESTURE · 97%</Label>
 
-      {/* text-to-speech waves */}
-      <g stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" fill="none">
-        <path d="M128 185 q10 18 0 36" />
-        <path d="M140 177 q16 26 0 52" />
+      {/* text-to-speech waves, speaking */}
+      <g stroke="currentColor" strokeWidth="1.5" fill="none">
+        <path d="M128 185 q10 18 0 36" className="plate-wave" />
+        <path d="M140 177 q16 26 0 52" className="plate-wave-2" />
       </g>
       <rect x="112" y="196" width="9" height="14" fill="currentColor" opacity="0.6" />
       <path d="M121 196 l8 -7 v28 l-8 -7 z" fill="currentColor" opacity="0.6" />
@@ -160,7 +173,7 @@ function LaunchPlate() {
       <circle cx="92" cy="112" r="5.5" fill="var(--accent)" />
       <Label x={78} y={182}>MENTOR MATCH</Label>
 
-      {/* trajectory */}
+      {/* trajectory, dashes marching upward */}
       <path
         d="M60 252 C 180 246, 300 204, 416 74"
         fill="none"
@@ -168,6 +181,7 @@ function LaunchPlate() {
         strokeOpacity="0.6"
         strokeWidth="1.5"
         strokeDasharray="5 5"
+        className="plate-dash"
       />
 
       {/* milestones */}
@@ -178,8 +192,12 @@ function LaunchPlate() {
       <circle cx="352" cy="152" r="4.5" fill="none" stroke="currentColor" strokeOpacity="0.8" strokeWidth="1.5" />
       <Label x={344} y={143} anchor="end">PITCH — 23:59</Label>
 
-      {/* rocket + exhaust */}
-      <g>
+      {/* rocket flying the curve (CSS motion path); static fallback at apex */}
+      <g className="plate-rocket">
+        <path d="M9 0 L-9 -7 L-4 0 L-9 7 Z" fill="var(--accent)" />
+        <line x1="-12" y1="0" x2="-20" y2="0" stroke="var(--accent)" strokeOpacity="0.6" strokeWidth="2" strokeLinecap="round" />
+      </g>
+      <g className="plate-rocket-static">
         <path d="M430 58 L406 76 L418 88 Z" fill="var(--accent)" />
         <line x1="398" y1="92" x2="388" y2="101" stroke="var(--accent)" strokeOpacity="0.7" strokeWidth="2" strokeLinecap="round" />
         <line x1="404" y1="102" x2="397" y2="109" stroke="var(--accent)" strokeOpacity="0.45" strokeWidth="2" strokeLinecap="round" />
@@ -211,15 +229,20 @@ function MetaPlate() {
       <rect x="112" y="140" width="150" height="4" fill="currentColor" opacity="0.28" />
       <rect x="112" y="149" width="118" height="4" fill="currentColor" opacity="0.28" />
 
-      {/* mini query-me terminal, cursor blinking for real */}
+      {/* mini query-me terminal — cursor blinking, reply "thinking" */}
       <rect x="112" y="168" width="258" height="66" rx="4" fill="currentColor" fillOpacity="0.05" stroke="currentColor" strokeOpacity="0.4" />
       <text x="122" y="192" fontFamily={MONO} fontSize="10" letterSpacing="1" fill="var(--muted)">
         &gt; whoami
       </text>
       <rect x="176" y="183" width="6" height="11" fill="var(--accent)" className="caret-blink" />
+      <g fill="var(--accent)">
+        <circle cx="126" cy="215" r="2.2" className="plate-dot-1" />
+        <circle cx="136" cy="215" r="2.2" className="plate-dot-2" />
+        <circle cx="146" cy="215" r="2.2" className="plate-dot-3" />
+      </g>
 
-      {/* you are here */}
-      <line x1="386" y1="132" x2="412" y2="120" stroke="var(--accent)" strokeOpacity="0.55" strokeDasharray="3 3" />
+      {/* you are here, leader dashes marching toward the window */}
+      <line x1="386" y1="132" x2="412" y2="120" stroke="var(--accent)" strokeOpacity="0.55" strokeDasharray="3 3" className="plate-dash" />
       <Label x={396} y={112} accent>YOU ARE HERE</Label>
     </Frame>
   );
