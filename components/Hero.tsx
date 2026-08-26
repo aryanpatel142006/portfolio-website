@@ -12,14 +12,22 @@ export default function Hero() {
 
       <div className="mt-6 flex flex-col-reverse items-start gap-10 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-3xl">
-          <h1 className="rise rise-1 display text-[17vw] text-foreground sm:text-7xl md:text-8xl xl:text-[7rem]">
+          <h1 className="display text-[17vw] text-foreground sm:text-7xl md:text-8xl xl:text-[7rem]">
             <span className="sr-only">Aryan Patel.</span>
-            {/* visual layer: the hand-drawn glyph stands in for the first A */}
+            {/* visual layer: the hand-drawn glyph stands in for the first A;
+                each line rises out of its own mask, the period lands last */}
             <span aria-hidden>
-              <LogoMark size="0.74em" className="inline-block mr-[-0.1em]" />
-              ryan
-              <br />
-              Patel<span className="text-accent">.</span>
+              <span className="line-mask">
+                <span className="line-rise">
+                  <LogoMark size="0.74em" className="inline-block mr-[-0.1em]" />
+                  ryan
+                </span>
+              </span>
+              <span className="line-mask">
+                <span className="line-rise line-rise-2">
+                  Patel<span className="dot-pop text-accent">.</span>
+                </span>
+              </span>
             </span>
           </h1>
 

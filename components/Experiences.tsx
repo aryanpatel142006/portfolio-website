@@ -62,7 +62,10 @@ export default function Experiences() {
                       key={b}
                       className="flex gap-2.5 text-[13.5px] leading-relaxed text-muted-strong"
                     >
-                      <span aria-hidden className="select-none text-accent">
+                      <span
+                        aria-hidden
+                        className="inline-block select-none text-accent transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1"
+                      >
                         —
                       </span>
                       {b}

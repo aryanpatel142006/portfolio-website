@@ -1,4 +1,5 @@
 import { profile, socials } from "@/lib/content";
+import Magnetic from "./Magnetic";
 import Reveal from "./Reveal";
 import { ArrowUpRight } from "./icons";
 
@@ -10,7 +11,7 @@ export default function Footer() {
 
   return (
     <footer id="contact" aria-label="Contact" className="mt-10 scroll-mt-20">
-      <hr className="divider" />
+      <hr className="divider divider-draw" />
 
       <Reveal className="py-16 sm:py-20">
         <p className="kicker">06 / contact</p>
@@ -26,18 +27,20 @@ export default function Footer() {
         </p>
 
         {email && (
-          <a
-            href={`mailto:${email}`}
-            className="group pressable mt-8 inline-flex items-center gap-3 border border-border-strong bg-surface px-6 py-4 font-mono text-[13px] text-foreground shadow-[var(--shadow)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:border-accent hover:text-accent"
-          >
-            {email}
-            <ArrowUpRight
-              width={14}
-              height={14}
-              aria-hidden
-              className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-            />
-          </a>
+          <Magnetic className="mt-8 inline-block" strength={0.25}>
+            <a
+              href={`mailto:${email}`}
+              className="group pressable inline-flex items-center gap-3 border border-border-strong bg-surface px-6 py-4 font-mono text-[13px] text-foreground shadow-[var(--shadow)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-accent hover:text-accent"
+            >
+              {email}
+              <ArrowUpRight
+                width={14}
+                height={14}
+                aria-hidden
+                className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+            </a>
+          </Magnetic>
         )}
 
         <nav

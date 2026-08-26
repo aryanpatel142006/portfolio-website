@@ -1,3 +1,3 @@
 export default function Divider() {
-  return <hr className="divider my-14 sm:my-16" />;
+  return <hr className="divider divider-draw my-14 sm:my-16" />;
 }

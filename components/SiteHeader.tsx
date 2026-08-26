@@ -50,12 +50,34 @@ function ThemeToggle() {
     () => "light" as const,
   );
 
-  function toggle() {
+  function toggle(e: React.MouseEvent<HTMLButtonElement>) {
     const next = theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    try {
-      localStorage.setItem("theme", next);
-    } catch {}
+    const apply = () => {
+      document.documentElement.dataset.theme = next;
+      try {
+        localStorage.setItem("theme", next);
+      } catch {}
+    };
+
+    // Sweep the new theme out of the button in a widening circle where the
+    // View Transition API exists; elsewhere, swap instantly as before.
+    const root = document.documentElement;
+    if (typeof document.startViewTransition === "function") {
+      const r = e.currentTarget.getBoundingClientRect();
+      root.style.setProperty("--vt-x", `${r.left + r.width / 2}px`);
+      root.style.setProperty("--vt-y", `${r.top + r.height / 2}px`);
+      root.classList.add("vt-active");
+      const vt = document.startViewTransition(apply);
+      // a skipped transition (hidden tab, rapid re-toggle) still applies the
+      // theme but rejects `ready` — observe both promises so nothing lands
+      // in the console as an unhandled rejection
+      vt.ready.catch(() => {});
+      vt.finished
+        .catch(() => {})
+        .finally(() => root.classList.remove("vt-active"));
+    } else {
+      apply();
+    }
   }
 
   return (

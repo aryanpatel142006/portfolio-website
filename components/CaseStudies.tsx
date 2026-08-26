@@ -69,7 +69,10 @@ export default function CaseStudies() {
                         key={h}
                         className="flex gap-2.5 text-[13.5px] leading-relaxed text-muted-strong"
                       >
-                        <span aria-hidden className="select-none text-accent">
+                        <span
+                          aria-hidden
+                          className="inline-block select-none text-accent transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1"
+                        >
                           —
                         </span>
                         {h}
@@ -113,10 +116,11 @@ export default function CaseStudies() {
                 )}
               </div>
 
-              {/* numbers & picture */}
-              <div className="flex flex-col gap-5">
+              {/* numbers & picture — the column drifts on a scroll-linked
+                  parallax where the browser supports it */}
+              <div className="col-drift flex flex-col gap-5">
                 {p.stat && (
-                  <div className="border-l-2 border-accent pl-4">
+                  <div className="stat-in border-l-2 border-accent pl-4">
                     <p className="display text-4xl text-foreground sm:text-5xl">
                       {p.stat.value}
                     </p>
