@@ -1,4 +1,4 @@
-import { profile, socials } from "@/lib/content";
+import { opensNewTab, profile, socials } from "@/lib/content";
 import Magnetic from "./Magnetic";
 import Reveal from "./Reveal";
 import { ArrowUpRight } from "./icons";
@@ -51,8 +51,8 @@ export default function Footer() {
             <a
               key={s.type + s.href}
               href={s.href}
-              target={s.href.startsWith("http") ? "_blank" : undefined}
-              rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              target={opensNewTab(s.href) ? "_blank" : undefined}
+              rel={opensNewTab(s.href) ? "noopener noreferrer" : undefined}
               className="draw-link hitbox font-mono text-[12px] uppercase tracking-[0.12em] text-muted-strong transition-colors hover:text-foreground"
             >
               {s.label}

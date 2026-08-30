@@ -1,4 +1,4 @@
-import { profile, statusBadges, socials } from "@/lib/content";
+import { opensNewTab, profile, statusBadges, socials } from "@/lib/content";
 import HeroPhoto from "./HeroPhoto";
 import LogoMark from "./LogoMark";
 import { ArrowUpRight } from "./icons";
@@ -65,8 +65,8 @@ export default function Hero() {
               <a
                 key={s.type + s.href}
                 href={s.href}
-                target={s.href.startsWith("http") ? "_blank" : undefined}
-                rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                target={opensNewTab(s.href) ? "_blank" : undefined}
+                rel={opensNewTab(s.href) ? "noopener noreferrer" : undefined}
                 className="draw-link hitbox inline-flex items-center gap-1 font-mono text-[12px] uppercase tracking-[0.12em] text-muted-strong transition-colors hover:text-foreground"
               >
                 {s.label}

@@ -90,7 +90,7 @@ export const profile: Profile = {
   name: "Aryan Patel",
   pronunciation: "/ah-ri-an/",
   tagline:
-    "cs & data science student at rutgers — building data pipelines, ml tools, and interfaces that make technology more human.",
+    "CS & Data Science student at Rutgers — building data pipelines, ML tools, and interfaces that make technology more human.",
   location: "New Brunswick, NJ",
   photo: "/pfp.png", // your photo
   photoHover: "/cat.png", // hover the photo to crossfade to this
@@ -105,6 +105,13 @@ export const statusBadges: StatusBadge[] = [
 ];
 
 /* ────────────────────────────  SOCIALS  ──────────────────────────── */
+
+/** Links that should leave the page in a new tab: external URLs, and
+    documents like the resume PDF — a recruiter mid-skim shouldn't lose
+    their place on the page to a full-tab PDF viewer. */
+export function opensNewTab(href: string) {
+  return href.startsWith("http") || href.endsWith(".pdf");
+}
 
 export const socials: Social[] = [
   { type: "email", href: "mailto:aryanpatel142006@gmail.com", label: "Email" },

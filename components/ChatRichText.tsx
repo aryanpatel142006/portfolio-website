@@ -1,6 +1,6 @@
 "use client";
 
-import { socials } from "@/lib/content";
+import { opensNewTab, socials } from "@/lib/content";
 import { SocialGlyph } from "./icons";
 
 /**
@@ -28,8 +28,8 @@ function Chip({ type }: { type: string }) {
   return (
     <a
       href={social.href}
-      target={social.href.startsWith("http") ? "_blank" : undefined}
-      rel={social.href.startsWith("http") ? "noopener noreferrer" : undefined}
+      target={opensNewTab(social.href) ? "_blank" : undefined}
+      rel={opensNewTab(social.href) ? "noopener noreferrer" : undefined}
       className="mx-0.5 inline-flex translate-y-[-1px] items-center gap-1.5 rounded-md border border-accent/40 bg-accent/[0.08] px-2 py-0.5 align-middle font-mono text-[11px] text-accent transition-all duration-200 hover:border-accent hover:bg-accent hover:text-accent-contrast"
     >
       <SocialGlyph type={social.type} width={11} height={11} aria-hidden />

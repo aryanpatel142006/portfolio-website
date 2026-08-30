@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { socials, profile } from "@/lib/content";
+import { opensNewTab, socials, profile } from "@/lib/content";
 import { unlockOffDuty } from "@/lib/offduty";
 import { SocialGlyph } from "./icons";
 
@@ -59,7 +59,7 @@ export default function CommandPalette() {
       label: `Open ${s.label}`,
       hint: "link",
       icon: <SocialGlyph type={s.type} width={15} height={15} />,
-      run: () => window.open(s.href, s.href.startsWith("http") ? "_blank" : "_self"),
+      run: () => window.open(s.href, opensNewTab(s.href) ? "_blank" : "_self"),
     }));
     const actions: Command[] = email
       ? [
