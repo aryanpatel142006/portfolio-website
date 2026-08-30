@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -43,7 +44,15 @@ next-env.d.ts
 # local working files
 .playwright-mcp/
 *RESUME.pdf
+/*Resume*.pdf
 
 # local assistant/tooling files — never publish
 CLAUDE.md
 .claude/
+Quant Project Roadmap.pdf
+
+# design tooling context (local only)
+PRODUCT.md
+DESIGN.md
+.impeccable/
+Aryan Patel.png

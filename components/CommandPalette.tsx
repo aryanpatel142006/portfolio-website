@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { socials, profile } from "@/lib/content";
+import { opensNewTab, socials, profile } from "@/lib/content";
 import { unlockOffDuty } from "@/lib/offduty";
 import { SocialGlyph } from "./icons";
 
@@ -24,6 +24,13 @@ export default function CommandPalette() {
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
   const [copied, setCopied] = useState(false);
+  // Reset the highlighted row whenever the search changes — done during
+  // render (React's derived-state pattern) instead of an effect.
+  const [lastQuery, setLastQuery] = useState(query);
+  if (lastQuery !== query) {
+    setLastQuery(query);
+    setActive(0);
+  }
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -42,15 +49,17 @@ export default function CommandPalette() {
     const nav: Command[] = [
       { id: "top", label: "Go to top", hint: "section", run: () => window.scrollTo({ top: 0, behavior: "smooth" }) },
       { id: "query", label: "Ask me anything", hint: "section", run: () => scrollToLabel("Ask me anything") },
-      { id: "exp", label: "Experiences", hint: "section", run: () => scrollToLabel("Experiences") },
-      { id: "projects", label: "Projects", hint: "section", run: () => scrollToLabel("Projects") },
+      { id: "exp", label: "Experience", hint: "section", run: () => scrollToLabel("Experiences") },
+      { id: "projects", label: "Selected work", hint: "section", run: () => scrollToLabel("Projects") },
+      { id: "record", label: "The record", hint: "section", run: () => scrollToLabel("Recognition") },
+      { id: "contact", label: "Contact", hint: "section", run: () => scrollToLabel("Contact") },
     ];
     const links: Command[] = socials.map((s) => ({
       id: "social-" + s.type,
       label: `Open ${s.label}`,
       hint: "link",
       icon: <SocialGlyph type={s.type} width={15} height={15} />,
-      run: () => window.open(s.href, s.href.startsWith("http") ? "_blank" : "_self"),
+      run: () => window.open(s.href, opensNewTab(s.href) ? "_blank" : "_self"),
     }));
     const actions: Command[] = email
       ? [
@@ -118,10 +127,14 @@ export default function CommandPalette() {
     };
   }, [open]);
 
-  useEffect(() => setActive(0), [query]);
-
   function onListKey(e: React.KeyboardEvent) {
     if (e.key === "Escape") return close();
+    // The palette is a single-input surface: trap Tab so keyboard focus
+    // never escapes behind the overlay.
+    if (e.key === "Tab") {
+      e.preventDefault();
+      return;
+    }
     if (e.key === "ArrowDown") {
       e.preventDefault();
       setActive((a) => Math.min(a + 1, filtered.length - 1));
@@ -145,16 +158,6 @@ export default function CommandPalette() {
 
   return (
     <>
-      {/* Floating hint / trigger */}
-      <button
-        aria-label="Open command palette"
-        onClick={() => setOpen(true)}
-        className="fixed bottom-4 right-4 z-40 hidden items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 font-mono text-[11px] text-muted backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-white/20 hover:text-foreground sm:inline-flex"
-      >
-        <kbd className="font-sans">⌘</kbd>
-        <kbd className="font-sans">K</kbd>
-      </button>
-
       {open && (
         <div
           className="animate-overlay-in fixed inset-0 z-[60] flex items-start justify-center px-4 pt-[18vh]"
@@ -169,14 +172,14 @@ export default function CommandPalette() {
             onClick={close}
             className="absolute inset-0 cursor-default bg-black/40 backdrop-blur-md"
           />
-          <div className="animate-panel-in relative z-10 w-full max-w-lg overflow-hidden rounded-xl border border-white/[0.12] bg-[#1b2121]/95 shadow-2xl backdrop-blur-xl">
+          <div className="animate-panel-in relative z-10 w-full max-w-lg overflow-hidden rounded-xl border border-border-strong bg-surface/95 shadow-2xl backdrop-blur-xl">
             <input
               ref={inputRef}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Type a command or search…"
               aria-label="Search commands"
-              className="w-full border-b border-white/[0.08] bg-transparent px-4 py-3.5 font-mono text-[13px] text-foreground placeholder:text-muted focus:outline-none"
+              className="w-full border-b border-border bg-transparent px-4 py-3.5 font-mono text-[13px] text-foreground placeholder:text-muted focus:outline-none"
             />
             <div ref={listRef} className="max-h-[46vh] overflow-y-auto p-2">
               {filtered.length === 0 && (
@@ -195,7 +198,7 @@ export default function CommandPalette() {
                   }}
                   className={[
                     "flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left transition-colors",
-                    i === active ? "bg-white/[0.07]" : "hover:bg-white/[0.04]",
+                    i === active ? "bg-card-hover" : "hover:bg-card",
                   ].join(" ")}
                 >
                   <span className="flex items-center gap-2.5">
@@ -212,7 +215,7 @@ export default function CommandPalette() {
                 </button>
               ))}
             </div>
-            <div className="flex items-center justify-between border-t border-white/[0.08] px-4 py-2 font-mono text-[10px] text-muted">
+            <div className="flex items-center justify-between border-t border-border px-4 py-2 font-mono text-[10px] text-muted">
               <span>{profile.name}</span>
               <span>↑↓ navigate · ↵ select · esc close</span>
             </div>

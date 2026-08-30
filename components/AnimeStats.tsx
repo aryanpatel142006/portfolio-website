@@ -22,7 +22,7 @@ const nf = new Intl.NumberFormat("en-US");
 
 function Figure({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex flex-1 flex-col gap-1 rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/40 hover:bg-accent/[0.08]">
+    <div className="flex flex-1 flex-col gap-1 rounded-lg border border-border bg-card px-4 py-3 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/40 hover:bg-accent/[0.08]">
       <span className="font-serif text-2xl text-foreground">{value}</span>
       <span className="font-mono text-[10px] uppercase leading-tight tracking-wide text-muted">
         {label}
@@ -37,10 +37,10 @@ function StripSkeleton() {
       {[0, 1, 2].map((i) => (
         <div
           key={i}
-          className="flex flex-1 flex-col gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3"
+          className="flex flex-1 flex-col gap-2 rounded-lg border border-border bg-card px-4 py-3"
         >
-          <span className="h-6 w-16 animate-pulse rounded bg-white/[0.06]" />
-          <span className="h-2.5 w-20 animate-pulse rounded bg-white/[0.05]" />
+          <span className="h-6 w-16 animate-pulse rounded bg-card-hover" />
+          <span className="h-2.5 w-20 animate-pulse rounded bg-card-hover" />
         </div>
       ))}
     </div>
