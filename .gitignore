@@ -43,6 +43,7 @@ next-env.d.ts
 # local working files
 .playwright-mcp/
 *RESUME.pdf
+/*Resume*.pdf
 
 # local assistant/tooling files — never publish
 CLAUDE.md
