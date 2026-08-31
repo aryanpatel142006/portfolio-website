@@ -88,7 +88,10 @@ export default function OffDuty() {
       <div className="mt-16 flex justify-center">
         <button
           type="button"
-          onClick={() => unlockOffDuty()}
+          onClick={(e) => {
+            const r = e.currentTarget.getBoundingClientRect();
+            unlockOffDuty({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
+          }}
           className="group flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-card px-6 py-5 text-center transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/30 hover:bg-accent/[0.05]"
         >
           <span className="text-[13px] text-muted-strong transition-colors group-hover:text-foreground">

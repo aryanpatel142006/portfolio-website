@@ -90,12 +90,17 @@ export default function CommandPalette() {
         id: "offduty",
         label: "whoami — the off-duty me",
         hint: "secret",
-        run: () => unlockOffDuty(),
+        // close first so the sweep's "after" snapshot doesn't contain the
+        // palette (flushSync inside unlockOffDuty commits both together)
+        run: () => {
+          close();
+          unlockOffDuty();
+        },
       };
       return [secret, ...commands.filter((c) => c.label.toLowerCase().includes(q))];
     }
     return commands.filter((c) => c.label.toLowerCase().includes(q));
-  }, [commands, query]);
+  }, [commands, query, close]);
 
   // Global open shortcut + custom event
   useEffect(() => {

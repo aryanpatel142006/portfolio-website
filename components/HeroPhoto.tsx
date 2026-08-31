@@ -22,11 +22,11 @@ export default function HeroPhoto({
   const count = useRef(0);
   const [showCat, setShowCat] = useState(false);
 
-  function onClick() {
+  function onClick(e: React.MouseEvent) {
     count.current += 1;
     if (count.current >= CLICKS_TO_UNLOCK) {
       count.current = 0;
-      unlockOffDuty();
+      unlockOffDuty({ x: e.clientX, y: e.clientY });
     }
     if (photoHover) setShowCat((c) => !c);
   }

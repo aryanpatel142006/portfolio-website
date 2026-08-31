@@ -536,6 +536,11 @@ html.vt-active body {
   transition: none;
 }
 
+/* off-duty unlock reuses the sweep, a touch slower — lamplight spreading */
+:root.vt-warm::view-transition-new(root) {
+  animation-duration: 0.85s;
+}
+
 /* second beat inside a case-study reveal: the stat lands after the words */
 .fade-up .stat-in {
   animation: fade-up 0.9s 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;

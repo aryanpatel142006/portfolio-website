@@ -6,7 +6,14 @@ import posthog from "posthog-js";
     (see next.config.ts rewrites) so ad blockers don't eat them. */
 const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
 
-if (key) {
+// Only the canonical production host reports — localhost, LAN phone tests,
+// and Vercel preview deployments stay out of the dashboard, so the numbers
+// are real visitors only.
+const isCanonicalHost =
+  typeof location !== "undefined" &&
+  /(^|\.)aryan\.is-a\.dev$/.test(location.hostname);
+
+if (key && isCanonicalHost) {
   try {
     posthog.init(key, {
       api_host: "/ingest",
