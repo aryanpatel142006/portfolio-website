@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { offDuty } from "@/lib/content";
 import NonMainstream from "@/components/NonMainstream";
 import AnimeStats from "@/components/AnimeStats";
+import NightSky from "@/components/fx/NightSky";
 import { prefetchTracks } from "@/lib/tracks-client";
 import {
   KONAMI_SEQUENCE,
@@ -113,6 +114,7 @@ export default function OffDuty() {
       aria-label={OFFDUTY_ANCHOR_LABEL}
       className={`offduty-world relative ${justUnlocked ? "warm-in" : ""}`}
     >
+      <NightSky />
       <hr className="divider mb-12 mt-4" />
 
       <div className="mb-7 flex items-end justify-between gap-4">
@@ -122,7 +124,10 @@ export default function OffDuty() {
             <span aria-hidden> / </span>
             off the clock
           </p>
-          <h2 className="display text-3xl italic text-foreground sm:text-4xl">
+          <h2
+            data-text="the off-duty me"
+            className={`display neon-text text-3xl italic sm:text-4xl ${justUnlocked ? "glitch" : ""}`}
+          >
             the off-duty me
           </h2>
         </div>
@@ -138,6 +143,10 @@ export default function OffDuty() {
         </button>
       </div>
 
+      <p className="mb-6 font-arcade text-[9px] uppercase tracking-[0.18em] text-neon-2">
+        <span className="coin-blink">▶</span> player 1 · insert coin
+      </p>
+
       <p className="mb-9 max-w-md font-serif text-[17px] italic leading-relaxed text-muted-strong">
         {offDuty.intro}
       </p>
@@ -152,10 +161,12 @@ export default function OffDuty() {
             things i like when i&rsquo;m not coding
           </p>
           <div className="flex flex-wrap gap-2">
-            {offDuty.hobbies.map((h) => (
+            {offDuty.hobbies.map((h, i) => (
               <span
                 key={h}
-                className="rounded-lg border border-border bg-card px-3 py-1.5 text-[12px] text-muted-strong transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/40 hover:bg-accent/[0.08] hover:text-foreground"
+                className={`rounded-lg border border-accent/50 bg-accent/[0.06] px-3 py-1.5 text-[12px] text-foreground shadow-[0_0_18px_-6px_var(--accent)] transition-[transform,box-shadow] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:shadow-[0_0_30px_-6px_var(--accent)] ${
+                  i % 3 === 1 ? "neon-flicker" : ""
+                }`}
               >
                 {h}
               </span>

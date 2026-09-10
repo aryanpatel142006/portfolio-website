@@ -4,6 +4,8 @@ import ProjectPlate from "./ProjectPlate";
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
 import { ArrowUpRight, TrophyIcon } from "./icons";
+import CountUp from "./fx/CountUp";
+import Tilt from "./fx/Tilt";
 
 export default function CaseStudies() {
   if (projects.length === 0) return null;
@@ -122,15 +124,18 @@ export default function CaseStudies() {
                 {p.stat && (
                   <div className="stat-in border-l-2 border-accent pl-4">
                     <p className="display text-4xl text-foreground sm:text-5xl">
-                      {p.stat.value}
+                      <CountUp value={p.stat.value} />
                     </p>
                     <p className="kicker mt-1">{p.stat.label}</p>
                   </div>
                 )}
                 {p.plate ? (
-                  <div className="aspect-[16/10] w-full overflow-hidden border border-border bg-card transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.02]">
+                  <Tilt
+                    max={8}
+                    className="aspect-[16/10] w-full overflow-hidden border border-border bg-card"
+                  >
                     <ProjectPlate kind={p.plate} />
-                  </div>
+                  </Tilt>
                 ) : (
                   p.image && (
                     <div className="relative aspect-[16/10] w-full overflow-hidden border border-border bg-card">

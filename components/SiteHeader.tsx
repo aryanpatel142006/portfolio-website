@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { Moon, SunMedium } from "lucide-react";
+import { motion } from "motion/react";
 import LogoMark from "./LogoMark";
 
 /* New Brunswick wall clock — first tick is deferred a frame so the server
@@ -29,6 +30,67 @@ function LocalTime() {
     <span className="hidden font-mono text-[11px] tracking-[0.14em] text-muted sm:inline">
       <span className="tabular-nums">{time ?? "--:--"}</span>
     </span>
+  );
+}
+
+const NAV: [string, string][] = [
+  ["work", "#work"],
+  ["experience", "#experience"],
+  ["contact", "#contact"],
+];
+
+/* Section nav with a shared ink underline that slides between items as the
+   matching section crosses the middle band of the viewport. */
+function SectionNav() {
+  const [active, setActive] = useState<string | null>(null);
+
+  useEffect(() => {
+    const targets = NAV.map(([, h]) => document.querySelector(h)).filter(
+      (el): el is Element => !!el,
+    );
+    if (targets.length === 0) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) setActive(`#${e.target.id}`);
+        }
+      },
+      { rootMargin: "-30% 0px -50% 0px", threshold: 0 },
+    );
+    targets.forEach((el) => io.observe(el));
+    // back at the top, no section is "current"
+    const hero = document.querySelector('section[aria-label="Introduction"]');
+    const top = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) setActive(null);
+    });
+    if (hero) top.observe(hero);
+    return () => {
+      io.disconnect();
+      top.disconnect();
+    };
+  }, []);
+
+  return (
+    <nav aria-label="Sections" className="flex items-center gap-4 sm:gap-5">
+      {NAV.map(([label, href]) => (
+        <a
+          key={href}
+          href={href}
+          aria-current={active === href ? "true" : undefined}
+          className="draw-link hitbox relative font-mono text-[11px] lowercase tracking-[0.1em] text-muted transition-colors hover:text-foreground aria-[current]:text-foreground"
+        >
+          {label}
+          {active === href && (
+            <motion.span
+              layoutId="nav-ink"
+              aria-hidden
+              className="absolute -bottom-1.5 left-0 right-0 h-px bg-accent"
+              transition={{ type: "spring", stiffness: 420, damping: 34 }}
+            />
+          )}
+        </a>
+      ))}
+    </nav>
   );
 }
 
@@ -105,24 +167,11 @@ export default function SiteHeader() {
           aria-label="Aryan Patel, back to top"
           className="hitbox text-foreground transition-opacity hover:opacity-70"
         >
-          <LogoMark size={22} />
+          {/* the glyph turns one full revolution over the length of the page */}
+          <LogoMark size={22} className="logo-scroll-spin block" />
         </a>
 
-        <nav aria-label="Sections" className="flex items-center gap-4 sm:gap-5">
-          {[
-            ["work", "#work"],
-            ["experience", "#experience"],
-            ["contact", "#contact"],
-          ].map(([label, href]) => (
-            <a
-              key={href}
-              href={href}
-              className="draw-link hitbox font-mono text-[11px] lowercase tracking-[0.1em] text-muted transition-colors hover:text-foreground"
-            >
-              {label}
-            </a>
-          ))}
-        </nav>
+        <SectionNav />
 
         <div className="flex items-center gap-4">
           <LocalTime />

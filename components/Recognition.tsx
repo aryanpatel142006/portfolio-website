@@ -1,5 +1,6 @@
 import { certifications, education } from "@/lib/content";
 import SectionHeading from "./SectionHeading";
+import Scramble from "./fx/Scramble";
 
 /** Education and certifications — the receipts, set like a colophon. */
 export default function Recognition() {
@@ -10,7 +11,9 @@ export default function Recognition() {
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
         {/* education */}
         <div>
-          <p className="kicker mb-4">education</p>
+          <p className="kicker mb-4">
+            <Scramble text="education" />
+          </p>
           <h3 className="display text-xl text-foreground">{education.school}</h3>
           <p className="mt-1.5 text-[13px] leading-relaxed text-muted-strong">
             {education.degree}
@@ -28,7 +31,9 @@ export default function Recognition() {
 
         {/* certifications */}
         <div>
-          <p className="kicker mb-4">certifications</p>
+          <p className="kicker mb-4">
+            <Scramble text="certifications" />
+          </p>
           <ul className="flex flex-col">
             {certifications.map((c) => (
               <li

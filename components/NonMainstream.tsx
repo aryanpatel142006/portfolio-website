@@ -27,7 +27,7 @@ function Art({ src, title }: { src: string | null; title: string }) {
         alt=""
         width={48}
         height={48}
-        className="h-12 w-12 shrink-0 rounded-md object-cover"
+        className="vinyl h-12 w-12 shrink-0 rounded-full object-cover ring-1 ring-border"
         unoptimized
       />
     );
@@ -35,7 +35,7 @@ function Art({ src, title }: { src: string | null; title: string }) {
   return (
     <span
       aria-hidden
-      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-border bg-accent/[0.06] text-accent"
+      className="vinyl flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-border bg-accent/[0.06] text-accent"
       title={title}
     >
       ♪

@@ -1,4 +1,5 @@
 import { stack } from "@/lib/content";
+import Scramble from "./fx/Scramble";
 
 /** The grouped skills index under the marquee — set like a colophon table. */
 export default function StackGroups() {
@@ -11,7 +12,9 @@ export default function StackGroups() {
           key={group.label}
           className="grid grid-cols-1 gap-1.5 border-b border-border py-4 sm:grid-cols-[180px_1fr] sm:gap-6"
         >
-          <span className="kicker pt-0.5">{group.label}</span>
+          <span className="kicker pt-0.5">
+            <Scramble text={group.label} />
+          </span>
           <p className="text-[13.5px] leading-relaxed text-muted-strong">
             {group.items.map((item, i) => (
               <span key={item}>

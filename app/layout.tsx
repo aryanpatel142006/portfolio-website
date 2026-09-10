@@ -1,10 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter, Geist_Mono } from "next/font/google";
+import { Fraunces, Inter, Geist_Mono, Press_Start_2P } from "next/font/google";
 import "./globals.css";
 import { profile } from "@/lib/content";
 import ScrollProgress from "@/components/ScrollProgress";
 import CommandPalette from "@/components/CommandPalette";
 import SiteHeader from "@/components/SiteHeader";
+import Cursor from "@/components/fx/Cursor";
+import Spotlight from "@/components/fx/Spotlight";
+import Sparks from "@/components/fx/Sparks";
 
 const serif = Fraunces({
   variable: "--font-serif",
@@ -20,6 +23,13 @@ const sans = Inter({
 
 const mono = Geist_Mono({
   variable: "--font-mono",
+  subsets: ["latin"],
+});
+
+// arcade face for the off-duty world's score counters
+const arcade = Press_Start_2P({
+  weight: "400",
+  variable: "--font-arcade",
   subsets: ["latin"],
 });
 
@@ -62,7 +72,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${serif.variable} ${sans.variable} ${mono.variable} h-full antialiased`}
+      className={`${serif.variable} ${sans.variable} ${mono.variable} ${arcade.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="relative min-h-full bg-background">
@@ -77,12 +87,15 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/devicon@2.16.0/devicon.min.css"
         />
+        <Spotlight />
         <ScrollProgress />
         <SiteHeader />
         <div className="page-rails mx-auto w-[94%] sm:w-[90%] lg:w-[82%] xl:w-[70%] 2xl:w-[58%]">
           {children}
         </div>
         <CommandPalette />
+        <Cursor />
+        <Sparks />
       </body>
     </html>
   );

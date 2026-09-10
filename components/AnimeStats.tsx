@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import CountUp from "./fx/CountUp";
 
 type AnimeData = {
   enabled: boolean;
@@ -31,8 +32,11 @@ const nf = new Intl.NumberFormat("en-US");
 
 function Figure({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex flex-1 flex-col gap-1 rounded-lg border border-border bg-card px-4 py-3 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/40 hover:bg-accent/[0.08]">
-      <span className="font-serif text-2xl text-foreground">{value}</span>
+    <div className="arcade-card flex flex-1 flex-col gap-2 rounded-lg border border-border px-4 py-3 transition-[transform,box-shadow] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:shadow-[0_0_36px_-12px_var(--accent)]">
+      <CountUp
+        value={value}
+        className="font-arcade text-[17px] leading-tight text-neon-3 sm:text-[19px]"
+      />
       <span className="font-mono text-[10px] uppercase leading-tight tracking-wide text-muted">
         {label}
       </span>

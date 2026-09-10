@@ -75,7 +75,8 @@ function sweep(
 export function unlockOffDuty(origin?: { x: number; y: number }) {
   const fire = () => {
     enterMood();
-    window.dispatchEvent(new CustomEvent(OFFDUTY_UNLOCK_EVENT));
+    // the origin rides along so the spark burst can start where the click was
+    window.dispatchEvent(new CustomEvent(OFFDUTY_UNLOCK_EVENT, { detail: origin }));
   };
 
   const alreadyUnlocked = !!document.querySelector(
