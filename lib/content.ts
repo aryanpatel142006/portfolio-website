@@ -355,7 +355,12 @@ export type NowItem = {
 
 // A song for the "non-mainstream songs" shelf. Paste a Spotify link/URI, OR a
 // plain "Song Name — Artist" string (resolved via Spotify search server-side).
-export type SongEntry = string;
+export type SongLang = "en" | "hi" | "gu" | "jp";
+/** A Spotify link or a plain "Song — Artist" name, plus the language it's
+    sung in (rendered as a small chip) and, optionally, the scene it's from. */
+export type SongEntry =
+  | string
+  | { src: string; lang: SongLang; scene?: string };
 
 export const offDuty = {
   // A short, human intro line shown under the heading.
@@ -376,25 +381,25 @@ export const offDuty = {
   //    (open.spotify.com/track/… or spotify:track:…) OR plain "Song — Artist"
   //    names. Server resolves album art + artist via the Spotify API. ──
   nonMainstream: [
-    "https://open.spotify.com/track/3StShCGECtZMW2yp9XkFYv", // THER IT IS
-    "https://open.spotify.com/track/1Xp2sxCBpDFCcerKKh1ik7", // MAJJA NI LIFE
-    "https://open.spotify.com/track/4N7LGbba3i05Ymt3lUN4IT", // car keys — Tsumyoki, Venserto, lil help
-    "https://open.spotify.com/track/6vH6xKa1vh9ihWrLYZAmU8?autoplay_ok=1", // Banda kaam ka
-    "https://open.spotify.com/track/0pMACt1jSBlH8mKdaE1TSv", // Don't even text - gini
-    "https://open.spotify.com/track/4TFYFMssJiMwREPUauwWbt", // SAVEEREN
+    { src: "https://open.spotify.com/track/3StShCGECtZMW2yp9XkFYv", lang: "en" }, // There It Is
+    { src: "https://open.spotify.com/track/1Xp2sxCBpDFCcerKKh1ik7", lang: "gu" }, // Majja Ni Life
+    { src: "https://open.spotify.com/track/4N7LGbba3i05Ymt3lUN4IT", lang: "en" }, // car keys — Tsumyoki
+    { src: "https://open.spotify.com/track/6vH6xKa1vh9ihWrLYZAmU8", lang: "hi" }, // Banda Kaam Ka
+    { src: "https://open.spotify.com/track/0pMACt1jSBlH8mKdaE1TSv", lang: "en" }, // Don't Even Text — gini
+    { src: "https://open.spotify.com/track/4TFYFMssJiMwREPUauwWbt", lang: "hi" }, // Saanvare
 
     // ── desi indie / bollymood deep cuts ──
-    "https://open.spotify.com/track/2oSnGQbI4tZxImmCs2c4PP", // Nasamajh — Aditya Rikhari
-    "https://open.spotify.com/track/7eQoMQdE4JqngwYDOqLBU0", // Superstar — dox, JASKARAN, Rita Kim
-    // ── japanese city pop (JAP) ──
-    "https://open.spotify.com/album/48I17j8JwxGEe2FQAiQ75P", // STAY WITH ME
-    "https://open.spotify.com/track/3x4378ztiLvFmm2nuzEI0C", // EVENGELION
-    "https://open.spotify.com/track/0kdqcbwei4MDWFEX5f33yG", // bling bang bang born
-    "https://open.spotify.com/track/1rN9QoVxw5U7TJkyaUR8C1", // TOKYO GOHUL OPENING
-    "https://open.spotify.com/track/6bfjEGSR7DyC8MK8cp3ZCp", // Blood Blockade Battlefront (S1 ED)
+    { src: "https://open.spotify.com/track/2oSnGQbI4tZxImmCs2c4PP", lang: "hi" }, // Nasamajh — Aditya Rikhari
+    { src: "https://open.spotify.com/track/7eQoMQdE4JqngwYDOqLBU0", lang: "hi" }, // Superstar — dox, JASKARAN, Rita Kim
+    // ── japanese: city pop + anime ──
+    { src: "Stay With Me — Miki Matsubara", lang: "jp", scene: "city pop" }, // (album links don't resolve; the name does)
+    { src: "https://open.spotify.com/track/3x4378ztiLvFmm2nuzEI0C", lang: "jp", scene: "anime op" }, // Cruel Angel's Thesis
+    { src: "https://open.spotify.com/track/0kdqcbwei4MDWFEX5f33yG", lang: "jp", scene: "anime op" }, // Bling-Bang-Bang-Born
+    { src: "https://open.spotify.com/track/1rN9QoVxw5U7TJkyaUR8C1", lang: "jp", scene: "anime op" }, // unravel (Tokyo Ghoul)
+    { src: "https://open.spotify.com/track/6bfjEGSR7DyC8MK8cp3ZCp", lang: "jp", scene: "anime ed" }, // Sugar Song to Bitter Step
     // ── rap ──
-    "https://open.spotify.com/track/1Jsos1mzwTwYGOndYN5h8V", // Farebi — Chaar Diwaari, Raftaar
-    "https://open.spotify.com/track/7CVw4gVPpH1TPQttQGVmhZ", // Maharani — Karun, Lambo Drive, Arpit Bala
+    { src: "https://open.spotify.com/track/1Jsos1mzwTwYGOndYN5h8V", lang: "hi", scene: "rap" }, // Farebi — Chaar Diwaari, Raftaar
+    { src: "https://open.spotify.com/track/7CVw4gVPpH1TPQttQGVmhZ", lang: "hi", scene: "rap" }, // Maharani — Karun, Lambo Drive
   ] as SongEntry[],
 
   // ── anime stats — live from AniList (public profile, no auth needed). ──

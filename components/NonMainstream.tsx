@@ -2,22 +2,27 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
 import { playPreview, stopPreview, subscribe } from "@/lib/preview-player";
-import { offDuty } from "@/lib/content";
+import { OFFDUTY_COIN_EVENT } from "@/lib/offduty";
+import { offDuty, type SongEntry, type SongLang } from "@/lib/content";
 import { prefetchTracks, type Track } from "@/lib/tracks-client";
 
 // Derive a readable "Title / Artist" from a raw content entry, used as the
 // graceful fallback when the Spotify API can't resolve (or isn't configured).
-function fallbackFromEntry(entry: string): { title: string; artist: string } {
-  const s = entry.trim();
+const LANG_LABEL: Record<SongLang, string> = { en: "english", hi: "hindi", gu: "gujarati", jp: "japanese" };
+
+function fallbackFromEntry(entry: SongEntry): { title: string; artist: string; lang?: SongLang } {
+  const s = (typeof entry === "string" ? entry : entry.src).trim();
+  const lang = typeof entry === "string" ? undefined : entry.lang;
   if (/open\.spotify\.com|spotify:track:/.test(s)) {
-    return { title: "spotify track", artist: "" };
+    return { title: "spotify track", artist: "", lang };
   }
   const parts = s.split(/\s+[—–-]\s+/);
   if (parts.length >= 2) {
-    return { title: parts[0].trim(), artist: parts.slice(1).join(" — ").trim() };
+    return { title: parts[0].trim(), artist: parts.slice(1).join(" — ").trim(), lang };
   }
-  return { title: s, artist: "" };
+  return { title: s, artist: "", lang };
 }
 
 function Art({
@@ -123,6 +128,15 @@ function Card({ track }: { track: Track }) {
           </span>
         )}
       </div>
+      {track.lang && (
+        <span
+          className="lang-chip ml-1 shrink-0 self-center"
+          title={LANG_LABEL[track.lang]}
+          aria-label={`sung in ${LANG_LABEL[track.lang]}`}
+        >
+          {track.lang}
+        </span>
+      )}
       {playing ? (
         <span
           aria-hidden
@@ -196,6 +210,30 @@ export default function NonMainstream() {
   const entries = offDuty.nonMainstream;
   const [tracks, setTracks] = useState<Track[] | null>(null);
   const [loading, setLoading] = useState(true);
+  // display order; every inserted coin deals a new one (never the same twice)
+  const [order, setOrder] = useState<number[] | null>(null);
+  // language filter; "all" shows the whole shelf
+  const [lang, setLang] = useState<SongLang | "all">("all");
+
+  useEffect(() => {
+    const onCoin = () => {
+      setOrder((prev) => {
+        const n = entries.length;
+        const base = prev ?? Array.from({ length: n }, (_, i) => i);
+        let next = base;
+        for (let tries = 0; tries < 5 && next.join() === base.join(); tries++) {
+          next = [...base];
+          for (let i = next.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [next[i], next[j]] = [next[j], next[i]];
+          }
+        }
+        return next;
+      });
+    };
+    window.addEventListener(OFFDUTY_COIN_EVENT, onCoin);
+    return () => window.removeEventListener(OFFDUTY_COIN_EVENT, onCoin);
+  }, [entries.length]);
 
   useEffect(() => {
     let alive = true;
@@ -221,19 +259,57 @@ export default function NonMainstream() {
   const cards: Track[] = resolved
     ? tracks
     : entries.map((e) => ({ ...fallbackFromEntry(e), albumArt: null, url: null, previewUrl: null }));
+  // languages actually present, in shelf order
+  const langs = [...new Set(cards.map((c) => c.lang).filter((l): l is SongLang => !!l))];
 
   return (
     <div className="mb-8">
-      <p className="mb-3 flex flex-wrap items-baseline gap-x-2 font-mono text-[11px] uppercase tracking-wider text-muted">
-        non-mainstream songs
-        <span className="normal-case tracking-normal text-muted/70">
-          · in no particular order
-        </span>
-      </p>
+      <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
+        <p className="flex flex-wrap items-baseline gap-x-2 font-mono text-[11px] uppercase tracking-wider text-muted">
+          non-mainstream songs
+          <span className="normal-case tracking-normal text-muted/70">
+            · in no particular order
+          </span>
+        </p>
+        {langs.length > 1 && (
+          <div
+            role="group"
+            aria-label="Filter songs by language"
+            className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider"
+          >
+            {(["all", ...langs] as const).map((l) => (
+              <button
+                key={l}
+                type="button"
+                onClick={() => setLang(l)}
+                aria-pressed={lang === l}
+                className={`rounded-full px-2 py-0.5 transition-colors ${
+                  lang === l
+                    ? "bg-accent text-accent-contrast"
+                    : "text-muted hover:text-foreground"
+                }`}
+              >
+                {l}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
       <div className="flex flex-col gap-2">
         {loading
           ? entries.map((_, i) => <Skeleton key={i} />)
-          : cards.map((t, i) => <Card key={`${t.title}-${i}`} track={t} />)}
+          : (order ?? cards.map((_, i) => i))
+              .filter((i) => i < cards.length)
+              .filter((i) => lang === "all" || cards[i].lang === lang)
+              .map((i) => (
+                <motion.div
+                  key={`${cards[i].title}-${i}`}
+                  layout
+                  transition={{ type: "spring", stiffness: 320, damping: 32 }}
+                >
+                  <Card track={cards[i]} />
+                </motion.div>
+              ))}
       </div>
     </div>
   );

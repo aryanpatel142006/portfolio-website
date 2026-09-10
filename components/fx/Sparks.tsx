@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { OFFDUTY_UNLOCK_EVENT } from "@/lib/offduty";
+import { FX_SPARKS_EVENT, OFFDUTY_UNLOCK_EVENT } from "@/lib/offduty";
 import { reducedMotion } from "@/lib/fx";
 
 type Spark = {
@@ -29,9 +29,10 @@ export default function Sparks() {
     let raf = 0;
     const onUnlock = (e: Event) => {
       if (reducedMotion()) return;
-      const d = (e as CustomEvent<{ x: number; y: number } | undefined>).detail;
+      const d = (e as CustomEvent<{ x?: number; y?: number; count?: number } | undefined>).detail;
       const ox = d?.x ?? window.innerWidth / 2;
       const oy = d?.y ?? window.innerHeight / 2;
+      const count = d?.count ?? 160;
       const dpr = Math.min(2, window.devicePixelRatio || 1);
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
@@ -46,7 +47,7 @@ export default function Sparks() {
         cs.getPropertyValue("--neon-3").trim() || "#ffd166",
         cs.getPropertyValue("--foreground").trim() || "#fff",
       ];
-      const sparks: Spark[] = Array.from({ length: 160 }, () => {
+      const sparks: Spark[] = Array.from({ length: count }, () => {
         const a = Math.random() * Math.PI * 2;
         const s = 5 + Math.random() * 13;
         return {
@@ -95,8 +96,10 @@ export default function Sparks() {
       raf = requestAnimationFrame(frame);
     };
     window.addEventListener(OFFDUTY_UNLOCK_EVENT, onUnlock);
+    window.addEventListener(FX_SPARKS_EVENT, onUnlock);
     return () => {
       window.removeEventListener(OFFDUTY_UNLOCK_EVENT, onUnlock);
+      window.removeEventListener(FX_SPARKS_EVENT, onUnlock);
       cancelAnimationFrame(raf);
     };
   }, []);

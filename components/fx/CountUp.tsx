@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { reducedMotion } from "@/lib/fx";
+import { OFFDUTY_COIN_EVENT } from "@/lib/offduty";
 
 /** Numbers that count up the first time they scroll into view, and again
     whenever the pointer enters the nearest [data-replay-host] (or the number
@@ -58,10 +59,12 @@ export default function CountUp({
     const host = el.closest<HTMLElement>("[data-replay-host]") ?? el;
     const replay = () => run(Math.min(duration, 900));
     host.addEventListener("pointerenter", replay);
+    window.addEventListener(OFFDUTY_COIN_EVENT, replay);
     return () => {
       io.disconnect();
       cancelAnimationFrame(raf);
       host.removeEventListener("pointerenter", replay);
+      window.removeEventListener(OFFDUTY_COIN_EVENT, replay);
     };
   }, [value, duration]);
 

@@ -7,13 +7,25 @@
  * by free (non-Premium) accounts, even on public endpoints. No token needed.
  */
 
+import type { SongEntry, SongLang } from "@/lib/content";
+
 export type Track = {
   title: string;
   artist: string;
   albumArt: string | null;
   url: string | null;
   previewUrl: string | null; // ~30s clip (Spotify's own, else iTunes) for hover previews
+  lang?: SongLang; // from the content entry, shown as a chip
+  scene?: string;
 };
+
+/** Normalize a content entry to its lookup string + tags. */
+export function entrySrc(e: SongEntry): string {
+  return typeof e === "string" ? e : e.src;
+}
+function entryTags(e: SongEntry): { lang?: SongLang; scene?: string } {
+  return typeof e === "string" ? {} : { lang: e.lang, scene: e.scene };
+}
 
 // ── parsing ────────────────────────────────────────────────────────────────
 
@@ -165,16 +177,18 @@ async function resolveByName(query: string): Promise<Track | null> {
  * card). URL entries are resolved in small batches with a short gap to stay
  * polite; order is preserved by resolving against the original indices.
  */
-export async function getTracks(list: string[]): Promise<Track[]> {
+export async function getTracks(list: SongEntry[]): Promise<Track[]> {
   const results = new Array<Track | null>(list.length).fill(null);
   const BATCH = 4;
 
   for (let i = 0; i < list.length; i += BATCH) {
     const slice = list.slice(i, i + BATCH);
     const resolved = await Promise.all(
-      slice.map((entry) =>
-        parseTrackId(entry) ? resolveByUrl(entry) : resolveByName(entry),
-      ),
+      slice.map(async (entry) => {
+        const src = entrySrc(entry);
+        const t = parseTrackId(src) ? await resolveByUrl(src) : await resolveByName(src);
+        return t ? { ...t, ...entryTags(entry) } : null;
+      }),
     );
     resolved.forEach((t, j) => (results[i + j] = t));
     if (i + BATCH < list.length) await sleep(300);

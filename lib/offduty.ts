@@ -13,6 +13,10 @@ export const OFFDUTY_UNLOCK_EVENT = "offduty:unlock";
 export const OFFDUTY_RELOCK_EVENT = "offduty:relock";
 export const OFFDUTY_ANCHOR_LABEL = "Off duty";
 export const OFFDUTY_TEASER_ID = "offduty";
+/** "insert coin": reshuffles the shelf, replays the counters, throws sparks */
+export const OFFDUTY_COIN_EVENT = "offduty:coin";
+/** generic spark burst request: detail { x, y, count? } */
+export const FX_SPARKS_EVENT = "fx:sparks";
 
 /** How the unlock happened. Deliberate routes (the teaser button, the ⌘K
     command) need no explanation; the two that can fire by accident (arrow

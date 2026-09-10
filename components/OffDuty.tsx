@@ -6,6 +6,7 @@ import { offDuty } from "@/lib/content";
 import NonMainstream from "@/components/NonMainstream";
 import AnimeStats from "@/components/AnimeStats";
 import NightSky from "@/components/fx/NightSky";
+import { playCoin } from "@/lib/coin-sound";
 import { prefetchTracks } from "@/lib/tracks-client";
 import {
   KONAMI_SEQUENCE,
@@ -13,6 +14,8 @@ import {
   OFFDUTY_RELOCK_EVENT,
   OFFDUTY_TEASER_ID,
   OFFDUTY_UNLOCK_EVENT,
+  OFFDUTY_COIN_EVENT,
+  FX_SPARKS_EVENT,
   relockOffDuty,
   unlockOffDuty,
   type UnlockDetail,
@@ -27,6 +30,22 @@ export default function OffDuty() {
   const sectionRef = useRef<HTMLElement>(null);
   // "you just did X" note for unlocks that can happen by accident
   const [toastVia, setToastVia] = useState<UnlockVia | null>(null);
+  // arcade credits: each coin reshuffles the shelf and replays the counters
+  const [credits, setCredits] = useState(0);
+  const [coinDrop, setCoinDrop] = useState(0); // bumps to replay the drop animation
+
+  function insertCoin(e: React.MouseEvent<HTMLButtonElement>) {
+    const r = e.currentTarget.getBoundingClientRect();
+    setCredits((c) => c + 1);
+    setCoinDrop((k) => k + 1);
+    playCoin();
+    window.dispatchEvent(new CustomEvent(OFFDUTY_COIN_EVENT));
+    window.dispatchEvent(
+      new CustomEvent(FX_SPARKS_EVENT, {
+        detail: { x: r.left + 12, y: r.top + r.height / 2, count: 60 },
+      }),
+    );
+  }
   // the section's own "back to work mode" button; when it scrolls out of
   // view a floating twin takes over so the exit is always one click away
   const headRef = useRef<HTMLDivElement>(null);
@@ -60,6 +79,7 @@ export default function OffDuty() {
       setUnlocked(false);
       setJustUnlocked(false);
       setToastVia(null);
+      setCredits(0);
     };
     window.addEventListener(OFFDUTY_UNLOCK_EVENT, onUnlock);
     window.addEventListener(OFFDUTY_RELOCK_EVENT, onRelock);
@@ -184,9 +204,35 @@ export default function OffDuty() {
         </button>
       </div>
 
-      <p className="mb-6 font-arcade text-[9px] uppercase tracking-[0.18em] text-neon-2">
-        <span className="coin-blink">▶</span> player 1 · insert coin
-      </p>
+      {/* the coin slot: a real button. each coin reshuffles the song shelf,
+          replays the score counters, throws sparks and goes "bling" */}
+      <button
+        type="button"
+        onClick={insertCoin}
+        aria-label={`Insert coin: reshuffle the song shelf. Credits: ${credits}`}
+        className="coin-slot group mb-6 inline-flex items-center gap-3 font-arcade text-[9px] uppercase tracking-[0.18em] text-neon-2"
+      >
+        <span className="coin-well" aria-hidden>
+          <span key={coinDrop} className={coinDrop ? "coin coin-fall" : "coin"} />
+        </span>
+        <span>
+          {credits === 0 ? (
+            <>
+              <span className="coin-blink">▶</span> player 1 · insert coin
+            </>
+          ) : (
+            <>
+              credits {String(credits).padStart(2, "0")} · shelf reshuffled
+            </>
+          )}
+        </span>
+        <span
+          aria-hidden
+          className="text-[8px] text-muted opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+        >
+          {credits === 0 ? "click" : "again?"}
+        </span>
+      </button>
 
       <p className="mb-9 max-w-md font-serif text-[17px] italic leading-relaxed text-muted-strong">
         {offDuty.intro}

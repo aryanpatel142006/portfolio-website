@@ -1138,6 +1138,72 @@ html[data-mood="offduty"] .spotlight {
   }
 }
 
+/* the coin slot: a slot with a gold coin that drops in on every press */
+.coin-slot {
+  cursor: pointer;
+}
+.coin-well {
+  position: relative;
+  display: inline-block;
+  width: 14px;
+  height: 22px;
+  border: 1px solid color-mix(in oklab, var(--neon-2) 60%, transparent);
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow: inset 0 0 8px -3px var(--neon-2);
+}
+.coin-well::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 5px;
+  height: 2px;
+  background: var(--neon-2);
+  border-radius: 1px;
+}
+.coin {
+  position: absolute;
+  left: 2px;
+  top: -12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--neon-3);
+  box-shadow: inset -2px -2px 0 rgba(0, 0, 0, 0.35), 0 0 6px var(--neon-3);
+  opacity: 0;
+}
+.coin-fall {
+  animation: coin-fall 0.55s cubic-bezier(0.5, 0, 0.9, 0.6) both;
+}
+@keyframes coin-fall {
+  0% { opacity: 1; transform: translateY(0) scaleX(1); }
+  60% { opacity: 1; transform: translateY(18px) scaleX(0.4); }
+  100% { opacity: 0; transform: translateY(28px) scaleX(0.2); }
+}
+.coin-slot:active .coin-well {
+  transform: translateY(1px);
+}
+
+/* language chip on a song card */
+.lang-chip {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-strong);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.group:hover .lang-chip,
+.is-playing .lang-chip {
+  color: var(--neon-2);
+  border-color: color-mix(in oklab, var(--neon-2) 60%, transparent);
+}
+
 /* arcade furniture */
 .coin-blink {
   animation: coin 1.1s steps(2, jump-none) infinite;
