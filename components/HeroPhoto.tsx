@@ -1,8 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
-import { unlockOffDuty } from "@/lib/offduty";
+import { useEffect, useRef, useState } from "react";
+import {
+  OFFDUTY_RELOCK_EVENT,
+  OFFDUTY_UNLOCK_EVENT,
+  unlockOffDuty,
+} from "@/lib/offduty";
 
 const CLICKS_TO_UNLOCK = 5;
 
@@ -22,11 +26,27 @@ export default function HeroPhoto({
   const count = useRef(0);
   const [showCat, setShowCat] = useState(false);
 
+  // Off duty means the cat's on shift: the portrait swaps to the hover photo
+  // when the hidden section opens (from any trigger) and back on relock.
+  useEffect(() => {
+    if (!photoHover) return;
+    const onUnlock = () => setShowCat(true);
+    const onRelock = () => setShowCat(false);
+    window.addEventListener(OFFDUTY_UNLOCK_EVENT, onUnlock);
+    window.addEventListener(OFFDUTY_RELOCK_EVENT, onRelock);
+    return () => {
+      window.removeEventListener(OFFDUTY_UNLOCK_EVENT, onUnlock);
+      window.removeEventListener(OFFDUTY_RELOCK_EVENT, onRelock);
+    };
+  }, [photoHover]);
+
   function onClick(e: React.MouseEvent) {
     count.current += 1;
     if (count.current >= CLICKS_TO_UNLOCK) {
       count.current = 0;
+      // the unlock event shows the cat itself — don't toggle it back off
       unlockOffDuty({ x: e.clientX, y: e.clientY });
+      return;
     }
     if (photoHover) setShowCat((c) => !c);
   }
