@@ -14,7 +14,7 @@ export type Track = {
   albumArt: string | null;
   url: string | null;
   previewUrl: string | null;
-  lang?: "en" | "hi" | "gu" | "pa" | "ta" | "jp";
+  lang?: "en" | "hi" | "gu" | "pa" | "ta" | "ur" | "jp";
   scene?: string;
 };
 

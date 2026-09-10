@@ -355,7 +355,7 @@ export type NowItem = {
 
 // A song for the "non-mainstream songs" shelf. Paste a Spotify link/URI, OR a
 // plain "Song Name — Artist" string (resolved via Spotify search server-side).
-export type SongLang = "en" | "hi" | "gu" | "pa" | "ta" | "jp";
+export type SongLang = "en" | "hi" | "gu" | "pa" | "ta" | "ur" | "jp";
 /** A Spotify link or a plain "Song — Artist" name, plus the language it's
     sung in (rendered as a small chip) and, optionally, the scene it's from. */
 export type SongEntry =
@@ -398,6 +398,8 @@ export const offDuty = {
     { src: "RAAT KHATAM — Dashmusic", lang: "hi" }, // feat. KAAR; say so if you meant the Neil-Niraj film song
     { src: "Nafrat — Seedhe Maut", lang: "hi", scene: "rap" }, // Darshan Raval also has a "Nafrat"; swap the artist if that's the one
     { src: "Animals — Martin Garrix", lang: "en" },
+    // ── urdu ──
+    { src: "kidhar? — Maanu, Talal Qureshi", lang: "ur" },
     // ── tamil ──
     { src: "Holá Amigö — Anirudh Ravichander", lang: "ta" },
     // ── punjabi ──
