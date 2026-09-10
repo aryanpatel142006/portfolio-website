@@ -19,16 +19,33 @@ type AnimeData = {
 function Comparison({ hours, first, pool }: { hours: number; first: string; pool: string[] }) {
   const [line, setLine] = useState(first);
   const [deal, setDeal] = useState(0);
+  const [fresh, setFresh] = useState<string[]>([]);
+
+  // a dozen model-written lines join the curated pool once they arrive
   useEffect(() => {
+    let alive = true;
+    fetch("/api/quips")
+      .then((r) => (r.ok ? r.json() : { lines: [] }))
+      .then((d: { lines?: string[] }) => {
+        if (alive && d.lines?.length) setFresh(d.lines);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const all = [...new Set([...pool, ...fresh])];
     const onCoin = () => {
-      const others = pool.filter((l) => l !== line);
+      const others = all.filter((l) => l !== line);
       if (others.length === 0) return;
       setLine(others[Math.floor(Math.random() * others.length)]);
       setDeal((d) => d + 1);
     };
     window.addEventListener(OFFDUTY_COIN_EVENT, onCoin);
     return () => window.removeEventListener(OFFDUTY_COIN_EVENT, onCoin);
-  }, [pool, line]);
+  }, [pool, fresh, line]);
   return (
     <p
       key={deal}
