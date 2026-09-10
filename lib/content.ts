@@ -415,7 +415,6 @@ export const offDuty = {
     { src: "9:45 — Prabh Singh", lang: "pa" }, // Prabh Singh & Jay Trak
     { src: "Tauba Tauba — Karan Aujla", lang: "pa" }, // from Bad Newz
     { src: "Lover — Diljit Dosanjh", lang: "pa" },
-    { src: "Masala — TroyBoi, Amrit Maan", lang: "pa" },
     // ── japanese: city pop + anime ──
     { src: "Stay With Me — Miki Matsubara", lang: "jp", scene: "city pop" }, // (album links don't resolve; the name does)
     { src: "https://open.spotify.com/track/3x4378ztiLvFmm2nuzEI0C", lang: "jp", scene: "anime op" }, // Cruel Angel's Thesis
