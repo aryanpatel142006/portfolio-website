@@ -797,10 +797,34 @@ html.vt-warm body {
 .cursor-ring.is-field {
   border-color: color-mix(in oklab, var(--accent) 45%, transparent);
 }
-/* the ring's birthplace loses its ink while the ring is in flight */
-.drained {
-  transition: color 0.35s ease !important;
-  color: var(--muted) !important;
+/* the ring's birthplace fires a ripple and dips grey for a beat */
+.launch {
+  position: relative;
+  animation: launch-dip 0.9s ease both;
+}
+.launch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid var(--accent);
+  animation: launch-ripple 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes launch-dip {
+  30%,
+  60% {
+    color: var(--muted);
+  }
+}
+@keyframes launch-ripple {
+  from {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(9);
+  }
 }
 html[data-mood="offduty"] .cursor-ring {
   box-shadow:
