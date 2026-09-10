@@ -203,13 +203,11 @@ export default function OffDuty() {
             <p className="mt-1.5 text-[13px] leading-snug text-foreground">
               {toastVia === "keys" ? (
                 <>
-                  Pressing <kbd>↓</kbd> <kbd>↓</kbd> opened the off-duty side of this site:
-                  anime, songs, the cat.
+                  Pressing <kbd>↓</kbd> <kbd>↓</kbd> opened the off-duty side of this site.
                 </>
               ) : (
                 <>
-                  Tapping the photo five times opened the off-duty side of this site:
-                  anime, songs, the cat.
+                  Tapping the photo five times opened the off-duty side of this site.
                 </>
               )}
             </p>
