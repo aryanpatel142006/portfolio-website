@@ -400,6 +400,20 @@ export const offDuty = {
     // ── rap ──
     { src: "https://open.spotify.com/track/1Jsos1mzwTwYGOndYN5h8V", lang: "hi", scene: "rap" }, // Farebi — Chaar Diwaari, Raftaar
     { src: "https://open.spotify.com/track/7CVw4gVPpH1TPQttQGVmhZ", lang: "hi", scene: "rap" }, // Maharani — Karun, Lambo Drive
+
+    // ── gujarati ──
+    { src: "Luv Ni Love Storys — Aditya Gadhvi", lang: "gu" },
+    { src: "Tari Madh Mithi Madh Mithi Vaate", lang: "gu" },
+    { src: "Mane Malje", lang: "gu" },
+    { src: "Ramo Re", lang: "gu" },
+    { src: "Gori Radha Ne Kalo Kaan", lang: "gu", scene: "garba" },
+
+    // ── added for a deeper shuffle (2026-09-10); prune anything that isn't you ──
+    { src: "Samjho Na — Aditya Rikhari", lang: "hi" },
+    { src: "Where the Money Flows — Peter Cat Recording Co.", lang: "en" },
+    { src: "Yume Utsutsu — Lamp", lang: "jp", scene: "city pop" },
+    { src: "だから僕は音楽を辞めた ヨルシカ", lang: "jp" }, // Yorushika (Japanese title resolves; romaji found a music-box cover)
+    { src: "ギターと孤独と蒼い惑星 結束バンド", lang: "jp", scene: "anime" }, // Kessoku Band, Bocchi the Rock
   ] as SongEntry[],
 
   // ── anime stats — live from AniList (public profile, no auth needed). ──
