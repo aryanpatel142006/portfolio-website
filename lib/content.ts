@@ -397,6 +397,7 @@ export const offDuty = {
     { src: "Big Dawgs — Hanumankind", lang: "en", scene: "rap" },
     { src: "RAAT KHATAM — Dashmusic", lang: "hi" }, // feat. KAAR; say so if you meant the Neil-Niraj film song
     { src: "Nafrat — Seedhe Maut", lang: "hi", scene: "rap" }, // Darshan Raval also has a "Nafrat"; swap the artist if that's the one
+    { src: "Gujju Pataka — Meet Bros", lang: "hi" }, // from Satyaprem Ki Katha; Hindi with Gujarati flavor, retag "gu" if you'd rather
     { src: "Animals — Martin Garrix", lang: "en" },
     // ── urdu ──
     { src: "kidhar? — Maanu, Talal Qureshi", lang: "ur" },
