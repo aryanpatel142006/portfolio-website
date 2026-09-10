@@ -26,6 +26,7 @@ const LANG_LABEL: Record<SongLang, string> = {
   hi: "hindi",
   gu: "gujarati",
   pa: "punjabi",
+  ta: "tamil",
   jp: "japanese",
 };
 

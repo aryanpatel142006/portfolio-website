@@ -355,7 +355,7 @@ export type NowItem = {
 
 // A song for the "non-mainstream songs" shelf. Paste a Spotify link/URI, OR a
 // plain "Song Name — Artist" string (resolved via Spotify search server-side).
-export type SongLang = "en" | "hi" | "gu" | "pa" | "jp";
+export type SongLang = "en" | "hi" | "gu" | "pa" | "ta" | "jp";
 /** A Spotify link or a plain "Song — Artist" name, plus the language it's
     sung in (rendered as a small chip) and, optionally, the scene it's from. */
 export type SongEntry =
@@ -393,6 +393,9 @@ export const offDuty = {
     { src: "https://open.spotify.com/track/7eQoMQdE4JqngwYDOqLBU0", lang: "pa" }, // Superstar — dox, JASKARAN, Rita Kim
     { src: "Samjho Na — Aditya Rikhari", lang: "hi" },
     { src: "Girlfriend — Dino James", lang: "hi", scene: "rap" },
+    { src: "I Guess — KR$NA", lang: "hi", scene: "rap" },
+    // ── tamil ──
+    { src: "Holá Amigö — Anirudh Ravichander", lang: "ta" },
     // ── punjabi ──
     { src: "Wavy — Karan Aujla", lang: "pa" },
     { src: "For A Reason — Karan Aujla", lang: "pa" },
