@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import CountUp from "./fx/CountUp";
+import { OFFDUTY_COIN_EVENT } from "@/lib/offduty";
 
 type AnimeData = {
   enabled: boolean;
@@ -10,7 +11,33 @@ type AnimeData = {
   stats?: { count: number; episodesWatched: number; minutesWatched: number };
   watchingCount?: number;
   comparison?: { hours: number; line: string } | null;
+  comparisons?: string[]; // every line the hours qualify for
 };
+
+/** "that's N hours. i could've X instead lol", re-dealt on every coin with a
+    quick slide so the change reads as a new card being turned over. */
+function Comparison({ hours, first, pool }: { hours: number; first: string; pool: string[] }) {
+  const [line, setLine] = useState(first);
+  const [deal, setDeal] = useState(0);
+  useEffect(() => {
+    const onCoin = () => {
+      const others = pool.filter((l) => l !== line);
+      if (others.length === 0) return;
+      setLine(others[Math.floor(Math.random() * others.length)]);
+      setDeal((d) => d + 1);
+    };
+    window.addEventListener(OFFDUTY_COIN_EVENT, onCoin);
+    return () => window.removeEventListener(OFFDUTY_COIN_EVENT, onCoin);
+  }, [pool, line]);
+  return (
+    <p
+      key={deal}
+      className={`mt-3 max-w-md font-serif text-[15px] italic leading-relaxed text-muted-strong ${deal ? "line-deal" : ""}`}
+    >
+      that&rsquo;s {nf.format(hours)} hours. i {line} instead lol
+    </p>
+  );
+}
 
 // "2026-09-09" → "Sep 2026" (month-level is honest enough for a fallback)
 function formatSynced(iso: string): string {
@@ -99,7 +126,7 @@ export default function AnimeStats() {
   // Hide entirely when disabled, private, or errored — never look broken.
   if (!data?.enabled || !data.stats) return null;
 
-  const { stats, watchingCount, comparison, live, syncedAt } = data;
+  const { stats, watchingCount, comparison, comparisons, live, syncedAt } = data;
 
   return (
     <div className="mb-8">
@@ -122,10 +149,11 @@ export default function AnimeStats() {
       </div>
 
       {comparison && (
-        <p className="mt-3 max-w-md font-serif text-[15px] italic leading-relaxed text-muted-strong">
-          that&rsquo;s {nf.format(comparison.hours)} hours. i {comparison.line}{" "}
-          instead lol
-        </p>
+        <Comparison
+          hours={comparison.hours}
+          first={comparison.line}
+          pool={comparisons ?? [comparison.line]}
+        />
       )}
     </div>
   );

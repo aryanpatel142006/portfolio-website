@@ -15,7 +15,6 @@ import {
   OFFDUTY_TEASER_ID,
   OFFDUTY_UNLOCK_EVENT,
   OFFDUTY_COIN_EVENT,
-  FX_SPARKS_EVENT,
   relockOffDuty,
   unlockOffDuty,
   type UnlockDetail,
@@ -33,18 +32,16 @@ export default function OffDuty() {
   // arcade credits: each coin reshuffles the shelf and replays the counters
   const [credits, setCredits] = useState(0);
   const [coinDrop, setCoinDrop] = useState(0); // bumps to replay the drop animation
+  const [pops, setPops] = useState<number[]>([]); // "+1 credit" popups in flight
 
-  function insertCoin(e: React.MouseEvent<HTMLButtonElement>) {
-    const r = e.currentTarget.getBoundingClientRect();
+  function insertCoin() {
     setCredits((c) => c + 1);
     setCoinDrop((k) => k + 1);
+    const id = Date.now();
+    setPops((p) => [...p, id]);
+    window.setTimeout(() => setPops((p) => p.filter((x) => x !== id)), 900);
     playCoin();
     window.dispatchEvent(new CustomEvent(OFFDUTY_COIN_EVENT));
-    window.dispatchEvent(
-      new CustomEvent(FX_SPARKS_EVENT, {
-        detail: { x: r.left + 12, y: r.top + r.height / 2, count: 60 },
-      }),
-    );
   }
   // the section's own "back to work mode" button; when it scrolls out of
   // view a floating twin takes over so the exit is always one click away
@@ -210,11 +207,17 @@ export default function OffDuty() {
         type="button"
         onClick={insertCoin}
         aria-label={`Insert coin: reshuffle the song shelf. Credits: ${credits}`}
-        className="coin-slot group mb-6 inline-flex items-center gap-3 font-arcade text-[9px] uppercase tracking-[0.18em] text-neon-2"
+        className="coin-slot group relative mb-6 inline-flex items-center gap-3 font-arcade text-[9px] uppercase tracking-[0.18em] text-neon-2"
       >
         <span className="coin-well" aria-hidden>
           <span key={coinDrop} className={coinDrop ? "coin coin-fall" : "coin"} />
         </span>
+        {/* arcade score popups: "+1 credit" rises out of the slot and fades */}
+        {pops.map((id) => (
+          <span key={id} aria-hidden className="coin-pop">
+            +1 credit
+          </span>
+        ))}
         <span>
           {credits === 0 ? (
             <>

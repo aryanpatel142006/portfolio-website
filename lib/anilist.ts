@@ -126,6 +126,21 @@ const MILESTONES: Comparison[] = [
   { hours: 2000, line: "could've walked across the US" },
 ];
 
+/** Every milestone line the hours qualify for, shortest first. The client
+    deals a new one each time a coin drops. */
+export function comparisonLines(
+  minutes: number,
+  custom?: Comparison[],
+): { hours: number; lines: string[] } {
+  const hours = Math.round(minutes / 60);
+  const table = custom && custom.length > 0 ? custom : MILESTONES;
+  const lines = table
+    .filter((m) => hours >= m.hours)
+    .sort((a, b) => a.hours - b.hours)
+    .map((m) => m.line);
+  return { hours, lines };
+}
+
 /**
  * Build the playful "that's N hours — i could've X instead lol" line. Picks
  * among milestones whose threshold fits the hours watched, rotating the choice

@@ -1,5 +1,5 @@
 import { offDuty } from "@/lib/content";
-import { getAnimeStats, pickComparison } from "@/lib/anilist";
+import { comparisonLines, getAnimeStats, pickComparison } from "@/lib/anilist";
 
 // Stats change slowly — cache the resolved payload for an hour.
 export const revalidate = 3600;
@@ -22,6 +22,7 @@ export async function GET() {
       stats: data.stats,
       watchingCount: data.watching.length,
       comparison: pickComparison(data.stats.minutesWatched, comparisons),
+      comparisons: comparisonLines(data.stats.minutesWatched, comparisons).lines,
     });
   }
 
@@ -36,6 +37,7 @@ export async function GET() {
       stats,
       watchingCount,
       comparison: pickComparison(stats.minutesWatched, comparisons),
+      comparisons: comparisonLines(stats.minutesWatched, comparisons).lines,
     });
   }
 

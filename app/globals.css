@@ -1184,6 +1184,42 @@ html[data-mood="offduty"] .spotlight {
 .coin-slot:active .coin-well {
   transform: translateY(1px);
 }
+/* "+1 credit" score popup: rises from the slot, gold, gone in under a second */
+.coin-pop {
+  position: absolute;
+  left: 0;
+  top: -4px;
+  pointer-events: none;
+  white-space: nowrap;
+  color: var(--neon-3);
+  text-shadow: 0 0 10px var(--neon-3);
+  animation: coin-pop 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes coin-pop {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.8);
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.05);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-34px) scale(1);
+  }
+}
+/* the comparison line turns over like a new card */
+.line-deal {
+  animation: line-deal 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes line-deal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(3px);
+  }
+}
 
 /* language chip on a song card */
 .lang-chip {
