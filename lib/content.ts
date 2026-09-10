@@ -394,6 +394,7 @@ export const offDuty = {
     { src: "Samjho Na — Aditya Rikhari", lang: "hi" },
     { src: "Girlfriend — Dino James", lang: "hi", scene: "rap" },
     { src: "I Guess — KR$NA", lang: "hi", scene: "rap" },
+    { src: "Big Dawgs — Hanumankind", lang: "en", scene: "rap" },
     // ── tamil ──
     { src: "Holá Amigö — Anirudh Ravichander", lang: "ta" },
     // ── punjabi ──
