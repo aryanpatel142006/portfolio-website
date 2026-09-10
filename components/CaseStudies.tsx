@@ -122,7 +122,10 @@ export default function CaseStudies() {
                   parallax where the browser supports it */}
               <div className="col-drift flex flex-col gap-5">
                 {p.stat && (
-                  <div className="stat-in border-l-2 border-accent pl-4">
+                  <div
+                    data-replay-host
+                    className="stat-in border-l-2 border-accent pl-4 transition-[border-color,padding-left] duration-300 hover:border-l-[6px] hover:pl-5"
+                  >
                     <p className="display text-4xl text-foreground sm:text-5xl">
                       <CountUp value={p.stat.value} />
                     </p>

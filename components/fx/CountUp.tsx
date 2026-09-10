@@ -3,10 +3,11 @@
 import { useEffect, useRef } from "react";
 import { reducedMotion } from "@/lib/fx";
 
-/** Numbers that count up the first time they scroll into view. Takes the
-    finished string ("3,463", "24 hrs", "139") and animates only its digit
-    run, keeping any prefix or suffix. Server-renders the final value, so
-    without JS nothing is ever stuck at zero. */
+/** Numbers that count up the first time they scroll into view, and again
+    whenever the pointer enters the nearest [data-replay-host] (or the number
+    itself). Takes the finished string ("3,463", "24 hrs", "139") and
+    animates only its digit run, keeping any prefix or suffix. Server-renders
+    the final value, so without JS nothing is ever stuck at zero. */
 export default function CountUp({
   value,
   duration = 1300,
@@ -31,27 +32,36 @@ export default function CountUp({
       grouped ? new Intl.NumberFormat("en-US").format(n) : String(n);
 
     let raf = 0;
+    const run = (ms: number) => {
+      cancelAnimationFrame(raf);
+      const start = performance.now();
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / ms);
+        const eased = 1 - Math.pow(2, -10 * t); // expo-out
+        el.textContent = `${prefix}${fmt(Math.round(target * eased))}${suffix}`;
+        if (t < 1) raf = requestAnimationFrame(tick);
+        else el.textContent = value;
+      };
+      el.textContent = `${prefix}${fmt(0)}${suffix}`;
+      raf = requestAnimationFrame(tick);
+    };
     const io = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
         io.disconnect();
-        const start = performance.now();
-        const tick = (now: number) => {
-          const t = Math.min(1, (now - start) / duration);
-          const eased = 1 - Math.pow(2, -10 * t); // expo-out
-          el.textContent = `${prefix}${fmt(Math.round(target * eased))}${suffix}`;
-          if (t < 1) raf = requestAnimationFrame(tick);
-          else el.textContent = value;
-        };
-        el.textContent = `${prefix}${fmt(0)}${suffix}`;
-        raf = requestAnimationFrame(tick);
+        run(duration);
       },
       { threshold: 0.4 },
     );
     io.observe(el);
+    // hover replay, a touch quicker than the first run
+    const host = el.closest<HTMLElement>("[data-replay-host]") ?? el;
+    const replay = () => run(Math.min(duration, 900));
+    host.addEventListener("pointerenter", replay);
     return () => {
       io.disconnect();
       cancelAnimationFrame(raf);
+      host.removeEventListener("pointerenter", replay);
     };
   }, [value, duration]);
 

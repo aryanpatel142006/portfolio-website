@@ -32,12 +32,15 @@ const nf = new Intl.NumberFormat("en-US");
 
 function Figure({ label, value }: { label: string; value: string }) {
   return (
-    <div className="arcade-card flex flex-1 flex-col gap-2 rounded-lg border border-border px-4 py-3 transition-[transform,box-shadow] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:shadow-[0_0_36px_-12px_var(--accent)]">
+    <div
+      data-replay-host
+      className="arcade-card card-shimmer group relative flex flex-1 flex-col gap-2 overflow-hidden rounded-lg border border-border px-4 py-3 transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:scale-[1.02] hover:border-neon-3/60 hover:shadow-[0_0_44px_-10px_var(--accent)]"
+    >
       <CountUp
         value={value}
-        className="font-arcade text-[17px] leading-tight text-neon-3 sm:text-[19px]"
+        className="font-arcade text-[17px] leading-tight text-neon-3 transition-[text-shadow,letter-spacing] duration-300 group-hover:tracking-wider group-hover:[text-shadow:0_0_14px_var(--neon-3)] sm:text-[19px]"
       />
-      <span className="font-mono text-[10px] uppercase leading-tight tracking-wide text-muted">
+      <span className="font-mono text-[10px] uppercase leading-tight tracking-wide text-muted transition-colors duration-300 group-hover:text-neon-2">
         {label}
       </span>
     </div>

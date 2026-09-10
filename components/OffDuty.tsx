@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { offDuty } from "@/lib/content";
 import NonMainstream from "@/components/NonMainstream";
 import AnimeStats from "@/components/AnimeStats";
@@ -22,6 +23,20 @@ export default function OffDuty() {
   const [unlocked, setUnlocked] = useState(false);
   const [justUnlocked, setJustUnlocked] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  // the section's own "back to work mode" button; when it scrolls out of
+  // view a floating twin takes over so the exit is always one click away
+  const headRef = useRef<HTMLDivElement>(null);
+  const [headVisible, setHeadVisible] = useState(true);
+
+  useEffect(() => {
+    const el = headRef.current;
+    if (!unlocked || !el) return;
+    const io = new IntersectionObserver(([e]) => setHeadVisible(e.isIntersecting), {
+      rootMargin: "-56px 0px 0px 0px", // the sticky header's height
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [unlocked]);
 
   // Warm the song-shelf cache the moment the page loads — long before the user
   // unlocks off-duty — so the cards are already resolved when the shelf mounts.
@@ -117,7 +132,7 @@ export default function OffDuty() {
       <NightSky />
       <hr className="divider mb-12 mt-4" />
 
-      <div className="mb-7 flex items-end justify-between gap-4">
+      <div ref={headRef} className="mb-7 flex items-end justify-between gap-4">
         <div>
           <p className="kicker mb-2">
             <span className="text-accent">appendix</span>
@@ -150,6 +165,23 @@ export default function OffDuty() {
       <p className="mb-9 max-w-md font-serif text-[17px] italic leading-relaxed text-muted-strong">
         {offDuty.intro}
       </p>
+
+      {/* floating exit, only while the section's own button is off-screen */}
+      {!headVisible &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <button
+            type="button"
+            onClick={backToWork}
+            className="back-float group inline-flex items-center gap-2 rounded-full border border-accent/60 bg-surface/90 px-4 py-2.5 font-mono text-[11px] text-foreground shadow-[0_0_28px_-8px_var(--accent)] backdrop-blur-md transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_0_36px_-6px_var(--accent)]"
+          >
+            <span aria-hidden className="transition-transform duration-300 group-hover:-translate-x-0.5">
+              &larr;
+            </span>
+            back to work mode
+          </button>,
+          document.body,
+        )}
 
       {/* anime — live AniList stats + currently watching */}
       <AnimeStats />

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { finePointer, reducedMotion } from "@/lib/fx";
 
 type Star = { x: number; y: number; r: number; z: number; ph: number; hue: number };
@@ -81,7 +82,10 @@ export default function NightSky() {
     };
   }, []);
 
-  return (
+  // Portalled to <body>: inside the section, its overflow clip and entrance
+  // filter turned the "fixed" sky into a box the size of the section.
+  if (typeof document === "undefined") return null;
+  return createPortal(
     <div aria-hidden className="night-sky">
       <div className="aurora aurora-1" />
       <div className="aurora aurora-2" />
@@ -89,6 +93,7 @@ export default function NightSky() {
       <canvas ref={ref} className="absolute inset-0 h-full w-full" />
       <div className="scanlines" />
       <div className="vignette" />
-    </div>
+    </div>,
+    document.body,
   );
 }
