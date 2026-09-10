@@ -77,7 +77,7 @@ export default function Footer() {
                 href={`${github}/portfolio-website`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="draw-link text-muted-strong hover:text-foreground"
+                className="draw-link hitbox text-muted-strong hover:text-foreground"
               >
                 view source
               </a>

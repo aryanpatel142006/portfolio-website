@@ -106,7 +106,7 @@ export default function CaseStudies() {
                             ? "noopener noreferrer"
                             : undefined
                         }
-                        className="draw-link inline-flex items-center gap-1 font-mono text-[12px] uppercase tracking-[0.12em] text-foreground"
+                        className="draw-link hitbox inline-flex items-center gap-1 font-mono text-[12px] uppercase tracking-[0.12em] text-foreground"
                       >
                         {l.label}
                         <ArrowUpRight width={12} height={12} aria-hidden />

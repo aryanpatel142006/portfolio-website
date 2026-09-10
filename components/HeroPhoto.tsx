@@ -72,7 +72,7 @@ export default function HeroPhoto({
             priority
             sizes="(max-width: 640px) 176px, 208px"
             className={`object-cover transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-              showCat ? "opacity-0" : "opacity-100 group-hover:opacity-50"
+              showCat ? "opacity-0" : "opacity-100 group-hover:opacity-70"
             }`}
           />
           {photoHover && (
@@ -82,7 +82,7 @@ export default function HeroPhoto({
               fill
               sizes="(max-width: 640px) 176px, 208px"
               className={`object-cover transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                showCat ? "opacity-100" : "opacity-0 group-hover:opacity-80"
+                showCat ? "opacity-100" : "opacity-0 group-hover:opacity-40"
               }`}
             />
           )}
