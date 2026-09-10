@@ -799,15 +799,17 @@ html.vt-warm body {
 }
 /* the ring's birthplace fires a ripple and dips grey for a beat */
 .launch {
-  position: relative;
   animation: launch-dip 0.9s ease both;
 }
-.launch::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 9999px;
+.ripple {
+  position: fixed;
+  z-index: 89;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
   border: 2px solid var(--accent);
+  pointer-events: none;
   animation: launch-ripple 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 @keyframes launch-dip {

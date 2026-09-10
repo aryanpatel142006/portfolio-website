@@ -22,12 +22,13 @@ export default function Cursor() {
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
   const scale = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 650, damping: 46, mass: 0.35 });
-  const sy = useSpring(y, { stiffness: 650, damping: 46, mass: 0.35 });
+  // Position is written straight from the pointer, no spring: a trailing ring
+  // reads as lag and its settle reads as a snap. Only the size eases.
   const ss = useSpring(scale, { stiffness: 300, damping: 24 });
   const [mode, setMode] = useState<Mode>("ring");
   const [label, setLabel] = useState("");
   const [shown, setShown] = useState(false);
+  const [ripple, setRipple] = useState<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     if (!on) return;
@@ -70,10 +71,18 @@ export default function Cursor() {
         return r.width > 0 && r.top >= 0 && r.bottom <= window.innerHeight;
       };
       const source = inView(dot) ? dot : logo;
+      if (source) {
+        // the period's box is a whole text line tall; its ink sits near the
+        // baseline, so aim the ripple there rather than at the box center
+        const r = source.getBoundingClientRect();
+        setRipple({
+          x: r.left + r.width / 2,
+          y: source === dot ? r.top + r.height * 0.84 : r.top + r.height / 2,
+        });
+        setTimeout(() => setRipple(null), 900);
+      }
       x.jump(lastX);
       y.jump(lastY);
-      sx.jump(lastX);
-      sy.jump(lastY);
       scale.jump(0);
       ss.jump(0);
       setShown(true);
@@ -132,12 +141,17 @@ export default function Cursor() {
   if (!on) return null;
 
   return (
-    <motion.div
-      aria-hidden
-      className={`cursor-ring is-${mode}`}
-      style={{ x: sx, y: sy, scale: ss, opacity: shown ? 1 : 0 }}
-    >
-      {label && <span className="cursor-label">{label}</span>}
-    </motion.div>
+    <>
+      {ripple && (
+        <span aria-hidden className="ripple" style={{ left: ripple.x, top: ripple.y }} />
+      )}
+      <motion.div
+        aria-hidden
+        className={`cursor-ring is-${mode}`}
+        style={{ x, y, scale: ss, opacity: shown ? 1 : 0 }}
+      >
+        {label && <span className="cursor-label">{label}</span>}
+      </motion.div>
+    </>
   );
 }
