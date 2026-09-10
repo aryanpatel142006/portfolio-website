@@ -778,7 +778,29 @@ html.vt-warm body {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+/* over something clickable: a tinted lens */
+.cursor-ring.is-link {
+  border-color: var(--accent);
+  background-color: color-mix(in oklab, var(--accent) 16%, transparent);
+}
+/* over reading text: a small solid dot that can't cover a word */
+.cursor-ring.is-text {
+  border-color: transparent;
+  background-color: var(--accent);
+}
+/* in a text field: faint, the caret has the floor */
+.cursor-ring.is-field {
+  border-color: color-mix(in oklab, var(--accent) 45%, transparent);
+}
+/* the ring's birthplace loses its ink while the ring is in flight */
+.drained {
+  transition: color 0.35s ease !important;
+  color: var(--muted) !important;
 }
 html[data-mood="offduty"] .cursor-ring {
   box-shadow:
