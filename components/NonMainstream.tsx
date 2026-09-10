@@ -334,7 +334,7 @@ export default function NonMainstream() {
       </div>
       {!loading && inDeck > hand.length && (
         <p className="mt-3 font-mono text-[10px] tracking-wider text-muted">
-          {hand.length} of {inDeck} on the table · insert a coin to deal the next hand
+          insert a coin to deal the next hand
         </p>
       )}
     </div>
