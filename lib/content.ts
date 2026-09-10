@@ -395,6 +395,7 @@ export const offDuty = {
     { src: "Girlfriend — Dino James", lang: "hi", scene: "rap" },
     { src: "I Guess — KR$NA", lang: "hi", scene: "rap" },
     { src: "Big Dawgs — Hanumankind", lang: "en", scene: "rap" },
+    { src: "RAAT KHATAM — Dashmusic", lang: "hi" }, // feat. KAAR; say so if you meant the Neil-Niraj film song
     // ── tamil ──
     { src: "Holá Amigö — Anirudh Ravichander", lang: "ta" },
     // ── punjabi ──
