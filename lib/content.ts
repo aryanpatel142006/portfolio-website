@@ -401,13 +401,12 @@ export const offDuty = {
     { src: "Gujju Pataka — Meet Bros", lang: "hi" }, // from Satyaprem Ki Katha; Hindi with Gujarati flavor, retag "gu" if you'd rather
     { src: "Aaj Na — Ritviz", lang: "hi" },
     { src: "https://open.spotify.com/track/7hSPAHaEqQwfRvJ0QtvSeu", lang: "hi" }, // Gaya Gaya — Dorwin John
+    { src: "Holá Amigö — Anirudh Ravichander", lang: "hi" },
     { src: "https://open.spotify.com/track/1u3KTMxSOXMX0cbb5BKGdc", lang: "hi", scene: "rap" }, // LOVESEXDHOKA!!! — Chaar Diwaari (not on iTunes)
     { src: "Animals — Martin Garrix", lang: "en" },
     { src: "https://open.spotify.com/track/420E2n9BEBXL8J7uYAWXtR", lang: "en", scene: "chutney" }, // Hunter — Vedesh Sookoo, Rajneesh, Shyamoo, Munna
     // ── urdu ──
     { src: "kidhar? — Maanu, Talal Qureshi", lang: "ur" },
-    // ── tamil ──
-    { src: "Holá Amigö — Anirudh Ravichander", lang: "ta" },
     // ── punjabi ──
     { src: "Wavy — Karan Aujla", lang: "pa" },
     { src: "For A Reason — Karan Aujla", lang: "pa" },
