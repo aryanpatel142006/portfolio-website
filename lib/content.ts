@@ -400,6 +400,7 @@ export const offDuty = {
     { src: "Nafrat — Seedhe Maut", lang: "hi", scene: "rap" }, // Darshan Raval also has a "Nafrat"; swap the artist if that's the one
     { src: "Gujju Pataka — Meet Bros", lang: "hi" }, // from Satyaprem Ki Katha; Hindi with Gujarati flavor, retag "gu" if you'd rather
     { src: "Aaj Na — Ritviz", lang: "hi" },
+    { src: "https://open.spotify.com/track/7hSPAHaEqQwfRvJ0QtvSeu", lang: "hi" }, // Gaya Gaya — Dorwin John
     { src: "https://open.spotify.com/track/1u3KTMxSOXMX0cbb5BKGdc", lang: "hi", scene: "rap" }, // LOVESEXDHOKA!!! — Chaar Diwaari (not on iTunes)
     { src: "Animals — Martin Garrix", lang: "en" },
     { src: "https://open.spotify.com/track/420E2n9BEBXL8J7uYAWXtR", lang: "en", scene: "chutney" }, // Hunter — Vedesh Sookoo, Rajneesh, Shyamoo, Munna
@@ -437,7 +438,6 @@ export const offDuty = {
     { src: "Dwarikadhish Ne Khamma", lang: "gu" },
     { src: "Helo Maro — Sachin-Jigar", lang: "gu" },
     { src: "Dakla 2 Extended Mix — Bandish Projekt", lang: "gu", scene: "garba" }, // plain "Dakla 2" lands on the original Dakla
-    { src: "https://open.spotify.com/track/7hSPAHaEqQwfRvJ0QtvSeu", lang: "gu" }, // Gaya Gaya — Dorwin John; retag "hi" if it's the Hindi cut
 
   ] as SongEntry[],
 
