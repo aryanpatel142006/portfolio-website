@@ -414,12 +414,6 @@ export const offDuty = {
     { src: "Helo Maro — Sachin-Jigar", lang: "gu" },
     { src: "Dakla 2 Extended Mix — Bandish Projekt", lang: "gu", scene: "garba" }, // plain "Dakla 2" lands on the original Dakla
 
-    // ── added for a deeper shuffle (2026-09-10); prune anything that isn't you ──
-    { src: "Samjho Na — Aditya Rikhari", lang: "hi" },
-    { src: "Where the Money Flows — Peter Cat Recording Co.", lang: "en" },
-    { src: "Yume Utsutsu — Lamp", lang: "jp", scene: "city pop" },
-    { src: "だから僕は音楽を辞めた ヨルシカ", lang: "jp" }, // Yorushika (Japanese title resolves; romaji found a music-box cover)
-    { src: "ギターと孤独と蒼い惑星 結束バンド", lang: "jp", scene: "anime" }, // Kessoku Band, Bocchi the Rock
   ] as SongEntry[],
 
   // ── anime stats — live from AniList (public profile, no auth needed). ──
