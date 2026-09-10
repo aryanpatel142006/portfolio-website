@@ -394,6 +394,7 @@ export const offDuty = {
     { src: "Samjho Na — Aditya Rikhari", lang: "hi" },
     { src: "Girlfriend — Dino James", lang: "hi", scene: "rap" },
     { src: "I Guess — KR$NA", lang: "hi", scene: "rap" },
+    { src: "https://open.spotify.com/track/1g6nQTE5x7eLJX7tXCTiSz", lang: "hi", scene: "rap" }, // Boom Shaka — KR$NA, Dhanda Nyoliwala
     { src: "Big Dawgs — Hanumankind", lang: "en", scene: "rap" },
     { src: "RAAT KHATAM — Dashmusic", lang: "hi" }, // feat. KAAR; say so if you meant the Neil-Niraj film song
     { src: "Nafrat — Seedhe Maut", lang: "hi", scene: "rap" }, // Darshan Raval also has a "Nafrat"; swap the artist if that's the one
