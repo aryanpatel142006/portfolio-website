@@ -412,6 +412,7 @@ export const offDuty = {
     { src: "Maar To Mele", lang: "gu" }, // resolves to the Ishani Dave cut; add "— Geeta Rabari" if you meant hers
     { src: "Dwarikadhish Ne Khamma", lang: "gu" },
     { src: "Helo Maro — Sachin-Jigar", lang: "gu" },
+    { src: "Dakla 2 Extended Mix — Bandish Projekt", lang: "gu", scene: "garba" }, // plain "Dakla 2" lands on the original Dakla
 
     // ── added for a deeper shuffle (2026-09-10); prune anything that isn't you ──
     { src: "Samjho Na — Aditya Rikhari", lang: "hi" },
