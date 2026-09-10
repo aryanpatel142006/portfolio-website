@@ -42,7 +42,7 @@ export default function ModelStage() {
             auto-rotate-delay={0}
             rotation-per-second="18deg"
             camera-orbit={model.orbit}
-            exposure={1.05}
+            exposure={model.exposure}
             shadow-intensity={0.7}
             shadow-softness={0.9}
             environment-image="neutral"
