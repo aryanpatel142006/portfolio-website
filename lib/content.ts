@@ -391,6 +391,7 @@ export const offDuty = {
     // ── desi indie / bollymood deep cuts ──
     { src: "https://open.spotify.com/track/2oSnGQbI4tZxImmCs2c4PP", lang: "hi" }, // Nasamajh — Aditya Rikhari
     { src: "https://open.spotify.com/track/7eQoMQdE4JqngwYDOqLBU0", lang: "pa" }, // Superstar — dox, JASKARAN, Rita Kim
+    { src: "Samjho Na — Aditya Rikhari", lang: "hi" },
     // ── japanese: city pop + anime ──
     { src: "Stay With Me — Miki Matsubara", lang: "jp", scene: "city pop" }, // (album links don't resolve; the name does)
     { src: "https://open.spotify.com/track/3x4378ztiLvFmm2nuzEI0C", lang: "jp", scene: "anime op" }, // Cruel Angel's Thesis
