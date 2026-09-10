@@ -392,6 +392,7 @@ export const offDuty = {
     { src: "https://open.spotify.com/track/2oSnGQbI4tZxImmCs2c4PP", lang: "hi" }, // Nasamajh — Aditya Rikhari
     { src: "https://open.spotify.com/track/7eQoMQdE4JqngwYDOqLBU0", lang: "pa" }, // Superstar — dox, JASKARAN, Rita Kim
     { src: "Samjho Na — Aditya Rikhari", lang: "hi" },
+    { src: "Girlfriend — Dino James", lang: "hi", scene: "rap" },
     // ── punjabi ──
     { src: "Wavy — Karan Aujla", lang: "pa" },
     { src: "For A Reason — Karan Aujla", lang: "pa" },
