@@ -437,6 +437,7 @@ export const offDuty = {
     { src: "Dwarikadhish Ne Khamma", lang: "gu" },
     { src: "Helo Maro — Sachin-Jigar", lang: "gu" },
     { src: "Dakla 2 Extended Mix — Bandish Projekt", lang: "gu", scene: "garba" }, // plain "Dakla 2" lands on the original Dakla
+    { src: "https://open.spotify.com/track/7hSPAHaEqQwfRvJ0QtvSeu", lang: "gu" }, // Gaya Gaya — Dorwin John; retag "hi" if it's the Hindi cut
 
   ] as SongEntry[],
 
