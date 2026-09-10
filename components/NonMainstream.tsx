@@ -10,7 +10,13 @@ import { prefetchTracks, type Track } from "@/lib/tracks-client";
 
 // Derive a readable "Title / Artist" from a raw content entry, used as the
 // graceful fallback when the Spotify API can't resolve (or isn't configured).
-const LANG_LABEL: Record<SongLang, string> = { en: "english", hi: "hindi", gu: "gujarati", jp: "japanese" };
+const LANG_LABEL: Record<SongLang, string> = {
+  en: "english",
+  hi: "hindi",
+  gu: "gujarati",
+  pa: "punjabi",
+  jp: "japanese",
+};
 
 function fallbackFromEntry(entry: SongEntry): { title: string; artist: string; lang?: SongLang } {
   const s = (typeof entry === "string" ? entry : entry.src).trim();
@@ -129,12 +135,8 @@ function Card({ track }: { track: Track }) {
         )}
       </div>
       {track.lang && (
-        <span
-          className="lang-chip ml-1 shrink-0 self-center"
-          title={LANG_LABEL[track.lang]}
-          aria-label={`sung in ${LANG_LABEL[track.lang]}`}
-        >
-          {track.lang}
+        <span className="lang-chip ml-1 shrink-0 self-center" aria-label={`sung in ${LANG_LABEL[track.lang]}`}>
+          {LANG_LABEL[track.lang]}
         </span>
       )}
       {playing ? (
@@ -289,7 +291,7 @@ export default function NonMainstream() {
                     : "text-muted hover:text-foreground"
                 }`}
               >
-                {l}
+                {l === "all" ? "all" : LANG_LABEL[l]}
               </button>
             ))}
           </div>

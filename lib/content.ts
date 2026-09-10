@@ -355,7 +355,7 @@ export type NowItem = {
 
 // A song for the "non-mainstream songs" shelf. Paste a Spotify link/URI, OR a
 // plain "Song Name — Artist" string (resolved via Spotify search server-side).
-export type SongLang = "en" | "hi" | "gu" | "jp";
+export type SongLang = "en" | "hi" | "gu" | "pa" | "jp";
 /** A Spotify link or a plain "Song — Artist" name, plus the language it's
     sung in (rendered as a small chip) and, optionally, the scene it's from. */
 export type SongEntry =
@@ -390,7 +390,7 @@ export const offDuty = {
 
     // ── desi indie / bollymood deep cuts ──
     { src: "https://open.spotify.com/track/2oSnGQbI4tZxImmCs2c4PP", lang: "hi" }, // Nasamajh — Aditya Rikhari
-    { src: "https://open.spotify.com/track/7eQoMQdE4JqngwYDOqLBU0", lang: "hi" }, // Superstar — dox, JASKARAN, Rita Kim
+    { src: "https://open.spotify.com/track/7eQoMQdE4JqngwYDOqLBU0", lang: "pa" }, // Superstar — dox, JASKARAN, Rita Kim
     // ── japanese: city pop + anime ──
     { src: "Stay With Me — Miki Matsubara", lang: "jp", scene: "city pop" }, // (album links don't resolve; the name does)
     { src: "https://open.spotify.com/track/3x4378ztiLvFmm2nuzEI0C", lang: "jp", scene: "anime op" }, // Cruel Angel's Thesis
