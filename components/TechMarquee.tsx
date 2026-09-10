@@ -39,9 +39,10 @@ export default function TechMarquee() {
     <section aria-label="Tech stack">
       <SectionHeading index="01" label="the toolkit" />
 
-      {/* Compact belt — the header row of the skills exhibit below. Generous
-          -my/py keeps hover lifts and tooltips from being clipped. */}
-      <div className="marquee-group marquee-mask -mt-3 overflow-hidden border-y border-border pt-6 pb-5">
+      {/* Compact belt, the header row of the skills exhibit below. The
+          hovered icon's name appears as a caption BELOW it, inside the belt's
+          own padding, so the clipping box can never cut it off. */}
+      <div className="marquee-group marquee-mask -mt-3 overflow-hidden border-y border-border pt-5 pb-11">
         <div className="marquee-track flex items-center gap-8">
           {/* Two identical copies produce a seamless -50% loop */}
           {[0, 1].map((copy) => (
@@ -55,18 +56,18 @@ export default function TechMarquee() {
                   key={copy + icon.name}
                   className="group/icon relative flex shrink-0 flex-col items-center"
                 >
-                  {/* Tooltip — mono chip, fades + rises in on hover */}
+                  <i
+                    className={`${icon.className} inline-block text-3xl text-foreground/55 transition-[transform,color] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover/icon:-translate-y-1 group-hover/icon:text-accent`}
+                    role="img"
+                    aria-label={copy === 0 ? icon.name : undefined}
+                  />
+                  {/* Caption: the name settles in under the lifted icon */}
                   <span
-                    className="pointer-events-none absolute bottom-full left-1/2 mb-2.5 -translate-x-1/2 translate-y-1 whitespace-nowrap border border-border bg-surface px-2.5 py-1 font-mono text-[11px] text-muted-strong opacity-0 shadow-[var(--shadow)] transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover/icon:translate-y-0 group-hover/icon:opacity-100"
+                    className="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 -translate-y-1 whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.12em] text-muted-strong opacity-0 transition-[transform,opacity] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover/icon:translate-y-0 group-hover/icon:opacity-100"
                     aria-hidden
                   >
                     {icon.name}
                   </span>
-                  <i
-                    className={`${icon.className} inline-block text-3xl text-foreground/55 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover/icon:-translate-y-1 group-hover/icon:text-accent`}
-                    role="img"
-                    aria-label={copy === 0 ? icon.name : undefined}
-                  />
                 </li>
               ))}
             </ul>
