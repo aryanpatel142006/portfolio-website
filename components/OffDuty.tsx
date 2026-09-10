@@ -6,6 +6,7 @@ import { offDuty } from "@/lib/content";
 import NonMainstream from "@/components/NonMainstream";
 import AnimeStats from "@/components/AnimeStats";
 import NightSky from "@/components/fx/NightSky";
+import NightPicker from "@/components/fx/NightPicker";
 import { playCoin } from "@/lib/coin-sound";
 import { prefetchTracks } from "@/lib/tracks-client";
 import {
@@ -189,6 +190,7 @@ export default function OffDuty() {
             the off-duty me
           </h2>
         </div>
+        <div className="flex shrink-0 flex-col items-end gap-3">
         <button
           type="button"
           onClick={backToWork}
@@ -199,6 +201,8 @@ export default function OffDuty() {
           </span>
           back to work mode
         </button>
+        <NightPicker />
+        </div>
       </div>
 
       {/* the coin slot: a real button. each coin reshuffles the song shelf,

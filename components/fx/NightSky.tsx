@@ -30,13 +30,19 @@ export default function NightSky() {
     let stars: Star[] = [];
 
     const seed = () => {
+      // "320,190,260" from the active palette; first hue is the rare one
+      const hues = (getComputedStyle(document.documentElement).getPropertyValue("--star-hues") || "320,190,260")
+        .split(",")
+        .map((n) => parseFloat(n))
+        .filter((n) => !Number.isNaN(n));
+      const [rare = 320, a = 190, b = 260] = hues;
       stars = Array.from({ length: Math.round((w * h) / 9000) + 60 }, () => ({
         x: Math.random(),
         y: Math.random(),
         r: 0.4 + Math.random() * 1.4,
         z: 0.3 + Math.random() * 0.7, // depth → parallax + brightness
         ph: Math.random() * Math.PI * 2,
-        hue: Math.random() < 0.12 ? 320 : Math.random() < 0.5 ? 190 : 260,
+        hue: Math.random() < 0.12 ? rare : Math.random() < 0.5 ? a : b,
       }));
     };
     const resize = () => {
@@ -72,11 +78,14 @@ export default function NightSky() {
       my = e.clientY / h;
     };
     resize();
+    const mo = new MutationObserver(() => { seed(); if (still) draw(0); });
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-night"] });
     window.addEventListener("resize", resize);
     if (pointer) window.addEventListener("pointermove", move, { passive: true });
     if (!still) raf = requestAnimationFrame(loop);
     return () => {
       cancelAnimationFrame(raf);
+      mo.disconnect();
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", move);
     };

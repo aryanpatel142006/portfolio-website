@@ -8,6 +8,7 @@
  */
 
 import { flushSync } from "react-dom";
+import { DEFAULT_NIGHT, NIGHT_KEY, isNight } from "@/lib/night-palettes";
 
 export const OFFDUTY_UNLOCK_EVENT = "offduty:unlock";
 export const OFFDUTY_RELOCK_EVENT = "offduty:relock";
@@ -32,11 +33,33 @@ export type UnlockDetail = { x?: number; y?: number; via: UnlockVia };
 const MOOD = "offduty";
 let themeBeforeOffDuty: string | undefined;
 
+/** Which palette the night opens on: ?night= in the URL wins, then the
+    remembered choice, then the default. */
+function currentNight(): string {
+  try {
+    const q = new URLSearchParams(location.search).get(NIGHT_KEY);
+    if (isNight(q)) return q;
+    const saved = localStorage.getItem(NIGHT_KEY);
+    if (isNight(saved)) return saved;
+  } catch {}
+  return DEFAULT_NIGHT;
+}
+
+/** Re-pigment the night world. Remembered for next time. */
+export function setNight(id: string) {
+  if (!isNight(id)) return;
+  document.documentElement.dataset.night = id;
+  try {
+    localStorage.setItem(NIGHT_KEY, id);
+  } catch {}
+}
+
 function enterMood() {
   const root = document.documentElement;
   if (root.dataset.mood === MOOD) return;
   themeBeforeOffDuty = root.dataset.theme;
   root.dataset.mood = MOOD;
+  root.dataset.night = currentNight();
   root.dataset.theme = "dark";
 }
 
@@ -44,6 +67,7 @@ function leaveMood() {
   const root = document.documentElement;
   if (root.dataset.mood !== MOOD) return;
   delete root.dataset.mood;
+  delete root.dataset.night;
   // Restore the pre-unlock theme unless they re-toggled while off duty.
   if (root.dataset.theme === "dark" && themeBeforeOffDuty) {
     root.dataset.theme = themeBeforeOffDuty;
