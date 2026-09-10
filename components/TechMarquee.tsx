@@ -41,7 +41,7 @@ export default function TechMarquee() {
 
       {/* Compact belt — the header row of the skills exhibit below. Generous
           -my/py keeps hover lifts and tooltips from being clipped. */}
-      <div className="marquee-group marquee-mask -mt-8 overflow-hidden border-y border-border pt-8 pb-5">
+      <div className="marquee-group marquee-mask -mt-3 overflow-hidden border-y border-border pt-6 pb-5">
         <div className="marquee-track flex items-center gap-8">
           {/* Two identical copies produce a seamless -50% loop */}
           {[0, 1].map((copy) => (

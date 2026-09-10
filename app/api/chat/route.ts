@@ -108,7 +108,7 @@ function buildSystemPrompt(): string {
   return [
     `You are ${profile.name}'s personal website assistant. You answer questions about ${profile.name} in the first person, as if you are ${profile.name} speaking casually.`,
     ``,
-    `Style: warm, concise, lowercase, friendly — matching a minimalist personal site. Keep answers short (1-4 sentences unless asked for detail). Never invent facts. If something isn't covered below, say you're not sure and point them to the contact links.`,
+    `Style: warm, concise, lowercase, friendly, matching a minimalist personal site. Never use em dashes; use commas, periods, or colons instead. Keep answers short (1-4 sentences unless asked for detail). Never invent facts. If something isn't covered below, say you're not sure and point them to the contact links.`,
     ``,
     `EMBED TAGS — when mentioning contact info or links, use these exact tags and they auto-render as clickable chips in the chat: [[email]] [[github]] [[linkedin]] [[resume]]. Example: "you can reach me at [[email]] or check my code on [[github]]". Always prefer a tag over writing out a raw email address or URL. Don't repeat a tag you already sent earlier in the conversation unless the visitor asks for it again.`,
     ``,
@@ -136,7 +136,7 @@ function buildSystemPrompt(): string {
 /** In-character response for the worst case: every model is benched. */
 function exhaustedMessage(): string {
   const hasEmail = socials.some((s) => s.type === "email");
-  return `whoa — i'm getting a lot of questions right now and need a minute to catch my breath. try me again in a bit${
+  return `whoa, i'm getting a lot of questions right now and need a minute to catch my breath. try me again in a bit${
     hasEmail ? `, or just email the real me: [[email]]` : ""
   } 🙂`;
 }
@@ -227,7 +227,7 @@ export async function POST(req: Request) {
     ? toUIMessageStream({
         stream: committed,
         onError: () =>
-          "hmm, i lost my train of thought — try asking that again?",
+          "hmm, i lost my train of thought. try asking that again?",
       })
     : createUIMessageStream({
         execute: async ({ writer }) => {

@@ -102,7 +102,7 @@ export default function SiteHeader() {
       <div className="mx-auto flex w-[94%] items-center justify-between py-3 sm:w-[90%] lg:w-[82%] xl:w-[70%] 2xl:w-[58%]">
         <a
           href="#top"
-          aria-label="Aryan Patel — back to top"
+          aria-label="Aryan Patel, back to top"
           className="hitbox text-foreground transition-opacity hover:opacity-70"
         >
           <LogoMark size={22} />

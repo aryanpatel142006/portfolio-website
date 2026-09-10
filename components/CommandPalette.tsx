@@ -88,7 +88,7 @@ export default function CommandPalette() {
     if (secretWords.some((w) => w.includes(q) || q.includes(w))) {
       const secret: Command = {
         id: "offduty",
-        label: "whoami — the off-duty me",
+        label: "whoami · the off-duty me",
         hint: "secret",
         // close first so the sweep's "after" snapshot doesn't contain the
         // palette (flushSync inside unlockOffDuty commits both together)

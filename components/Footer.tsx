@@ -14,16 +14,19 @@ export default function Footer() {
       <hr className="divider divider-draw" />
 
       <Reveal className="py-16 sm:py-20">
-        <p className="kicker">06 / contact</p>
-        <h2 className="display mt-4 text-5xl text-foreground sm:text-6xl md:text-7xl">
-          Let&rsquo;s build
+        <h2 className="display relative text-5xl text-foreground sm:text-6xl md:text-7xl">
+          <span aria-hidden className="folio sm:top-[1.4rem] md:top-[1.75rem]">
+            06
+          </span>
+          Looking for a
           <br />
-          something <span className="draw-word italic text-accent">human</span>.
+          <span className="draw-word italic text-accent">summer 2027</span>{" "}
+          internship.
         </h2>
 
         <p className="mt-6 max-w-md text-[14px] leading-relaxed text-muted-strong">
-          Open to internships, research, and interesting problems — especially
-          the kind that make technology kinder to the people using it.
+          Data engineering, ML, or research, and the interesting problems in
+          between. Email is the fastest way to reach me.
         </p>
 
         {email && (

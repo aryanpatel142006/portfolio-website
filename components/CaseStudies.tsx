@@ -29,7 +29,7 @@ export default function CaseStudies() {
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
               <span className="kicker">
                 № {String(i + 1).padStart(2, "0")}
-                {p.date && <span aria-hidden> — {p.date}</span>}
+                {p.date && <span aria-hidden> · {p.date}</span>}
               </span>
               {p.badges?.map((b) => (
                 <span

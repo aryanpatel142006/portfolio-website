@@ -100,7 +100,7 @@ export const profile: Profile = {
   name: "Aryan Patel",
   pronunciation: "/ah-ri-an/",
   tagline:
-    "CS & Data Science student at Rutgers — building data pipelines, ML tools, and interfaces that make technology more human.",
+    "CS & Data Science student at Rutgers. I build data pipelines, ML tools, and interfaces that make technology more human.",
   location: "New Brunswick, NJ",
   photo: "/pfp.png", // your photo
   photoHover: "/cat.png", // hover the photo to crossfade to this
@@ -156,7 +156,7 @@ export const education = {
 /* ─────────────────────  AWARDS & CERTIFICATIONS  ──────────────────── */
 
 export const awards: Award[] = [
-  { name: "National Award — Science & Technology Exhibition", detail: "VoxIQ, national showcase" },
+  { name: "National Award, Science & Technology Exhibition", detail: "VoxIQ, national showcase" },
   { name: "Rutgers Honors College", detail: "Dean's List" },
   { name: "Break Through Tech AI Fellow", detail: "Cornell Tech" },
   { name: "Blueprint Fellowship", detail: "software engineering" },
@@ -178,9 +178,9 @@ export const experiences: Experience[] = [
     period: "Sep 2026 → Dec 2026",
     active: true,
     bullets: [
-      "Second-Look Lending, through Break Through Tech's AI Studio: building credit-risk models on consumer-loan data to predict applicant default probability — benchmarking logistic regression, random forests, and gradient boosting (XGBoost, LightGBM) against a production baseline.",
+      "Second-Look Lending, through Break Through Tech's AI Studio: building credit-risk models on consumer-loan data to predict applicant default probability, benchmarking logistic regression, random forests, and gradient boosting (XGBoost, LightGBM) against a production baseline.",
       "Evaluating on a time-based holdout with ROC-AUC, LogLoss, and calibration (reliability curves, Brier score); translating predicted risk into profit-aware lending decisions under a defined cost model.",
-      "Optimizing an Inclusive Profit Score — expected portfolio profit minus a penalty for the thin-file inclusion gap — so applicants with little credit history get a fair second look.",
+      "Optimizing an Inclusive Profit Score (expected portfolio profit minus a penalty for the thin-file inclusion gap) so applicants with little credit history get a fair second look.",
     ],
     icon: "💳",
     iconUrl: "https://img.logo.dev/americanexpress.com?token=pk_FNeueCUtR0qx7cHP9ZPGrA&format=webp&retina=true",
@@ -192,7 +192,7 @@ export const experiences: Experience[] = [
     period: "June 2026 → Present",
     active: true,
     bullets: [
-      "Modeling multi-facility financial transaction data in a normalized relational database — replacing Excel-based revenue tracking with a single source of truth for downstream analytics.",
+      "Modeling multi-facility financial transaction data in a normalized relational database, replacing Excel-based revenue tracking with a single source of truth for downstream analytics.",
       "Building automated Python + Pandas ETL pipelines over daily revenue time series, a 99%+ cut in manual reporting time, saving 500+ hours a year.",
       "Shipping a live revenue dashboard surfacing time-series trends, backed by data validation, role-based access, and audit trails.",
     ],
@@ -206,7 +206,7 @@ export const experiences: Experience[] = [
     period: "Mar 2026 → Present",
     active: true,
     bullets: [
-      "Selected for Cornell Tech's machine-learning fellowship — ML foundations, applied projects, and industry mentorship.",
+      "Selected for Cornell Tech's machine-learning fellowship: ML foundations, applied projects, and industry mentorship.",
     ],
     icon: "🧠",
     iconUrl: "https://img.logo.dev/breakthroughtech.org?token=pk_FNeueCUtR0qx7cHP9ZPGrA&format=webp&retina=true",
@@ -242,7 +242,7 @@ export const experiences: Experience[] = [
     location: "remote",
     period: "February 2025 → April 2025",
     bullets: [
-      "Software engineering fellowship — shipped production features with a mentored team on a real client project.",
+      "Software engineering fellowship: shipped production features with a mentored team on a real client project.",
     ],
     icon: "/blueprint.jpg",
   },
@@ -258,9 +258,9 @@ export const projects: Project[] = [
     date: "2025",
     stat: { value: "national", label: "award winner" },
     description:
-      "An inclusive, adaptive accessibility assessment platform that scales difficulty from live performance data — so the test meets the person, not the other way around.",
+      "An inclusive, adaptive accessibility assessment platform that scales difficulty from live performance data, so the test meets the person, not the other way around.",
     highlights: [
-      "Touchless computer-vision interface — OpenCV + MediaPipe hand-gesture control, no keyboard or mouse required.",
+      "Touchless computer-vision interface: OpenCV + MediaPipe hand-gesture control, no keyboard or mouse required.",
       "Fully audio-navigable via Pyttsx3 speech for visually impaired users.",
       "Won a National Award and was showcased at a national Science & Technology Exhibition.",
     ],
@@ -276,11 +276,11 @@ export const projects: Project[] = [
     date: "2025",
     stat: { value: "24 hrs", label: "idea → full stack" },
     description:
-      "An AI-powered incubator hacked together in 24 hours to help women founders reach mentorship and funding — matching, pitch practice, and payments in one place.",
+      "An AI-powered incubator hacked together in 24 hours to help women founders reach mentorship and funding: matching, pitch practice, and payments in one place.",
     highlights: [
       "Mentor–mentee matching algorithm plus AI pitch feedback that simulates investor evaluations (Gemini + Presage APIs).",
       "Secure payment processing via the Fiserv API.",
-      "Responsive React UI on a Supabase backend — auth, storage, and real-time updates.",
+      "Responsive React UI on a Supabase backend: auth, storage, and real-time updates.",
     ],
     badges: [{ label: "Hackathon", icon: "⚡" }],
     plate: "launch",
@@ -293,13 +293,13 @@ export const projects: Project[] = [
   },
   {
     title: "aryan.is-a.dev",
-    kicker: "this site — a portfolio that answers back",
+    kicker: "this site, a portfolio that answers back",
     date: "2026",
     stat: { value: "live", label: "you're inside it" },
     description:
       "The page you're reading: a Next.js 16 site driven by one content file, with an AI chatbot grounded in my real data and a few secrets for the curious.",
     highlights: [
-      "\"Query me\" — a streaming AI terminal (Vercel AI SDK + AI Gateway) that only answers from my actual resume data.",
+      "\"Query me\": a streaming AI terminal (Vercel AI SDK + AI Gateway) that only answers from my actual resume data.",
       "Live integrations: Spotify song shelf and AniList anime stats, resolved server-side with graceful fallbacks.",
       "Hidden off-duty world behind a ⌘K command, a Konami code, or tapping my photo five times.",
     ],
@@ -360,7 +360,7 @@ export type SongEntry = string;
 export const offDuty = {
   // A short, human intro line shown under the heading.
   intro:
-    "the version of me that isn't staring at a terminal — chasing progress in the gym, queuing up an anime, listening to the most random songs, and doing garba till my legs give out.",
+    "the version of me that isn't staring at a terminal: chasing progress in the gym, queuing up an anime, listening to the most random songs, and doing garba till my legs give out.",
 
   // ── hobbies — quick, low-commitment tags. Emoji optional. ──
   hobbies: [
@@ -430,7 +430,7 @@ and on the Dean's List, carrying a 3.5 GPA, and I'll graduate in May 2028 (start
 My coursework includes Data Structures, Honors Computer Architecture, Discrete Structures I,
 and Linear Algebra.
 
-I love building things that make technology more human — accessible, useful, and a little
+I love building things that make technology more human: accessible, useful, and a little
 delightful. Right now I'm an AI Fellow at American Express through Break Through Tech's AI
 Studio (Sep–Dec 2026, New York), a Data Engineer at the New Brunswick Parking Authority (since
 June 2026), an AI/ML Fellow with Break Through Tech @ Cornell Tech (since March 2026), and an IT
@@ -453,7 +453,7 @@ stretch goal is a self-attention model to surface high-order feature interaction
 
 At NBPA I'm architecting a normalized relational database to replace Excel-based revenue
 tracking and building automated Python + Pandas ETL pipelines that cut manual reporting
-time by 99%+ — saving 500+ hours a year — with validation, role-based access, audit trails, and a live revenue dashboard.
+time by 99%+ (saving 500+ hours a year), with validation, role-based access, audit trails, and a live revenue dashboard.
 
 A couple of projects I'm proud of:
 - VoxIQ, an adaptive accessibility assessment platform (Python, MySQL, OpenCV, MediaPipe,
@@ -465,7 +465,7 @@ A couple of projects I'm proud of:
   founders access mentorship and funding (React, TypeScript, Supabase, Gemini & Fiserv APIs,
   Tailwind, Figma). It includes a mentor–mentee matching algorithm, AI-driven pitch feedback
   simulating investor evaluations, and secure Fiserv payments.
-- This very website (aryan.is-a.dev) — a Next.js 16 portfolio with an AI chatbot grounded in
+- This very website (aryan.is-a.dev), a Next.js 16 portfolio with an AI chatbot grounded in
   my real data, live Spotify and AniList integrations, and hidden easter eggs.
 
 Certifications: Machine Learning Foundations (Cornell Tech) and Machine Learning and Image

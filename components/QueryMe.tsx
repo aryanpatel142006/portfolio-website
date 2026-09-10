@@ -44,10 +44,10 @@ export default function QueryMe() {
       <SectionHeading
         index="02"
         label="query me"
-        title="Don't just read about me — ask me."
+        title="Ask the resume a question."
       />
       <p className="-mt-4 mb-6 max-w-md text-[13.5px] leading-relaxed text-muted">
-        A live model, grounded in my actual resume — it only knows what&rsquo;s
+        A live model grounded in my actual resume. It only knows what&rsquo;s
         true about me.
       </p>
 
@@ -61,7 +61,7 @@ export default function QueryMe() {
             <i className="h-2.5 w-2.5 rounded-full border border-border-strong bg-live/60" />
           </span>
           <span className="ml-2 font-mono text-[11px] text-muted">
-            {me}@portfolio — ask anything
+            {me}@portfolio · ask anything
           </span>
         </div>
 
@@ -128,7 +128,7 @@ export default function QueryMe() {
             <p className="mt-4 whitespace-pre-wrap text-[12px] text-red-500/90">
               {error.message && error.message !== "An error occurred."
                 ? error.message
-                : "hmm, something went sideways — give it another try, or just email me instead."}
+                : "hmm, something went sideways. give it another try, or just email me instead."}
             </p>
           )}
         </div>

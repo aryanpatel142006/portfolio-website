@@ -140,6 +140,27 @@ textarea:focus-visible {
   text-wrap: balance;
 }
 
+/* Section folio: the accent-colored number beside a heading. On phones it
+   stacks above the heading; from 640px it moves into the gutter between the
+   text column and the page rail, like margin numbering in a printed journal. */
+.folio {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  color: var(--accent);
+}
+@media (min-width: 640px) {
+  .folio {
+    position: absolute;
+    right: 100%;
+    margin: 0 1rem 0 0;
+  }
+}
+
 /* Section kicker — "01 / experience" */
 .kicker {
   font-family: var(--font-mono), monospace;

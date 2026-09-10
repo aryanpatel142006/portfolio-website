@@ -55,7 +55,7 @@ export default function HeroPhoto({
     <button
       type="button"
       onClick={onClick}
-      aria-label={showCat ? "Show the portrait again" : `${name} — portrait`}
+      aria-label={showCat ? "Show the portrait again" : `Portrait of ${name}`}
       className="group relative w-44 shrink-0 rotate-2 cursor-pointer select-none transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:rotate-0 sm:w-52"
     >
       {/* tape strip */}

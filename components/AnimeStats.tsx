@@ -116,7 +116,7 @@ export default function AnimeStats() {
 
       {comparison && (
         <p className="mt-3 max-w-md font-serif text-[15px] italic leading-relaxed text-muted-strong">
-          that&rsquo;s {nf.format(comparison.hours)} hours — i {comparison.line}{" "}
+          that&rsquo;s {nf.format(comparison.hours)} hours. i {comparison.line}{" "}
           instead lol
         </p>
       )}
