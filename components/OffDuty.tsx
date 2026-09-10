@@ -7,6 +7,7 @@ import NonMainstream from "@/components/NonMainstream";
 import AnimeStats from "@/components/AnimeStats";
 import NightSky from "@/components/fx/NightSky";
 import NightPicker from "@/components/fx/NightPicker";
+import ModelStage from "@/components/fx/ModelStage";
 import { playCoin } from "@/lib/coin-sound";
 import { prefetchTracks } from "@/lib/tracks-client";
 import {
@@ -241,9 +242,13 @@ export default function OffDuty() {
         </span>
       </button>
 
-      <p className="mb-9 max-w-md font-serif text-[17px] italic leading-relaxed text-muted-strong">
-        {offDuty.intro}
-      </p>
+      {/* intro beside the turntable: one 3D object from the shelf of things */}
+      <div className="mb-10 grid gap-8 lg:grid-cols-[1fr_340px] lg:items-start">
+        <p className="max-w-md font-serif text-[17px] italic leading-relaxed text-muted-strong">
+          {offDuty.intro}
+        </p>
+        <ModelStage />
+      </div>
 
       {/* "you found it" note for the two routes that can fire by accident */}
       {toastVia &&
