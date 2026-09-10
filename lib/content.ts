@@ -34,6 +34,16 @@ export type Award = {
   detail?: string; // e.g. the year, or who granted it
 };
 
+/** Last-known AniList numbers, shown with a "last synced" note whenever the
+    live API is unreachable. Read them off anilist.co/user/<name>/stats. */
+export type AnimeSnapshot = {
+  syncedAt: string; // ISO date (YYYY-MM-DD)
+  count: number;
+  episodesWatched: number;
+  minutesWatched: number;
+  watchingCount: number;
+};
+
 export type Certification = {
   name: string;
   issuer: string;
@@ -117,7 +127,6 @@ export const socials: Social[] = [
   { type: "email", href: "mailto:aryanpatel142006@gmail.com", label: "Email" },
   { type: "github", href: "https://github.com/aryanpatel142006", label: "GitHub" },
   { type: "linkedin", href: "https://linkedin.com/in/aryanpatel142006/", label: "LinkedIn" },
-  { type: "website", href: "https://aryan.is-a.dev/", label: "Website" },
   { type: "resume", href: "/resume.pdf", label: "Resume" }, // drop your resume at public/resume.pdf
 ];
 
@@ -376,6 +385,15 @@ export const offDuty = {
     username: "aryanpatel142006",
     showStats: true,
     comparisons: [] as { hours: number; line: string }[],
+    // Fallback when AniList's API refuses server-side requests (it has been
+    // blocking non-browser clients). Set to null to hide the section instead.
+    snapshot: {
+      syncedAt: "2026-09-09",
+      count: 139,
+      episodesWatched: 3463,
+      minutesWatched: 82574,
+      watchingCount: 14,
+    } as AnimeSnapshot | null,
   },
 };
 

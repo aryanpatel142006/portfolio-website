@@ -64,7 +64,12 @@ export async function getAnimeStats(username: string): Promise<AnimeStats | null
   try {
     const res = await fetch(ENDPOINT, {
       method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        // identify ourselves — AniList filters anonymous server clients
+        "User-Agent": "aryan.is-a.dev portfolio (+https://aryan.is-a.dev)",
+      },
       body: JSON.stringify({ query: QUERY, variables: { name } }),
       cache: "no-store",
     });

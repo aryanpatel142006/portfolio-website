@@ -4,10 +4,19 @@ import { useEffect, useState } from "react";
 
 type AnimeData = {
   enabled: boolean;
+  live?: boolean; // false → served from the content.ts snapshot
+  syncedAt?: string; // ISO date of that snapshot
   stats?: { count: number; episodesWatched: number; minutesWatched: number };
   watchingCount?: number;
   comparison?: { hours: number; line: string } | null;
 };
+
+// "2026-09-09" → "Sep 2026" (month-level is honest enough for a fallback)
+function formatSynced(iso: string): string {
+  const d = new Date(`${iso}T00:00:00`);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+}
 
 // Minutes → a compact "Xd Yh" (days + hours), dropping a zero leading unit.
 function formatWatchTime(minutes: number): string {
@@ -83,12 +92,17 @@ export default function AnimeStats() {
   // Hide entirely when disabled, private, or errored — never look broken.
   if (!data?.enabled || !data.stats) return null;
 
-  const { stats, watchingCount, comparison } = data;
+  const { stats, watchingCount, comparison, live, syncedAt } = data;
 
   return (
     <div className="mb-8">
-      <p className="mb-3 font-mono text-[11px] uppercase tracking-wider text-muted">
+      <p className="mb-3 flex flex-wrap items-baseline gap-x-2 font-mono text-[11px] uppercase tracking-wider text-muted">
         anime
+        {live === false && syncedAt && (
+          <span className="normal-case tracking-normal text-muted/70">
+            · last synced {formatSynced(syncedAt)}
+          </span>
+        )}
       </p>
 
       <div className="flex flex-wrap gap-2">

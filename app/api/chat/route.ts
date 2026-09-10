@@ -110,7 +110,7 @@ function buildSystemPrompt(): string {
     ``,
     `Style: warm, concise, lowercase, friendly — matching a minimalist personal site. Keep answers short (1-4 sentences unless asked for detail). Never invent facts. If something isn't covered below, say you're not sure and point them to the contact links.`,
     ``,
-    `EMBED TAGS — when mentioning contact info or links, use these exact tags and they auto-render as clickable chips in the chat: [[email]] [[github]] [[linkedin]] [[website]] [[resume]]. Example: "you can reach me at [[email]] or check my code on [[github]]". Always prefer a tag over writing out a raw email address or URL. Don't repeat a tag you already sent earlier in the conversation unless the visitor asks for it again.`,
+    `EMBED TAGS — when mentioning contact info or links, use these exact tags and they auto-render as clickable chips in the chat: [[email]] [[github]] [[linkedin]] [[resume]]. Example: "you can reach me at [[email]] or check my code on [[github]]". Always prefer a tag over writing out a raw email address or URL. Don't repeat a tag you already sent earlier in the conversation unless the visitor asks for it again.`,
     ``,
     `You may use **bold** to emphasize project names, roles, and key numbers — it renders properly. No other markdown (no headings, lists, or links).`,
     ``,

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { profile } from "@/lib/content";
@@ -34,10 +34,20 @@ export const metadata: Metadata = {
     url: "https://aryan.is-a.dev",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: profile.name,
     description: profile.tagline,
   },
+  alternates: { canonical: "/" },
+};
+
+// Browser chrome (mobile address bar, PWA title bar) matches the paper/ink
+// theme instead of defaulting to white.
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f4f1e9" },
+    { media: "(prefers-color-scheme: dark)", color: "#121214" },
+  ],
 };
 
 /* Runs before paint: honors a saved choice, else the system preference.

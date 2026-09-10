@@ -156,7 +156,7 @@ export default function QueryMe() {
               type="button"
               onClick={() => stop()}
               aria-label="Stop generating"
-              className="pressable hitbox text-muted transition-colors hover:text-foreground"
+              className="pressable hitbox -my-2 -mr-2 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors hover:bg-card-hover hover:text-foreground"
             >
               <span
                 aria-hidden
@@ -168,7 +168,7 @@ export default function QueryMe() {
               type="submit"
               disabled={!input.trim()}
               aria-label="Send"
-              className="pressable hitbox text-muted transition-colors hover:text-foreground disabled:opacity-40"
+              className="pressable hitbox -my-2 -mr-2 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors hover:bg-card-hover hover:text-foreground disabled:opacity-40 disabled:hover:bg-transparent"
             >
               <SendIcon width={16} height={16} />
             </button>
