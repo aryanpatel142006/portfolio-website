@@ -224,8 +224,11 @@ export default function NonMainstream() {
 
   return (
     <div className="mb-8">
-      <p className="mb-3 font-mono text-[11px] uppercase tracking-wider text-muted">
+      <p className="mb-3 flex flex-wrap items-baseline gap-x-2 font-mono text-[11px] uppercase tracking-wider text-muted">
         non-mainstream songs
+        <span className="normal-case tracking-normal text-muted/70">
+          · in no particular order
+        </span>
       </p>
       <div className="flex flex-col gap-2">
         {loading
