@@ -10,6 +10,17 @@ import { prefetchTracks, type Track } from "@/lib/tracks-client";
 
 // Derive a readable "Title / Artist" from a raw content entry, used as the
 // graceful fallback when the Spotify API can't resolve (or isn't configured).
+const HAND = 7; // cards on the table at once
+
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 const LANG_LABEL: Record<SongLang, string> = {
   en: "english",
   hi: "hindi",
@@ -213,29 +224,30 @@ export default function NonMainstream() {
   const [tracks, setTracks] = useState<Track[] | null>(null);
   const [loading, setLoading] = useState(true);
   // display order; every inserted coin deals a new one (never the same twice)
-  const [order, setOrder] = useState<number[] | null>(null);
-  // language filter; "all" shows the whole shelf
+  // The shelf is a deck: only HAND cards show at once, dealt from a shuffled
+  // order. A coin moves the cards on the table to the bottom of the deck and
+  // deals the next hand, so repeats only come back once everything else has
+  // had a turn. The section mounts client-side only, so a random initial
+  // order never fights server markup.
+  const [order, setOrder] = useState<number[]>(() =>
+    shuffle(Array.from({ length: entries.length }, (_, i) => i)),
+  );
+  // language filter; "all" deals from the whole deck
   const [lang, setLang] = useState<SongLang | "all">("all");
 
   useEffect(() => {
     const onCoin = () => {
       setOrder((prev) => {
-        const n = entries.length;
-        const base = prev ?? Array.from({ length: n }, (_, i) => i);
-        let next = base;
-        for (let tries = 0; tries < 5 && next.join() === base.join(); tries++) {
-          next = [...base];
-          for (let i = next.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [next[i], next[j]] = [next[j], next[i]];
-          }
-        }
-        return next;
+        // deal from the top of the deck; the cards just shown go to the
+        // bottom, so nothing repeats until everything else has had a turn
+        const shown = prev.slice(0, HAND);
+        const deck = prev.slice(HAND);
+        return [...deck, ...shuffle(shown)];
       });
     };
     window.addEventListener(OFFDUTY_COIN_EVENT, onCoin);
     return () => window.removeEventListener(OFFDUTY_COIN_EVENT, onCoin);
-  }, [entries.length]);
+  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -263,6 +275,12 @@ export default function NonMainstream() {
     : entries.map((e) => ({ ...fallbackFromEntry(e), albumArt: null, url: null, previewUrl: null }));
   // languages actually present, in shelf order
   const langs = [...new Set(cards.map((c) => c.lang).filter((l): l is SongLang => !!l))];
+  // the deck after the language filter, and the hand on the table
+  const filtered = order.filter(
+    (i) => i < cards.length && (lang === "all" || cards[i].lang === lang),
+  );
+  const inDeck = filtered.length;
+  const hand = filtered.slice(0, HAND);
 
   return (
     <div className="mb-8">
@@ -299,20 +317,24 @@ export default function NonMainstream() {
       </div>
       <div className="flex flex-col gap-2">
         {loading
-          ? entries.map((_, i) => <Skeleton key={i} />)
-          : (order ?? cards.map((_, i) => i))
-              .filter((i) => i < cards.length)
-              .filter((i) => lang === "all" || cards[i].lang === lang)
-              .map((i) => (
-                <motion.div
-                  key={`${cards[i].title}-${i}`}
-                  layout
-                  transition={{ type: "spring", stiffness: 320, damping: 32 }}
-                >
-                  <Card track={cards[i]} />
-                </motion.div>
-              ))}
+          ? Array.from({ length: HAND }, (_, i) => <Skeleton key={i} />)
+          : hand.map((i) => (
+              <motion.div
+                key={`${cards[i].title}-${i}`}
+                layout
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: "spring", stiffness: 320, damping: 32 }}
+              >
+                <Card track={cards[i]} />
+              </motion.div>
+            ))}
       </div>
+      {!loading && inDeck > hand.length && (
+        <p className="mt-3 font-mono text-[10px] tracking-wider text-muted">
+          {hand.length} of {inDeck} on the table · insert a coin to deal the next hand
+        </p>
+      )}
     </div>
   );
 }
