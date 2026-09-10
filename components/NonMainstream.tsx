@@ -12,13 +12,69 @@ import { prefetchTracks, type Track } from "@/lib/tracks-client";
 // graceful fallback when the Spotify API can't resolve (or isn't configured).
 const HAND = 7; // cards on the table at once
 
-function shuffle<T>(arr: T[]): T[] {
+/** How a hand is built: fixed seats per language, then one wildcard from
+    whatever is left (that is the only seat Punjabi, Tamil or Urdu can take,
+    so none of them ever crowds a hand). A language with too few songs for
+    its seats gives the spare seats to the wildcard pool. */
+const QUOTA: { lang: SongLang; n: number }[] = [
+  { lang: "hi", n: 2 },
+  { lang: "gu", n: 2 },
+  { lang: "jp", n: 1 },
+  { lang: "en", n: 1 },
+];
+
+/** Small seeded PRNG (mulberry32) so a visit's deck order is fixed for the
+    session and every hand is a pure function of (cards, seed, deal). */
+function rng(seed: number) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function shuffleWith<T>(arr: T[], seed: number): T[] {
   const a = [...arr];
+  const r = rng(seed);
   for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(r() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+/** `n` cards from a deck starting at deal×n, wrapping, so each language
+    cycles through all of its songs before any repeat. */
+function take(deck: number[], n: number, deal: number): number[] {
+  if (deck.length === 0 || n <= 0) return [];
+  const out: number[] = [];
+  const start = (deal * n) % deck.length;
+  for (let k = 0; k < Math.min(n, deck.length); k++) out.push(deck[(start + k) % deck.length]);
+  return out;
+}
+
+/** Build hand number `deal`. With a language filter, seven straight from
+    that language's deck; otherwise the quota, then wildcards to fill. */
+function dealHand(cards: Track[], seed: number, deal: number, lang: SongLang | "all"): number[] {
+  const byLang = new Map<SongLang, number[]>();
+  cards.forEach((c, i) => {
+    if (!c.lang) return;
+    byLang.set(c.lang, [...(byLang.get(c.lang) ?? []), i]);
+  });
+  const deckOf = (l: SongLang) => shuffleWith(byLang.get(l) ?? [], seed + l.charCodeAt(0) * 7919 + l.charCodeAt(1));
+
+  if (lang !== "all") return take(deckOf(lang), HAND, deal);
+
+  const hand: number[] = [];
+  for (const q of QUOTA) hand.push(...take(deckOf(q.lang), q.n, deal));
+  // wildcard seats: everything not already on the table, in a fixed shuffled
+  // order, advancing one per deal so the wildcard also cycles
+  const rest = shuffleWith(cards.map((_, i) => i), seed + 104729).filter((i) => !hand.includes(i));
+  const need = HAND - hand.length;
+  for (let k = 0; k < need && rest.length > 0; k++) hand.push(rest[(deal + k) % rest.length]);
+  // present the hand in a mixed order rather than grouped by language
+  return shuffleWith(hand, seed + deal * 31);
 }
 
 const LANG_LABEL: Record<SongLang, string> = {
@@ -225,28 +281,17 @@ export default function NonMainstream() {
   const entries = offDuty.nonMainstream;
   const [tracks, setTracks] = useState<Track[] | null>(null);
   const [loading, setLoading] = useState(true);
-  // display order; every inserted coin deals a new one (never the same twice)
-  // The shelf is a deck: only HAND cards show at once, dealt from a shuffled
-  // order. A coin moves the cards on the table to the bottom of the deck and
-  // deals the next hand, so repeats only come back once everything else has
-  // had a turn. The section mounts client-side only, so a random initial
-  // order never fights server markup.
-  const [order, setOrder] = useState<number[]>(() =>
-    shuffle(Array.from({ length: entries.length }, (_, i) => i)),
-  );
-  // language filter; "all" deals from the whole deck
+  // Only HAND cards show at once. The seed fixes this session's deck order;
+  // each coin advances `deal`, and the hand is computed from the two (see
+  // dealHand). The section mounts client-side only, so the random seed never
+  // fights server markup.
+  const [seed] = useState(() => Math.floor(Math.random() * 2 ** 31));
+  const [deal, setDeal] = useState(0);
+  // language filter; "all" uses the quota deal
   const [lang, setLang] = useState<SongLang | "all">("all");
 
   useEffect(() => {
-    const onCoin = () => {
-      setOrder((prev) => {
-        // deal from the top of the deck; the cards just shown go to the
-        // bottom, so nothing repeats until everything else has had a turn
-        const shown = prev.slice(0, HAND);
-        const deck = prev.slice(HAND);
-        return [...deck, ...shuffle(shown)];
-      });
-    };
+    const onCoin = () => setDeal((d) => d + 1);
     window.addEventListener(OFFDUTY_COIN_EVENT, onCoin);
     return () => window.removeEventListener(OFFDUTY_COIN_EVENT, onCoin);
   }, []);
@@ -277,12 +322,9 @@ export default function NonMainstream() {
     : entries.map((e) => ({ ...fallbackFromEntry(e), albumArt: null, url: null, previewUrl: null }));
   // languages actually present, in shelf order
   const langs = [...new Set(cards.map((c) => c.lang).filter((l): l is SongLang => !!l))];
-  // the deck after the language filter, and the hand on the table
-  const filtered = order.filter(
-    (i) => i < cards.length && (lang === "all" || cards[i].lang === lang),
-  );
-  const inDeck = filtered.length;
-  const hand = filtered.slice(0, HAND);
+  // the hand on the table, and how many songs the current view could deal from
+  const hand = dealHand(cards, seed, deal, lang);
+  const inDeck = lang === "all" ? cards.length : cards.filter((c) => c.lang === lang).length;
 
   return (
     <div className="mb-8">
