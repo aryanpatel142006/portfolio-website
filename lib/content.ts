@@ -406,7 +406,11 @@ export const offDuty = {
     { src: "Tari Madh Mithi Madh Mithi Vaate", lang: "gu" },
     { src: "Mane Malje", lang: "gu" },
     { src: "Ramo Re", lang: "gu" },
-    { src: "Gori Radha Ne Kalo Kaan", lang: "gu", scene: "garba" },
+    { src: "Gori Radha Ne Kalo Kaan — Kirtidan Gadhvi", lang: "gu", scene: "garba" }, // the artist keeps it off the covers
+    { src: "Khalasi — Aditya Gadhvi", lang: "gu" },
+    { src: "Radha Ne Kaan Kare Vaat — Aditya Gadhvi", lang: "gu", scene: "garba" },
+    { src: "Maar To Mele", lang: "gu" }, // resolves to the Ishani Dave cut; add "— Geeta Rabari" if you meant hers
+    { src: "Dwarikadhish Ne Khamma", lang: "gu" },
 
     // ── added for a deeper shuffle (2026-09-10); prune anything that isn't you ──
     { src: "Samjho Na — Aditya Rikhari", lang: "hi" },
