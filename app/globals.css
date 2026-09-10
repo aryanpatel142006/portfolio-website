@@ -180,7 +180,46 @@ button:not(:disabled) {
 
 /* ── Off-duty world ──────────────────────────────────────────────
    When the visitor steps off the clock, the page warms to lamplight —
-   amber accent, softer surfaces. A mood flip, not a different site. */
+   amber accent, softer surfaces. A mood flip, not a different site.
+
+   Unlocking sets html[data-mood="offduty"] (see lib/offduty.ts), which
+   re-tints the WHOLE page: the ink goes to a warm after-hours midnight
+   and the electric blue hands over to amber everywhere — header, chips,
+   focus rings, progress bar. "Back to work mode" removes it. Session-only,
+   never persisted. */
+html[data-mood="offduty"] {
+  /* warm paper, should the visitor flip back to light while off duty */
+  --background: #f5eadb;
+  --foreground: #221a12;
+  --muted: #6f6152;
+  --muted-strong: #5a4d40;
+  --border: rgba(34, 26, 18, 0.14);
+  --border-strong: rgba(163, 89, 31, 0.3);
+  --card: rgba(163, 89, 31, 0.06);
+  --card-hover: rgba(163, 89, 31, 0.1);
+  --accent: #a3591f;
+  --accent-contrast: #f5eadb;
+  --grid-line: rgba(34, 26, 18, 0.06);
+  --surface: #faf2e6;
+  --shadow: 0 24px 60px -24px rgba(34, 26, 18, 0.28);
+}
+html[data-theme="dark"][data-mood="offduty"] {
+  /* lamplight: warm midnight instead of the neutral one */
+  --background: #141110;
+  --foreground: #ede3d3;
+  --muted: #968a79;
+  --muted-strong: #c2b5a2;
+  --border: rgba(237, 227, 211, 0.13);
+  --border-strong: rgba(217, 154, 91, 0.28);
+  --card: rgba(217, 154, 91, 0.06);
+  --card-hover: rgba(217, 154, 91, 0.1);
+  --accent: #d99a5b;
+  --accent-contrast: #141110;
+  --grid-line: rgba(237, 227, 211, 0.05);
+  --surface: #1c1714;
+  --shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.65);
+}
+
 .offduty-world {
   --accent: #a3591f;
   --accent-contrast: #f4f1e9;
@@ -532,7 +571,8 @@ html[data-theme="dark"] .offduty-world {
   animation: vt-sweep 0.6s cubic-bezier(0.33, 0, 0.2, 1) both;
 }
 /* the body's own color transition would smear inside the sweep */
-html.vt-active body {
+html.vt-active body,
+html.vt-warm body {
   transition: none;
 }
 

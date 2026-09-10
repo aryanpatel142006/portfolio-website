@@ -9,6 +9,7 @@ import {
   KONAMI_SEQUENCE,
   OFFDUTY_ANCHOR_LABEL,
   OFFDUTY_RELOCK_EVENT,
+  OFFDUTY_TEASER_ID,
   OFFDUTY_UNLOCK_EVENT,
   relockOffDuty,
   unlockOffDuty,
@@ -45,14 +46,12 @@ export default function OffDuty() {
     };
   }, []);
 
-  // "Back to work mode" — collapse the warm world and glide back to the teaser.
-  function backToWork() {
-    const anchor = sectionRef.current;
-    relockOffDuty();
-    // After the teaser re-renders in place, ease the viewport back to it.
-    requestAnimationFrame(() => {
-      anchor?.scrollIntoView({ behavior: "smooth", block: "center" });
-    });
+  // "Back to work mode" — the daytime theme sweeps back out of the button,
+  // the world collapses, and the viewport lands on the teaser (all inside
+  // the view transition; see relockOffDuty).
+  function backToWork(e: React.MouseEvent<HTMLButtonElement>) {
+    const r = e.currentTarget.getBoundingClientRect();
+    relockOffDuty({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
   }
 
   // Konami code listener — ↑↑↓↓←→←→ B A
@@ -85,7 +84,7 @@ export default function OffDuty() {
   // Locked: show a friendly invitation to reveal the off-duty side.
   if (!unlocked) {
     return (
-      <div className="mt-16 flex justify-center">
+      <div id={OFFDUTY_TEASER_ID} className="mt-16 flex justify-center scroll-mt-24">
         <button
           type="button"
           onClick={(e) => {
