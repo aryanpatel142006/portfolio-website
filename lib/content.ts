@@ -112,6 +112,12 @@ export const profile: Profile = {
 export const statusBadges: StatusBadge[] = [
   { role: "Student", org: "Rutgers University", icon: "/rutgers.png" },
   { role: "Data Engineer", org: "New Brunswick Parking Authority", icon: "/nbpa.png", size: 44 },
+  {
+    role: "AI Fellow",
+    org: "American Express",
+    iconUrl: "https://img.logo.dev/americanexpress.com?token=pk_FNeueCUtR0qx7cHP9ZPGrA&format=webp&retina=true",
+    iconAlt: "American Express",
+  },
 ];
 
 /* ────────────────────────────  SOCIALS  ──────────────────────────── */
@@ -165,6 +171,20 @@ export const certifications: Certification[] = [
 // Use `iconUrl` for a remote logo when you have one; `icon` still shows when `iconUrl` is omitted.
 
 export const experiences: Experience[] = [
+  {
+    role: "AI Fellow",
+    org: "American Express",
+    location: "New York, NY",
+    period: "Sep 2026 → Dec 2026",
+    active: true,
+    bullets: [
+      "Second-Look Lending, through Break Through Tech's AI Studio: building credit-risk models on consumer-loan data to predict applicant default probability — benchmarking logistic regression, random forests, and gradient boosting (XGBoost, LightGBM) against a production baseline.",
+      "Evaluating on a time-based holdout with ROC-AUC, LogLoss, and calibration (reliability curves, Brier score); translating predicted risk into profit-aware lending decisions under a defined cost model.",
+      "Optimizing an Inclusive Profit Score — expected portfolio profit minus a penalty for the thin-file inclusion gap — so applicants with little credit history get a fair second look.",
+    ],
+    icon: "💳",
+    iconUrl: "https://img.logo.dev/americanexpress.com?token=pk_FNeueCUtR0qx7cHP9ZPGrA&format=webp&retina=true",
+  },
   {
     role: "Data Engineer",
     org: "New Brunswick Parking Authority",
@@ -411,13 +431,25 @@ My coursework includes Data Structures, Honors Computer Architecture, Discrete S
 and Linear Algebra.
 
 I love building things that make technology more human — accessible, useful, and a little
-delightful. Right now I'm a Data Engineer at the New Brunswick Parking Authority (since June
-2026), an AI/ML Fellow with Break Through Tech @ Cornell Tech (since March 2026), and an IT
+delightful. Right now I'm an AI Fellow at American Express through Break Through Tech's AI
+Studio (Sep–Dec 2026, New York), a Data Engineer at the New Brunswick Parking Authority (since
+June 2026), an AI/ML Fellow with Break Through Tech @ Cornell Tech (since March 2026), and an IT
 Support Engineer at Rutgers Digital Classroom Services (since January 2025, supporting 15+
 buildings and 10,000+ daily users). Earlier in 2026 I was a Product Manager + AI/ML Engineer
 at IPser Labs (Fort Worth, TX) working on a provisional patent-backed structured video
 conferencing system, and in early 2025 I was a Software Engineering Fellow at Blueprint.
 I'm also a member of SEED2S (Student Equity, Excellence and Diversity in Data Science).
+
+At American Express my AI Studio project is "Second-Look Lending": using synthetic
+consumer-loan data and classical ML (logistic regression, random forests, gradient boosting with
+XGBoost and LightGBM) to predict each applicant's default risk and turn it into a profit-aware,
+fair lending decision for people with thin credit files. Models are judged on a time-based
+holdout with ROC-AUC, LogLoss, and calibration (reliability curves, Brier score) against a
+logistic-regression baseline; the decision layer is judged on expected portfolio profit under a
+cost model and the thin-file inclusion gap, combined into an Inclusive Profit Score. Milestones
+run EDA and feature engineering (September), model exploration and hyperparameter tuning with
+grid and Bayesian search (October), then final scoring and a Streamlit demo app (November). A
+stretch goal is a self-attention model to surface high-order feature interactions.
 
 At NBPA I'm architecting a normalized relational database to replace Excel-based revenue
 tracking and building automated Python + Pandas ETL pipelines that cut manual reporting
