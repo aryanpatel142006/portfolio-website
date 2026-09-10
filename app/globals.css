@@ -1101,6 +1101,43 @@ html[data-mood="offduty"] .spotlight {
   }
 }
 
+/* "secret found" toast: top-center under the header, neon card */
+.secret-toast {
+  position: fixed;
+  left: 50%;
+  top: calc(56px + 1rem);
+  z-index: 75;
+  width: min(92vw, 30rem);
+  transform: translateX(-50%);
+  padding: 1rem 1.125rem;
+  border: 1px solid color-mix(in oklab, var(--accent) 55%, transparent);
+  border-radius: 0.75rem;
+  background: color-mix(in oklab, var(--surface) 92%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+    0 24px 60px -24px var(--accent);
+  animation: toast-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.secret-toast kbd {
+  display: inline-block;
+  min-width: 1.4em;
+  padding: 0 0.35em;
+  border: 1px solid var(--border-strong);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.85em;
+  text-align: center;
+  color: var(--foreground);
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-12px);
+  }
+}
+
 /* arcade furniture */
 .coin-blink {
   animation: coin 1.1s steps(2, jump-none) infinite;
@@ -1123,8 +1160,71 @@ html[data-mood="offduty"] .spotlight {
 .vinyl {
   animation: spin-1 3.4s linear infinite paused;
 }
-.group:hover .vinyl {
+/* the record spins only while its clip is actually playing */
+.is-playing .vinyl {
   animation-play-state: running;
+}
+/* progress ring around the art: --p is 0..1, hairline at rest */
+.art {
+  background: conic-gradient(
+    var(--neon-2) calc(var(--p, 0) * 1turn),
+    var(--border) 0
+  );
+  transition: box-shadow 0.3s ease;
+}
+.is-playing .art {
+  box-shadow: 0 0 22px -6px var(--neon-2);
+}
+/* play/pause cue over the art: hidden until hover on a mouse, always on touch */
+.art-cue {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 9999px;
+  background: rgba(8, 4, 15, 0.72);
+  color: #fff;
+  font-size: 10px;
+  letter-spacing: -0.05em;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.group:hover .art-cue,
+.is-playing:hover .art-cue {
+  opacity: 1;
+  transform: scale(1);
+}
+@media (hover: none) {
+  .art-cue {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+/* equalizer bars beside "previewing" */
+.eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 10px;
+}
+.eq i {
+  display: block;
+  width: 2px;
+  height: 100%;
+  background: currentColor;
+  transform-origin: bottom;
+  animation: eq 0.9s ease-in-out infinite;
+}
+.eq i:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.eq i:nth-child(3) {
+  animation-delay: -0.6s;
+}
+@keyframes eq {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
 }
 .arcade-card {
   background: linear-gradient(180deg, rgba(255, 61, 154, 0.09), rgba(51, 230, 255, 0.05));
@@ -1156,7 +1256,8 @@ html[data-mood="offduty"] .spotlight {
   .scanlines,
   .coin-blink,
   .neon-flicker,
-  .vinyl {
+  .vinyl,
+  .eq i {
     animation: none !important;
   }
 }

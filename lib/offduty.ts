@@ -14,6 +14,13 @@ export const OFFDUTY_RELOCK_EVENT = "offduty:relock";
 export const OFFDUTY_ANCHOR_LABEL = "Off duty";
 export const OFFDUTY_TEASER_ID = "offduty";
 
+/** How the unlock happened. Deliberate routes (the teaser button, the ⌘K
+    command) need no explanation; the two that can fire by accident (arrow
+    keys while scrolling, repeated taps on the photo) get a toast that says
+    what just happened and how to get back. */
+export type UnlockVia = "click" | "palette" | "keys" | "photo";
+export type UnlockDetail = { x?: number; y?: number; via: UnlockVia };
+
 /* ── Mood: the whole page changes theme the moment off-duty opens ──────
    html[data-mood="offduty"] re-tints every token (see globals.css) and the
    theme is forced to dark — after hours. The visitor's saved preference in
@@ -72,11 +79,16 @@ function sweep(
     the state flip AND an instant jump to the section happen inside the
     transition, so the sweep uncovers the lamplight world already in place.
     Without the API (or when already unlocked) it's the plain event. */
-export function unlockOffDuty(origin?: { x: number; y: number }) {
+export function unlockOffDuty(
+  origin?: { x: number; y: number },
+  via: UnlockVia = "click",
+) {
   const fire = () => {
     enterMood();
-    // the origin rides along so the spark burst can start where the click was
-    window.dispatchEvent(new CustomEvent(OFFDUTY_UNLOCK_EVENT, { detail: origin }));
+    // the origin rides along so the spark burst can start where the click
+    // was; `via` lets the section explain an accidental unlock
+    const detail: UnlockDetail = { ...origin, via };
+    window.dispatchEvent(new CustomEvent(OFFDUTY_UNLOCK_EVENT, { detail }));
   };
 
   const alreadyUnlocked = !!document.querySelector(

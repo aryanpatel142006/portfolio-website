@@ -94,7 +94,7 @@ export default function CommandPalette() {
         // palette (flushSync inside unlockOffDuty commits both together)
         run: () => {
           close();
-          unlockOffDuty();
+          unlockOffDuty(undefined, "palette");
         },
       };
       return [secret, ...commands.filter((c) => c.label.toLowerCase().includes(q))];

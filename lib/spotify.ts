@@ -12,6 +12,7 @@ export type Track = {
   artist: string;
   albumArt: string | null;
   url: string | null;
+  previewUrl: string | null; // ~30s clip (Spotify's own, else iTunes) for hover previews
 };
 
 // ── parsing ────────────────────────────────────────────────────────────────
@@ -48,7 +49,24 @@ type EmbedEntity = {
   subtitle?: string;
   artists?: EmbedArtist[];
   visualIdentity?: { image?: EmbedImage[] };
+  audioPreview?: { url?: string | null } | null;
 };
+
+/** iTunes Search is the fallback source for preview clips when Spotify's
+    embed data doesn't carry one. Best-effort: any failure is just null. */
+async function itunesPreview(term: string): Promise<string | null> {
+  try {
+    const res = await fetch(
+      `${ITUNES}?term=${encodeURIComponent(term)}&entity=song&limit=1`,
+      { cache: "no-store" },
+    );
+    if (!res.ok) return null;
+    const json = (await res.json()) as { results?: { previewUrl?: string }[] };
+    return json.results?.[0]?.previewUrl ?? null;
+  } catch {
+    return null;
+  }
+}
 
 /** Pick the largest album-art URL from the embed's image set. */
 function bestImage(images: EmbedImage[] | undefined): string | null {
@@ -105,6 +123,8 @@ async function resolveByUrl(input: string): Promise<Track | null> {
     artist,
     albumArt: bestImage(entity.visualIdentity?.image),
     url: spotifyUrl,
+    previewUrl:
+      entity.audioPreview?.url ?? (await itunesPreview(`${entity.title} ${artist}`)),
   };
 }
 
@@ -113,6 +133,7 @@ type ITunesResult = {
   artistName?: string;
   artworkUrl100?: string;
   trackViewUrl?: string;
+  previewUrl?: string;
 };
 
 /** Resolve a plain "Song — Artist" name to a card via the iTunes Search API. */
@@ -133,6 +154,7 @@ async function resolveByName(query: string): Promise<Track | null> {
     // Bump the 100px thumbnail up to a crisp 300px cover.
     albumArt: r.artworkUrl100?.replace(/100x100bb\.jpg$/, "300x300bb.jpg") ?? null,
     url: r.trackViewUrl ?? null,
+    previewUrl: r.previewUrl ?? null,
   };
 }
 

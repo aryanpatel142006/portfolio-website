@@ -15,6 +15,8 @@ import {
   OFFDUTY_UNLOCK_EVENT,
   relockOffDuty,
   unlockOffDuty,
+  type UnlockDetail,
+  type UnlockVia,
 } from "@/lib/offduty";
 
 export default function OffDuty() {
@@ -23,6 +25,8 @@ export default function OffDuty() {
   const [unlocked, setUnlocked] = useState(false);
   const [justUnlocked, setJustUnlocked] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  // "you just did X" note for unlocks that can happen by accident
+  const [toastVia, setToastVia] = useState<UnlockVia | null>(null);
   // the section's own "back to work mode" button; when it scrolls out of
   // view a floating twin takes over so the exit is always one click away
   const headRef = useRef<HTMLDivElement>(null);
@@ -46,13 +50,16 @@ export default function OffDuty() {
 
   // Reveal on any unlock trigger; collapse on relock.
   useEffect(() => {
-    const onUnlock = () => {
+    const onUnlock = (e: Event) => {
       setUnlocked(true);
       setJustUnlocked(true);
+      const via = (e as CustomEvent<UnlockDetail>).detail?.via;
+      setToastVia(via === "keys" || via === "photo" ? via : null);
     };
     const onRelock = () => {
       setUnlocked(false);
       setJustUnlocked(false);
+      setToastVia(null);
     };
     window.addEventListener(OFFDUTY_UNLOCK_EVENT, onUnlock);
     window.addEventListener(OFFDUTY_RELOCK_EVENT, onRelock);
@@ -70,6 +77,25 @@ export default function OffDuty() {
     relockOffDuty({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
   }
 
+  // the toast retires itself after a while
+  useEffect(() => {
+    if (!toastVia) return;
+    const id = window.setTimeout(() => setToastVia(null), 12_000);
+    return () => window.clearTimeout(id);
+  }, [toastVia]);
+
+  // Escape is always a way out of the night (unless the palette has it)
+  useEffect(() => {
+    if (!unlocked) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      if (document.querySelector('[aria-label="Command palette"]')) return;
+      relockOffDuty();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [unlocked]);
+
   // Konami code listener — ↑↑↓↓←→←→ B A
   useEffect(() => {
     let i = 0;
@@ -79,7 +105,7 @@ export default function OffDuty() {
         i += 1;
         if (i === KONAMI_SEQUENCE.length) {
           i = 0;
-          unlockOffDuty();
+          unlockOffDuty(undefined, "keys");
         }
       } else {
         // Allow a wrong key to be the start of a fresh attempt.
@@ -165,6 +191,50 @@ export default function OffDuty() {
       <p className="mb-9 max-w-md font-serif text-[17px] italic leading-relaxed text-muted-strong">
         {offDuty.intro}
       </p>
+
+      {/* "you found it" note for the two routes that can fire by accident */}
+      {toastVia &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div role="status" aria-live="polite" className="secret-toast">
+            <p className="font-arcade text-[9px] uppercase tracking-[0.18em] text-neon-2">
+              secret found
+            </p>
+            <p className="mt-1.5 text-[13px] leading-snug text-foreground">
+              {toastVia === "keys" ? (
+                <>
+                  Pressing <kbd>↓</kbd> <kbd>↓</kbd> opened the off-duty side of this site:
+                  anime, songs, the cat.
+                </>
+              ) : (
+                <>
+                  Tapping the photo five times opened the off-duty side of this site:
+                  anime, songs, the cat.
+                </>
+              )}
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <button
+                type="button"
+                onClick={backToWork}
+                className="inline-flex items-center gap-1.5 rounded-full border border-accent/60 bg-accent/10 px-3 py-1.5 font-mono text-[11px] text-foreground transition-colors hover:bg-accent hover:text-accent-contrast"
+              >
+                &larr; back to work mode
+              </button>
+              <button
+                type="button"
+                onClick={() => setToastVia(null)}
+                className="font-mono text-[11px] text-muted transition-colors hover:text-foreground"
+              >
+                stay a while
+              </button>
+              <span className="hidden font-mono text-[10px] text-muted sm:inline">
+                <kbd>esc</kbd> also exits
+              </span>
+            </div>
+          </div>,
+          document.body,
+        )}
 
       {/* floating exit, only while the section's own button is off-screen */}
       {!headVisible &&
