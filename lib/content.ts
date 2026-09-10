@@ -398,6 +398,7 @@ export const offDuty = {
     { src: "Dil Nu — AP Dhillon", lang: "pa" }, // AP Dhillon & Shinda Kahlon; say so if you meant Maninder Buttar's
     { src: "Boyfriend — Karan Aujla", lang: "pa" },
     { src: "9:45 — Prabh Singh", lang: "pa" }, // Prabh Singh & Jay Trak
+    { src: "Tauba Tauba — Karan Aujla", lang: "pa" }, // from Bad Newz
     // ── japanese: city pop + anime ──
     { src: "Stay With Me — Miki Matsubara", lang: "jp", scene: "city pop" }, // (album links don't resolve; the name does)
     { src: "https://open.spotify.com/track/3x4378ztiLvFmm2nuzEI0C", lang: "jp", scene: "anime op" }, // Cruel Angel's Thesis
