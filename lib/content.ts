@@ -440,6 +440,10 @@ at IPser Labs (Fort Worth, TX) working on a provisional patent-backed structured
 conferencing system, and in early 2025 I was a Software Engineering Fellow at Blueprint.
 I'm also a member of SEED2S (Student Equity, Excellence and Diversity in Data Science).
 
+For summer 2027 I'm looking for an internship in data engineering, ML, software engineering,
+or a forward deployed engineer role. Fintech is where I'd most like to land. I'm not looking
+for research positions.
+
 At American Express my AI Studio project is "Second-Look Lending": using synthetic
 consumer-loan data and classical ML (logistic regression, random forests, gradient boosting with
 XGBoost and LightGBM) to predict each applicant's default risk and turn it into a profit-aware,

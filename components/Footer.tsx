@@ -25,8 +25,8 @@ export default function Footer() {
         </h2>
 
         <p className="mt-6 max-w-md text-[14px] leading-relaxed text-muted-strong">
-          Data engineering, ML, or research, and the interesting problems in
-          between. Email is the fastest way to reach me.
+          Data engineering, ML, software, or forward deployed engineering.
+          Fintech is a plus. Email is the fastest way to reach me.
         </p>
 
         {email && (
