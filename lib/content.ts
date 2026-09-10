@@ -411,6 +411,7 @@ export const offDuty = {
     { src: "Radha Ne Kaan Kare Vaat — Aditya Gadhvi", lang: "gu", scene: "garba" },
     { src: "Maar To Mele", lang: "gu" }, // resolves to the Ishani Dave cut; add "— Geeta Rabari" if you meant hers
     { src: "Dwarikadhish Ne Khamma", lang: "gu" },
+    { src: "Helo Maro — Sachin-Jigar", lang: "gu" },
 
     // ── added for a deeper shuffle (2026-09-10); prune anything that isn't you ──
     { src: "Samjho Na — Aditya Rikhari", lang: "hi" },
