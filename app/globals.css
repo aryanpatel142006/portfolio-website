@@ -904,7 +904,7 @@ html.vt-warm body {
    BEZERK LAYER — the effects that make the journal feel alive, and the
    night world behind the off-duty section. Compositor-only where it can
    be (transform/opacity), pointer-gated in JS, and switched off wholesale
-   under prefers-reduced-motion at the bottom of this file.
+   everywhere; there is no reduced-motion switch (owner's call).
    ══════════════════════════════════════════════════════════════════════ */
 
 /* pointer ring — annotation around the native cursor */
@@ -1526,30 +1526,6 @@ html[data-mood="offduty"] .spotlight {
     0 0 28px -14px var(--accent);
 }
 
-/* ── less motion, by request of the OS ──────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  ::before,
-  ::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none !important;
-  }
-  .marquee-track {
-    animation: none !important;
-    transform: none !important;
-  }
-  .aurora,
-  .scanlines,
-  .coin-blink,
-  .neon-flicker,
-  .vinyl,
-  .eq i {
-    animation: none !important;
-  }
-}
+/* Reduced-motion handling was removed on purpose (2026-09-14): the owner
+   wants every animation to run for everyone. See lib/fx.ts. */
+
