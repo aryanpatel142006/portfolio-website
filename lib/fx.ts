@@ -1,12 +1,12 @@
-/** Shared gates for the decorative effects layer. Every effect asks these
-    before doing anything: no pointer-following on touch screens, nothing
-    kinetic for visitors who asked the OS for less motion. */
+/** Shared gates for the decorative effects layer. Pointer-following effects
+    stay off on touch screens (there is no pointer to follow); everything
+    else runs everywhere. */
 
+/** Owner's call (2026-09-14): the site's motion always runs, including for
+    visitors whose OS asks for reduced motion. Kept as a function so every
+    effect still has one switch if that decision is ever reversed. */
 export function reducedMotion(): boolean {
-  return (
-    typeof matchMedia !== "undefined" &&
-    matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
+  return false;
 }
 
 export function finePointer(): boolean {
