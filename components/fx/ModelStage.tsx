@@ -141,9 +141,10 @@ export default function ModelStage() {
             touch-action="pan-y"
             camera-orbit={model.orbit}
             interpolation-decay={reducedMotion() ? 0 : 220}
-            exposure={model.exposure}
-            shadow-intensity={0.7}
-            shadow-softness={0.9}
+            exposure={model.exposure * 1.15}
+            tone-mapping="agx"
+            shadow-intensity={0.9}
+            shadow-softness={0.8}
             environment-image="neutral"
             interaction-prompt="none"
             loading="eager"

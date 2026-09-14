@@ -28,6 +28,7 @@ declare module "react" {
         "environment-image"?: string;
         "interaction-prompt"?: string;
         "interpolation-decay"?: number | string;
+        "tone-mapping"?: "auto" | "aces" | "agx" | "commerce" | "neutral";
         "touch-action"?: string;
       };
     }
