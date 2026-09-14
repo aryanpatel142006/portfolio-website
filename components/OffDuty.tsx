@@ -6,7 +6,6 @@ import { offDuty } from "@/lib/content";
 import NonMainstream from "@/components/NonMainstream";
 import AnimeStats from "@/components/AnimeStats";
 import NightSky from "@/components/fx/NightSky";
-import NightPicker from "@/components/fx/NightPicker";
 import ModelStage from "@/components/fx/ModelStage";
 import { playCoin } from "@/lib/coin-sound";
 import { prefetchTracks } from "@/lib/tracks-client";
@@ -308,15 +307,6 @@ export default function OffDuty() {
                 <kbd>esc</kbd> also exits
               </span>
             </div>
-          </div>,
-          document.body,
-        )}
-
-      {/* the palette dock sits under the header for as long as the night is on */}
-      {typeof document !== "undefined" &&
-        createPortal(
-          <div className="night-dock">
-            <NightPicker />
           </div>,
           document.body,
         )}

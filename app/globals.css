@@ -1386,23 +1386,6 @@ html[data-mood="offduty"] .spotlight {
   border-color: color-mix(in oklab, var(--neon-2) 60%, transparent);
 }
 
-/* the dock: a fixed pill under the sticky header holding the night picker */
-.night-dock {
-  position: fixed;
-  top: calc(56px + 0.6rem);
-  left: 50%;
-  z-index: 60;
-  transform: translateX(-50%);
-  padding: 0.4rem 0.85rem;
-  border: 1px solid color-mix(in oklab, var(--accent) 45%, transparent);
-  border-radius: 9999px;
-  background: color-mix(in oklab, var(--surface) 88%, transparent);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 18px 40px -24px var(--accent);
-  animation: toast-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-  max-width: 96vw;
-}
-
 /* night picker: swatches split accent / secondary / ground */
 .night-picker {
   display: flex;
@@ -1425,11 +1408,23 @@ html[data-mood="offduty"] .spotlight {
   transform: scale(1.25);
   box-shadow: 0 0 0 2px var(--background), 0 0 0 3.5px var(--accent);
 }
+/* in the header: smaller dots, quieter ring, fades in with the night */
+.night-picker-compact {
+  animation: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.night-picker-compact .swatch {
+  width: 12px;
+  height: 12px;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.night-picker-compact .swatch.is-active {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 1.5px var(--background), 0 0 0 2.5px var(--accent);
+}
 
 /* the turntable: a square stage with a soft floor glow under the object */
 .model-stage-wrap {
   width: 100%;
-  max-width: 340px;
 }
 .model-stage {
   position: relative;

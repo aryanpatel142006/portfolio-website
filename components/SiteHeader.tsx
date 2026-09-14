@@ -4,6 +4,7 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import { Moon, SunMedium } from "lucide-react";
 import { motion } from "motion/react";
 import LogoMark from "./LogoMark";
+import NightPicker from "./fx/NightPicker";
 
 /* New Brunswick wall clock — first tick is deferred a frame so the server
    and client never disagree about the time. */
@@ -94,6 +95,20 @@ function SectionNav() {
   );
 }
 
+/* html[data-mood] mirror: the header shows the palette picker only at night. */
+function subscribeToMood(onChange: () => void) {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-mood"] });
+  return () => observer.disconnect();
+}
+function useNightOn() {
+  return useSyncExternalStore(
+    subscribeToMood,
+    () => document.documentElement.dataset.mood === "offduty",
+    () => false,
+  );
+}
+
 /* The <html data-theme> attribute (set pre-paint by the inline script in
    layout.tsx) is the single source of truth; this store just mirrors it. */
 function subscribeToTheme(onChange: () => void) {
@@ -159,6 +174,7 @@ function ThemeToggle() {
 }
 
 export default function SiteHeader() {
+  const nightOn = useNightOn();
   return (
     <header className="header-in sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex w-[94%] items-center justify-between py-3 sm:w-[90%] lg:w-[82%] xl:w-[70%] 2xl:w-[58%]">
@@ -174,6 +190,7 @@ export default function SiteHeader() {
         <SectionNav />
 
         <div className="flex items-center gap-4">
+          {nightOn && <NightPicker compact />}
           <LocalTime />
           <button
             type="button"

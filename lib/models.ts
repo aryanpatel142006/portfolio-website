@@ -17,9 +17,29 @@ export const STAGE_MODELS: StageModel[] = [
     name: "old computer",
     blurb: "a hand-painted beige box and a mug of coffee",
     src: "/models/computer.glb",
-    orbit: "-20deg 80deg 88%",
+    orbit: "75deg 80deg 88%", // screen to the camera, keyboard showing
     exposure: 1.2,
     credit: "downloaded model (old computer)",
+    license: "check source license before shipping",
+  },
+  {
+    id: "reaper",
+    name: "little reaper",
+    blurb: "grim reaper, coffee in hand, off duty too",
+    src: "/models/reaper.glb",
+    orbit: "70deg 78deg 95%", // face and mug, a touch of profile
+    exposure: 1.3,
+    credit: "downloaded model (grim reaper)",
+    license: "check source license before shipping",
+  },
+  {
+    id: "crt",
+    name: "signal lost",
+    blurb: "a portable CRT stuck on a test pattern",
+    src: "/models/crt.glb",
+    orbit: "-10deg 84deg 100%", // screen square to the camera
+    exposure: 1.05,
+    credit: "downloaded model (monitor)",
     license: "check source license before shipping",
   },
 ];

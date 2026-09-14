@@ -3,12 +3,21 @@
 import { useEffect, useRef, useState } from "react";
 import { DEFAULT_MODEL, STAGE_MODELS } from "@/lib/models";
 import { reducedMotion } from "@/lib/fx";
+import { OFFDUTY_COIN_EVENT } from "@/lib/offduty";
+
+type MV = HTMLElement & {
+  cameraOrbit: string;
+  getCameraOrbit: () => { theta: number; phi: number; radius: number };
+};
+
+const TAU = Math.PI * 2;
 
 /** A turntable for one 3D object in the off-duty world. The viewer library
-    loads only after this mounts (i.e. after the unlock), the GLB streams
-    lazily, and a row of names swaps the object. The object faces front;
-    the visitor can drag it about 75° either way, and a second after they
-    let go it eases back to its pose. Zoom is off so the wheel scrolls. */
+    loads only after this mounts (i.e. after the unlock) and the GLB streams
+    lazily. Left alone, the object faces front and sways a few degrees very
+    slowly. Drag it and it spins freely with momentum; a moment after you let
+    go it glides back to the front. Zoom is off so the wheel scrolls. Each
+    coin swaps the object for one of the other two. */
 export default function ModelStage() {
   const [ready, setReady] = useState(false);
   const [id, setId] = useState(DEFAULT_MODEL);
@@ -25,36 +34,67 @@ export default function ModelStage() {
     };
   }, []);
 
-  // ease back to the front pose a moment after the visitor lets go. Keyed on
-  // pointer release rather than camera-change: the viewer's inertia keeps
-  // emitting camera-change for seconds as it slows, which would keep
-  // postponing the return.
+  // a coin deals a different object onto the turntable
   useEffect(() => {
-    const mv = mvRef.current as (HTMLElement & { cameraOrbit: string }) | null;
+    const onCoin = () =>
+      setId((cur) => {
+        const others = STAGE_MODELS.filter((m) => m.id !== cur);
+        return others[Math.floor(Math.random() * others.length)]?.id ?? cur;
+      });
+    window.addEventListener(OFFDUTY_COIN_EVENT, onCoin);
+    return () => window.removeEventListener(OFFDUTY_COIN_EVENT, onCoin);
+  }, []);
+
+  // idle: sway around the front pose; after a drag: wait, then glide home.
+  // The target is set every frame with a slow interpolation, so the glide
+  // and the sway are the same motion at different amplitudes.
+  useEffect(() => {
+    const mv = mvRef.current as MV | null;
     if (!mv) return;
-    let t = 0;
-    const arm = () => {
-      window.clearTimeout(t);
-      t = window.setTimeout(() => {
-        mv.cameraOrbit = model.orbit;
-      }, reducedMotion() ? 0 : 1100);
+    const [thetaStr, phiStr, radiusStr] = model.orbit.split(" ");
+    const front = (parseFloat(thetaStr) * Math.PI) / 180;
+    const still = reducedMotion();
+    let base = front; // front, plus whole turns so the way home is the short way
+    let idle = true;
+    let raf = 0;
+    let timer = 0;
+    const t0 = performance.now();
+    const loop = (now: number) => {
+      if (idle) {
+        const sway = still ? 0 : Math.sin((now - t0) / 2600) * 0.1; // ±6°, ~16s period
+        mv.cameraOrbit = `${(((base + sway) * 180) / Math.PI).toFixed(2)}deg ${phiStr} ${radiusStr}`;
+      }
+      raf = requestAnimationFrame(loop);
     };
-    const disarm = () => window.clearTimeout(t);
-    mv.addEventListener("pointerdown", disarm);
-    mv.addEventListener("pointerup", arm);
-    mv.addEventListener("pointercancel", arm);
-    mv.addEventListener("pointerleave", arm);
+    const down = () => {
+      idle = false;
+      window.clearTimeout(timer);
+    };
+    const up = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        const cur = mv.getCameraOrbit().theta;
+        base = front + Math.round((cur - front) / TAU) * TAU;
+        idle = true;
+      }, still ? 0 : 900);
+    };
+    mv.addEventListener("pointerdown", down);
+    mv.addEventListener("pointerup", up);
+    mv.addEventListener("pointercancel", up);
+    mv.addEventListener("pointerleave", up);
+    raf = requestAnimationFrame(loop);
     return () => {
-      mv.removeEventListener("pointerdown", disarm);
-      mv.removeEventListener("pointerup", arm);
-      mv.removeEventListener("pointercancel", arm);
-      mv.removeEventListener("pointerleave", arm);
-      window.clearTimeout(t);
+      cancelAnimationFrame(raf);
+      window.clearTimeout(timer);
+      mv.removeEventListener("pointerdown", down);
+      mv.removeEventListener("pointerup", up);
+      mv.removeEventListener("pointercancel", up);
+      mv.removeEventListener("pointerleave", up);
     };
   }, [ready, model.orbit]);
 
   return (
-    <figure className="model-stage-wrap">
+    <div className="model-stage-wrap">
       <div className="model-stage">
         {ready ? (
           <model-viewer
@@ -67,9 +107,7 @@ export default function ModelStage() {
             disable-pan
             touch-action="pan-y"
             camera-orbit={model.orbit}
-            min-camera-orbit="-75deg 60deg auto"
-            max-camera-orbit="75deg 100deg auto"
-            interpolation-decay={reducedMotion() ? 0 : 700}
+            interpolation-decay={reducedMotion() ? 0 : 1500}
             exposure={model.exposure}
             shadow-intensity={0.7}
             shadow-softness={0.9}
@@ -85,32 +123,6 @@ export default function ModelStage() {
         )}
         <span aria-hidden className="model-stage-floor" />
       </div>
-      <figcaption className="mt-2.5 font-mono text-[11px] leading-snug text-muted">
-        {model.blurb} · <span className="uppercase tracking-[0.12em]">drag to turn</span>
-      </figcaption>
-      {STAGE_MODELS.length > 1 && (
-      <div
-        role="group"
-        aria-label="Pick the object on the turntable"
-        className="mt-2.5 flex flex-wrap gap-1.5"
-      >
-        {STAGE_MODELS.map((m) => (
-          <button
-            key={m.id}
-            type="button"
-            onClick={() => setId(m.id)}
-            aria-pressed={m.id === id}
-            className={`rounded-full border px-2.5 py-1 font-mono text-[10px] lowercase tracking-wider transition-colors ${
-              m.id === id
-                ? "border-accent bg-accent text-accent-contrast"
-                : "border-border text-muted hover:border-accent/50 hover:text-foreground"
-            }`}
-          >
-            {m.name}
-          </button>
-        ))}
-      </div>
-      )}
-    </figure>
+    </div>
   );
 }

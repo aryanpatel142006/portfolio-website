@@ -14,7 +14,7 @@ function subscribe(onChange: () => void) {
 /** A row of swatches that re-pigments the whole night world on click.
     The choice is remembered in localStorage so the visitor's next unlock
     opens on the same night. */
-export default function NightPicker() {
+export default function NightPicker({ compact = false }: { compact?: boolean }) {
   const current = useSyncExternalStore(
     subscribe,
     () => document.documentElement.dataset.night ?? DEFAULT_NIGHT,
@@ -23,11 +23,17 @@ export default function NightPicker() {
   const active = NIGHT_PALETTES.find((p) => p.id === current) ?? NIGHT_PALETTES[0];
 
   return (
-    <div className="night-picker" role="group" aria-label="Pick the night's palette">
-      <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
-        night
-      </span>
-      <div className="flex items-center gap-1.5">
+    <div
+      className={`night-picker ${compact ? "night-picker-compact" : ""}`}
+      role="group"
+      aria-label="Pick the night's palette"
+    >
+      {!compact && (
+        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+          night
+        </span>
+      )}
+      <div className={`flex items-center ${compact ? "gap-1" : "gap-1.5"}`}>
         {NIGHT_PALETTES.map((p) => (
           <button
             key={p.id}
@@ -45,7 +51,7 @@ export default function NightPicker() {
           />
         ))}
       </div>
-      <span className="font-mono text-[10px] text-muted-strong">{active.name}</span>
+      {!compact && <span className="font-mono text-[10px] text-muted-strong">{active.name}</span>}
     </div>
   );
 }
