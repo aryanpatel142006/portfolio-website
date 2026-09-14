@@ -42,6 +42,16 @@ export const STAGE_MODELS: StageModel[] = [
     credit: "downloaded model (monitor)",
     license: "check source license before shipping",
   },
+  {
+    id: "grog",
+    name: "grog the adventurer",
+    blurb: "a frog with a torch and a bedroll twice his size",
+    src: "/models/grog.glb", // 2k textures kept: still under 1MB after Draco + WebP
+    orbit: "0deg 78deg 95%", // face, torch and pack all in view
+    exposure: 1.15,
+    credit: "downloaded model (grog the adventurer)",
+    license: "check source license before shipping",
+  },
 ];
 
 export const DEFAULT_MODEL = "computer";
