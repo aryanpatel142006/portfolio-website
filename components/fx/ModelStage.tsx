@@ -14,11 +14,11 @@ const TAU = Math.PI * 2;
 
 /** A turntable for one 3D object in the off-duty world. The viewer library
     loads only after this mounts (i.e. after the unlock) and the GLB streams
-    lazily. Left alone, the object swings side to side through about 40°
-    either way of its front, like a slow pendulum, so it moves without ever
-    showing its back. Drag it and it spins freely with momentum; a moment
-    after you let go it eases back into the swing. Zoom is off so the wheel
-    scrolls. Each coin swaps the object for one of the other two. */
+    lazily. Left alone, the object swings slowly side to side about its
+    front, never showing its back. Drag it and it is entirely yours, momentum
+    included; once it has stopped moving it eases back to the front over a
+    few seconds and the swing picks up again from rest. Zoom is off so the
+    wheel scrolls. Each coin swaps the object for one of the others. */
 export default function ModelStage() {
   const [ready, setReady] = useState(false);
   const [id, setId] = useState(DEFAULT_MODEL);
@@ -46,51 +46,83 @@ export default function ModelStage() {
     return () => window.removeEventListener(OFFDUTY_COIN_EVENT, onCoin);
   }, []);
 
-  // idle: sway around the front pose; after a drag: wait, then glide home.
-  // The target is set every frame with a slow interpolation, so the glide
-  // and the sway are the same motion at different amplitudes.
+  // Four phases. idle: a slow pendulum swing about the front pose. drag: the
+  // visitor has it, hands off. coast: they let go and the viewer's own
+  // momentum is still spinning it; we wait until the camera has been quiet
+  // for a moment. return: we ease it from wherever it stopped back to the
+  // front over a few seconds, then the swing resumes from rest.
   useEffect(() => {
     const mv = mvRef.current as MV | null;
     if (!mv) return;
     const [thetaStr, phiStr, radiusStr] = model.orbit.split(" ");
     const front = (parseFloat(thetaStr) * Math.PI) / 180;
     const still = reducedMotion();
-    let base = front; // front, plus whole turns so the way home is the short way
-    let idle = true;
+    let phase: "idle" | "drag" | "coast" | "return" = "idle";
+    let base = front; // front plus whole turns, so the way home is the short way
+    let t0 = performance.now(); // swing clock; restarts at rest after a return
+    let ret = { from: front, start: 0 };
     let raf = 0;
-    let timer = 0;
-    const t0 = performance.now();
+    let quiet = 0;
+    const ease = (k: number) => (k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2);
+    const setTheta = (theta: number) => {
+      mv.cameraOrbit = `${((theta * 180) / Math.PI).toFixed(2)}deg ${phiStr} ${radiusStr}`;
+    };
     const loop = (now: number) => {
-      if (idle) {
-        const sway = still ? 0 : Math.sin((now - t0) / 1250) * 0.7; // ±40°, ~8s per full swing
-        mv.cameraOrbit = `${(((base + sway) * 180) / Math.PI).toFixed(2)}deg ${phiStr} ${radiusStr}`;
+      if (phase === "idle") {
+        // ±40° at the target; the interpolation trims that to roughly ±30°
+        // on screen. sin(t / 2300) is a full swing every ~14s.
+        setTheta(base + (still ? 0 : Math.sin((now - t0) / 2300) * 0.7));
+      } else if (phase === "return") {
+        const k = still ? 1 : Math.min(1, (now - ret.start) / 2800);
+        setTheta(ret.from + (base - ret.from) * ease(k));
+        if (k >= 1) {
+          phase = "idle";
+          t0 = now; // sway starts from rest, no jump
+        }
       }
       raf = requestAnimationFrame(loop);
     };
+    const beginReturn = () => {
+      const cur = mv.getCameraOrbit().theta;
+      base = front + Math.round((cur - front) / TAU) * TAU;
+      ret = { from: cur, start: performance.now() };
+      phase = "return";
+    };
+    const armQuiet = () => {
+      window.clearTimeout(quiet);
+      quiet = window.setTimeout(() => {
+        if (phase === "coast") beginReturn();
+      }, 650);
+    };
     const down = () => {
-      idle = false;
-      window.clearTimeout(timer);
+      phase = "drag";
+      window.clearTimeout(quiet);
     };
     const up = () => {
-      window.clearTimeout(timer);
-      timer = window.setTimeout(() => {
-        const cur = mv.getCameraOrbit().theta;
-        base = front + Math.round((cur - front) / TAU) * TAU;
-        idle = true;
-      }, still ? 0 : 900);
+      if (phase !== "drag") return;
+      phase = "coast";
+      armQuiet();
+    };
+    // while coasting, every camera move from momentum pushes the quiet timer
+    const onCamera = (e: Event) => {
+      if (phase !== "coast") return;
+      if ((e as CustomEvent<{ source?: string }>).detail?.source !== "user-interaction") return;
+      armQuiet();
     };
     mv.addEventListener("pointerdown", down);
     mv.addEventListener("pointerup", up);
     mv.addEventListener("pointercancel", up);
     mv.addEventListener("pointerleave", up);
+    mv.addEventListener("camera-change", onCamera);
     raf = requestAnimationFrame(loop);
     return () => {
       cancelAnimationFrame(raf);
-      window.clearTimeout(timer);
+      window.clearTimeout(quiet);
       mv.removeEventListener("pointerdown", down);
       mv.removeEventListener("pointerup", up);
       mv.removeEventListener("pointercancel", up);
       mv.removeEventListener("pointerleave", up);
+      mv.removeEventListener("camera-change", onCamera);
     };
   }, [ready, model.orbit]);
 
@@ -108,7 +140,7 @@ export default function ModelStage() {
             disable-pan
             touch-action="pan-y"
             camera-orbit={model.orbit}
-            interpolation-decay={reducedMotion() ? 0 : 450}
+            interpolation-decay={reducedMotion() ? 0 : 220}
             exposure={model.exposure}
             shadow-intensity={0.7}
             shadow-softness={0.9}
