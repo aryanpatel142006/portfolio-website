@@ -27,6 +27,7 @@ declare module "react" {
         "shadow-softness"?: number | string;
         "environment-image"?: string;
         "interaction-prompt"?: string;
+        "interpolation-decay"?: number | string;
         "touch-action"?: string;
       };
     }

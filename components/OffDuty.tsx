@@ -177,8 +177,10 @@ export default function OffDuty() {
       <NightSky />
       <hr className="divider mb-12 mt-4" />
 
-      <div ref={headRef} className="mb-7 flex items-end justify-between gap-4">
-        <div>
+      {/* head: words on the left, the exit and the turntable on the right, so
+          the turntable fills the column the short intro used to leave empty */}
+      <div ref={headRef} className="mb-10 flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+        <div className="min-w-0">
           <p className="kicker mb-2">
             <span className="text-accent">appendix</span>
             <span aria-hidden> / </span>
@@ -190,62 +192,63 @@ export default function OffDuty() {
           >
             the off-duty me
           </h2>
+          <div className="mt-6">
+          {/* the coin slot: a real button. each coin reshuffles the song shelf,
+              replays the score counters, throws sparks and goes "bling" */}
+          <button
+            type="button"
+            onClick={insertCoin}
+            aria-label={`Insert coin: reshuffle the song shelf. Credits: ${credits}`}
+            className="coin-slot group relative mb-6 inline-flex items-center gap-3 font-arcade text-[9px] uppercase tracking-[0.18em] text-neon-2"
+          >
+            <span className="coin-well" aria-hidden>
+              <span key={coinDrop} className={coinDrop ? "coin coin-fall" : "coin"} />
+            </span>
+            {/* arcade score popups: "+1 credit" rises out of the slot and fades */}
+            {pops.map((id) => (
+              <span key={id} aria-hidden className="coin-pop">
+                +1 credit
+              </span>
+            ))}
+            <span>
+              {credits === 0 ? (
+                <>
+                  <span className="coin-blink">▶</span> player 1 · insert coin
+                </>
+              ) : (
+                <>
+                  credits {String(credits).padStart(2, "0")} · shelf reshuffled
+                </>
+              )}
+            </span>
+            <span
+              aria-hidden
+              className="text-[8px] text-muted opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+            >
+              {credits === 0 ? "click" : "again?"}
+            </span>
+          </button>
+          </div>
+          <p className="mt-2 max-w-md font-serif text-[17px] italic leading-relaxed text-muted-strong">
+            {offDuty.intro}
+          </p>
         </div>
-        <button
-          type="button"
-          onClick={backToWork}
-          className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border px-3.5 py-1.5 font-mono text-[11px] text-muted transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:border-accent/40 hover:text-foreground"
-        >
-          <span aria-hidden className="transition-transform duration-300 group-hover:-translate-x-0.5">
-            &larr;
-          </span>
-          back to work mode
-        </button>
+        <div className="flex w-full shrink-0 flex-col items-stretch gap-4 lg:w-[260px] lg:items-end">
+          <button
+            type="button"
+            onClick={backToWork}
+            className="group inline-flex shrink-0 items-center gap-1.5 self-start rounded-full border border-border px-3.5 py-1.5 font-mono text-[11px] text-muted transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:border-accent/40 hover:text-foreground lg:self-end"
+          >
+            <span aria-hidden className="transition-transform duration-300 group-hover:-translate-x-0.5">
+              &larr;
+            </span>
+            back to work mode
+          </button>
+          <ModelStage />
+        </div>
       </div>
 
-      {/* the coin slot: a real button. each coin reshuffles the song shelf,
-          replays the score counters, throws sparks and goes "bling" */}
-      <button
-        type="button"
-        onClick={insertCoin}
-        aria-label={`Insert coin: reshuffle the song shelf. Credits: ${credits}`}
-        className="coin-slot group relative mb-6 inline-flex items-center gap-3 font-arcade text-[9px] uppercase tracking-[0.18em] text-neon-2"
-      >
-        <span className="coin-well" aria-hidden>
-          <span key={coinDrop} className={coinDrop ? "coin coin-fall" : "coin"} />
-        </span>
-        {/* arcade score popups: "+1 credit" rises out of the slot and fades */}
-        {pops.map((id) => (
-          <span key={id} aria-hidden className="coin-pop">
-            +1 credit
-          </span>
-        ))}
-        <span>
-          {credits === 0 ? (
-            <>
-              <span className="coin-blink">▶</span> player 1 · insert coin
-            </>
-          ) : (
-            <>
-              credits {String(credits).padStart(2, "0")} · shelf reshuffled
-            </>
-          )}
-        </span>
-        <span
-          aria-hidden
-          className="text-[8px] text-muted opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-        >
-          {credits === 0 ? "click" : "again?"}
-        </span>
-      </button>
 
-      {/* intro beside the turntable: one 3D object from the shelf of things */}
-      <div className="mb-10 grid gap-8 lg:grid-cols-[1fr_340px] lg:items-start">
-        <p className="max-w-md font-serif text-[17px] italic leading-relaxed text-muted-strong">
-          {offDuty.intro}
-        </p>
-        <ModelStage />
-      </div>
 
       {/* "you found it" note for the two routes that can fire by accident */}
       {toastVia &&
