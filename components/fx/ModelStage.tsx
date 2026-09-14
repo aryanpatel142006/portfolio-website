@@ -14,10 +14,11 @@ const TAU = Math.PI * 2;
 
 /** A turntable for one 3D object in the off-duty world. The viewer library
     loads only after this mounts (i.e. after the unlock) and the GLB streams
-    lazily. Left alone, the object faces front and sways a few degrees very
-    slowly. Drag it and it spins freely with momentum; a moment after you let
-    go it glides back to the front. Zoom is off so the wheel scrolls. Each
-    coin swaps the object for one of the other two. */
+    lazily. Left alone, the object swings side to side through about 40°
+    either way of its front, like a slow pendulum, so it moves without ever
+    showing its back. Drag it and it spins freely with momentum; a moment
+    after you let go it eases back into the swing. Zoom is off so the wheel
+    scrolls. Each coin swaps the object for one of the other two. */
 export default function ModelStage() {
   const [ready, setReady] = useState(false);
   const [id, setId] = useState(DEFAULT_MODEL);
@@ -61,7 +62,7 @@ export default function ModelStage() {
     const t0 = performance.now();
     const loop = (now: number) => {
       if (idle) {
-        const sway = still ? 0 : Math.sin((now - t0) / 2600) * 0.1; // ±6°, ~16s period
+        const sway = still ? 0 : Math.sin((now - t0) / 1250) * 0.7; // ±40°, ~8s per full swing
         mv.cameraOrbit = `${(((base + sway) * 180) / Math.PI).toFixed(2)}deg ${phiStr} ${radiusStr}`;
       }
       raf = requestAnimationFrame(loop);
@@ -107,7 +108,7 @@ export default function ModelStage() {
             disable-pan
             touch-action="pan-y"
             camera-orbit={model.orbit}
-            interpolation-decay={reducedMotion() ? 0 : 1500}
+            interpolation-decay={reducedMotion() ? 0 : 450}
             exposure={model.exposure}
             shadow-intensity={0.7}
             shadow-softness={0.9}
