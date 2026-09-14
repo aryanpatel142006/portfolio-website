@@ -7,6 +7,7 @@ import NonMainstream from "@/components/NonMainstream";
 import AnimeStats from "@/components/AnimeStats";
 import NightSky from "@/components/fx/NightSky";
 import ModelStage from "@/components/fx/ModelStage";
+import NightPicker from "@/components/fx/NightPicker";
 import { playCoin } from "@/lib/coin-sound";
 import { prefetchTracks } from "@/lib/tracks-client";
 import {
@@ -198,7 +199,7 @@ export default function OffDuty() {
             type="button"
             onClick={insertCoin}
             aria-label={`Insert coin: reshuffle the song shelf. Credits: ${credits}`}
-            className="coin-slot group relative mb-6 inline-flex items-center gap-3 font-arcade text-[9px] uppercase tracking-[0.18em] text-neon-2"
+            className="coin-slot group relative mb-6 inline-flex items-center gap-3 whitespace-nowrap font-arcade text-[8px] uppercase tracking-[0.14em] text-neon-2 sm:text-[9px] sm:tracking-[0.18em]"
           >
             <span className="coin-well" aria-hidden>
               <span key={coinDrop} className={coinDrop ? "coin coin-fall" : "coin"} />
@@ -263,6 +264,10 @@ export default function OffDuty() {
             </span>
             back to work mode
           </button>
+          {/* phones have no room in the header for the palette dots */}
+          <div className="sm:hidden">
+            <NightPicker compact />
+          </div>
           <ModelStage />
         </div>
       </div>

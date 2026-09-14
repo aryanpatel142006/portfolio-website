@@ -1021,7 +1021,13 @@ html[data-mood="offduty"] .spotlight {
   );
 }
 
-/* split type: each glyph rises on its own delay, then leans off the pointer */
+/* split type: each glyph rises on its own delay, then leans off the pointer.
+   The glyph run is one unbreakable unit, so a word wraps as a word and never
+   splits mid-letter on a narrow screen. */
+.split > [aria-hidden] {
+  display: inline-block;
+  white-space: nowrap;
+}
 .char {
   display: inline-block;
   will-change: transform;

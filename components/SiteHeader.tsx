@@ -190,7 +190,11 @@ export default function SiteHeader() {
         <SectionNav />
 
         <div className="flex items-center gap-4">
-          {nightOn && <NightPicker compact />}
+          {nightOn && (
+            <div className="hidden sm:block">
+              <NightPicker compact />
+            </div>
+          )}
           <LocalTime />
           <button
             type="button"
