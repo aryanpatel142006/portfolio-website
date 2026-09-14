@@ -191,7 +191,6 @@ export default function OffDuty() {
             the off-duty me
           </h2>
         </div>
-        <div className="flex shrink-0 flex-col items-end gap-3">
         <button
           type="button"
           onClick={backToWork}
@@ -202,8 +201,6 @@ export default function OffDuty() {
           </span>
           back to work mode
         </button>
-        <NightPicker />
-        </div>
       </div>
 
       {/* the coin slot: a real button. each coin reshuffles the song shelf,
@@ -288,6 +285,15 @@ export default function OffDuty() {
                 <kbd>esc</kbd> also exits
               </span>
             </div>
+          </div>,
+          document.body,
+        )}
+
+      {/* the palette dock sits under the header for as long as the night is on */}
+      {typeof document !== "undefined" &&
+        createPortal(
+          <div className="night-dock">
+            <NightPicker />
           </div>,
           document.body,
         )}
