@@ -232,6 +232,26 @@ export default function OffDuty() {
           <p className="mt-2 max-w-md font-serif text-[17px] italic leading-relaxed text-muted-strong">
             {offDuty.intro}
           </p>
+          {/* hobbies, under the intro so the words column matches the turntable height */}
+          {offDuty.hobbies.length > 0 && (
+            <div className="mt-7">
+              <p className="mb-3 font-mono text-[11px] uppercase tracking-wider text-muted">
+                things i like when i&rsquo;m not coding
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {offDuty.hobbies.map((h, i) => (
+                  <span
+                    key={h}
+                    className={`rounded-lg border border-accent/50 bg-accent/[0.06] px-3 py-1.5 text-[12px] text-foreground shadow-[0_0_18px_-6px_var(--accent)] transition-[transform,box-shadow] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:shadow-[0_0_30px_-6px_var(--accent)] ${
+                      i % 3 === 1 ? "neon-flicker" : ""
+                    }`}
+                  >
+                    {h}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
         <div className="flex w-full shrink-0 flex-col items-stretch gap-4 lg:w-[260px] lg:items-end">
           <button
@@ -321,26 +341,6 @@ export default function OffDuty() {
       {/* anime — live AniList stats + currently watching */}
       <AnimeStats />
 
-      {/* hobbies */}
-      {offDuty.hobbies.length > 0 && (
-        <div className="mb-8">
-          <p className="mb-3 font-mono text-[11px] uppercase tracking-wider text-muted">
-            things i like when i&rsquo;m not coding
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {offDuty.hobbies.map((h, i) => (
-              <span
-                key={h}
-                className={`rounded-lg border border-accent/50 bg-accent/[0.06] px-3 py-1.5 text-[12px] text-foreground shadow-[0_0_18px_-6px_var(--accent)] transition-[transform,box-shadow] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:shadow-[0_0_30px_-6px_var(--accent)] ${
-                  i % 3 === 1 ? "neon-flicker" : ""
-                }`}
-              >
-                {h}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* non-mainstream songs — Spotify-powered shelf */}
       <NonMainstream />

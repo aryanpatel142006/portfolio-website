@@ -17,7 +17,7 @@ export const STAGE_MODELS: StageModel[] = [
     name: "old computer",
     blurb: "a hand-painted beige box and a mug of coffee",
     src: "/models/computer.glb",
-    orbit: "-20deg 80deg 105%",
+    orbit: "-20deg 80deg 88%",
     exposure: 1.2,
     credit: "downloaded model (old computer)",
     license: "check source license before shipping",
