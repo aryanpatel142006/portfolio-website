@@ -78,7 +78,7 @@ function Figure({ label, value }: { label: string; value: string }) {
   return (
     <div
       data-replay-host
-      className="arcade-card card-shimmer group relative flex flex-1 flex-col gap-2 overflow-hidden rounded-lg border border-border px-4 py-3 transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:scale-[1.02] hover:border-neon-3/60 hover:shadow-[0_0_44px_-10px_var(--accent)]"
+      className="arcade-card card-shimmer group relative flex min-w-0 flex-col gap-2 overflow-hidden rounded-lg border border-border px-4 py-3 transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:scale-[1.02] hover:border-neon-3/60 hover:shadow-[0_0_44px_-10px_var(--accent)]"
     >
       <CountUp
         value={value}
@@ -93,11 +93,11 @@ function Figure({ label, value }: { label: string; value: string }) {
 
 function StripSkeleton() {
   return (
-    <div className="flex gap-2">
-      {[0, 1, 2].map((i) => (
+    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      {[0, 1, 2, 3].map((i) => (
         <div
           key={i}
-          className="flex flex-1 flex-col gap-2 rounded-lg border border-border bg-card px-4 py-3"
+          className="flex min-w-0 flex-col gap-2 rounded-lg border border-border bg-card px-4 py-3"
         >
           <span className="h-6 w-16 animate-pulse rounded bg-card-hover" />
           <span className="h-2.5 w-20 animate-pulse rounded bg-card-hover" />
@@ -156,7 +156,8 @@ export default function AnimeStats() {
         )}
       </p>
 
-      <div className="flex flex-wrap gap-2">
+      {/* two by two on phones so the arcade digits never get clipped */}
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <Figure label="animes finished" value={nf.format(stats.count)} />
         <Figure label="episodes watched" value={nf.format(stats.episodesWatched)} />
         <Figure label="time watched" value={formatWatchTime(stats.minutesWatched)} />

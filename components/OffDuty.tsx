@@ -208,7 +208,7 @@ export default function OffDuty() {
         type="button"
         onClick={insertCoin}
         aria-label={`Insert coin: reshuffle the song shelf. Credits: ${credits}`}
-        className="coin-slot group relative mb-6 inline-flex items-center gap-3 font-arcade text-[9px] uppercase tracking-[0.18em] text-neon-2"
+        className="coin-slot group relative mb-6 inline-flex items-center gap-3 whitespace-nowrap font-arcade text-[8px] uppercase tracking-[0.14em] text-neon-2 sm:text-[9px] sm:tracking-[0.18em]"
       >
         <span className="coin-well" aria-hidden>
           <span key={coinDrop} className={coinDrop ? "coin coin-fall" : "coin"} />

@@ -178,7 +178,10 @@ function Card({ track }: { track: Track }) {
     window.clearTimeout(hold.current);
     hold.current = window.setTimeout(() => void playPreview(preview), 220);
   };
-  const onLeave = () => {
+  // mouse only: a touch tap fires pointerleave right before its click, which
+  // used to stop the clip and let the click start it again, so it never paused
+  const onLeave = (e: React.PointerEvent) => {
+    if (e.pointerType !== "mouse") return;
     window.clearTimeout(hold.current);
     if (preview) stopPreview(preview);
   };
@@ -193,21 +196,24 @@ function Card({ track }: { track: Track }) {
   const inner = (
     <>
       <Art src={track.albumArt} title={track.title} progress={progress} />
-      <div className="flex min-w-0 flex-col leading-snug">
+      <div className="flex min-w-0 flex-1 flex-col leading-snug">
         <span className="truncate font-serif text-[16px] text-foreground">
           {track.title}
         </span>
-        {track.artist && (
-          <span className="truncate font-serif text-[13px] italic text-muted">
-            {track.artist}
-          </span>
-        )}
-      </div>
-      {track.lang && (
-        <span className="lang-chip ml-1 shrink-0 self-center" aria-label={`sung in ${LANG_LABEL[track.lang]}`}>
-          {LANG_LABEL[track.lang]}
+        {/* artist and language share one line so the title keeps the width */}
+        <span className="flex min-w-0 items-baseline gap-2">
+          {track.artist && (
+            <span className="truncate font-serif text-[13px] italic text-muted">
+              {track.artist}
+            </span>
+          )}
+          {track.lang && (
+            <span className="lang-chip shrink-0" aria-label={`sung in ${LANG_LABEL[track.lang]}`}>
+              {LANG_LABEL[track.lang]}
+            </span>
+          )}
         </span>
-      )}
+      </div>
       {playing ? (
         <span
           aria-hidden
@@ -219,7 +225,7 @@ function Card({ track }: { track: Track }) {
         track.url && (
           <span
             aria-hidden
-            className="ml-auto shrink-0 self-center font-mono text-[11px] text-accent transition-transform duration-300 group-hover:translate-x-0.5"
+            className="ml-auto hidden shrink-0 self-center font-mono text-[11px] text-accent transition-transform duration-300 group-hover:translate-x-0.5 sm:inline"
           >
             ↗ play
           </span>
