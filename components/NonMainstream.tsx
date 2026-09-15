@@ -83,7 +83,6 @@ const LANG_LABEL: Record<SongLang, string> = {
   gu: "gujarati",
   pa: "punjabi",
   ta: "tamil",
-  ur: "urdu",
   jp: "japanese",
 };
 
@@ -345,7 +344,7 @@ export default function NonMainstream() {
           <div
             role="group"
             aria-label="Filter songs by language"
-            className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider"
+            className="flex flex-wrap items-center justify-end gap-1 font-mono text-[10px] uppercase tracking-wider"
           >
             {(["all", ...langs] as const).map((l) => (
               <button

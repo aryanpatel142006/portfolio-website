@@ -355,7 +355,7 @@ export type NowItem = {
 
 // A song for the "non-mainstream songs" shelf. Paste a Spotify link/URI, OR a
 // plain "Song Name — Artist" string (resolved via Spotify search server-side).
-export type SongLang = "en" | "hi" | "gu" | "pa" | "ta" | "ur" | "jp";
+export type SongLang = "en" | "hi" | "gu" | "pa" | "ta" | "jp";
 /** A Spotify link or a plain "Song — Artist" name, plus the language it's
     sung in (rendered as a small chip) and, optionally, the scene it's from. */
 export type SongEntry =
@@ -404,8 +404,6 @@ export const offDuty = {
     { src: "https://open.spotify.com/track/1u3KTMxSOXMX0cbb5BKGdc", lang: "hi", scene: "rap" }, // LOVESEXDHOKA!!! — Chaar Diwaari (not on iTunes)
     { src: "Animals — Martin Garrix", lang: "en" },
     { src: "https://open.spotify.com/track/420E2n9BEBXL8J7uYAWXtR", lang: "en", scene: "chutney" }, // Hunter — Vedesh Sookoo, Rajneesh, Shyamoo, Munna
-    // ── urdu ──
-    { src: "kidhar? — Maanu, Talal Qureshi", lang: "ur" },
     // ── punjabi ──
     { src: "Wavy — Karan Aujla", lang: "pa" },
     { src: "For A Reason — Karan Aujla", lang: "pa" },
