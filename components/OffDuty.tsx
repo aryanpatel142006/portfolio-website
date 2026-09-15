@@ -54,25 +54,41 @@ export default function OffDuty() {
     relockOffDuty({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
   }
 
-  // Konami code listener — ↑↑↓↓←→←→ B A
+  // Arrow-key unlock: five ArrowDowns in a row, and only once per page load,
+  // so keyboard scrolling can never trip it twice and can never trip it by
+  // accident with a couple of taps.
   useEffect(() => {
     let i = 0;
+    let fired = false;
     const onKey = (e: KeyboardEvent) => {
+      if (fired || e.repeat) return;
       const expected = KONAMI_SEQUENCE[i];
       if (e.key.toLowerCase() === expected.toLowerCase()) {
         i += 1;
         if (i === KONAMI_SEQUENCE.length) {
           i = 0;
+          fired = true;
           unlockOffDuty();
         }
       } else {
-        // Allow a wrong key to be the start of a fresh attempt.
         i = e.key === KONAMI_SEQUENCE[0] ? 1 : 0;
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  // Escape is always a way out of the night (unless the palette has it)
+  useEffect(() => {
+    if (!unlocked) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      if (document.querySelector('[aria-label="Command palette"]')) return;
+      relockOffDuty();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [unlocked]);
 
   // Scroll to the section the moment it's freshly revealed.
   useEffect(() => {

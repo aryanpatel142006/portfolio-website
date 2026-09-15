@@ -27,12 +27,18 @@ function enterMood() {
   themeBeforeOffDuty = root.dataset.theme;
   root.dataset.mood = MOOD;
   root.dataset.theme = "dark";
+  try {
+    sessionStorage.setItem(OFFDUTY_SESSION_KEY, "1");
+  } catch {}
 }
 
 function leaveMood() {
   const root = document.documentElement;
   if (root.dataset.mood !== MOOD) return;
   delete root.dataset.mood;
+  try {
+    sessionStorage.removeItem(OFFDUTY_SESSION_KEY);
+  } catch {}
   // Restore the pre-unlock theme unless they re-toggled while off duty.
   if (root.dataset.theme === "dark" && themeBeforeOffDuty) {
     root.dataset.theme = themeBeforeOffDuty;
@@ -122,9 +128,11 @@ export function relockOffDuty(origin?: { x: number; y: number }) {
 }
 
 /** The Konami sequence: ↑ ↑ ↓ ↓ ← → ← → B A */
-export const KONAMI_SEQUENCE = [
-  // "ArrowUp",
-  // "ArrowUp",
-  "ArrowDown",
-  "ArrowDown",
-];
+/** Five ArrowDowns in a row. Two was too easy to hit while scrolling with
+    the keyboard; five is a deliberate act. Fires once per page load. */
+export const KONAMI_SEQUENCE = ["ArrowDown", "ArrowDown", "ArrowDown", "ArrowDown", "ArrowDown"];
+
+/** Remembered across a reload so the inline script in layout.tsx can stop the
+    browser restoring a scroll position that only made sense while the (much
+    taller) night section was open. */
+export const OFFDUTY_SESSION_KEY = "offduty-open";

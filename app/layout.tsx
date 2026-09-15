@@ -52,7 +52,7 @@ export const viewport: Viewport = {
 
 /* Runs before paint: honors a saved choice, else the system preference.
    Keeping it inline (not a module) is what prevents the theme flash. */
-const themeInit = `(function(){try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}})()`;
+const themeInit = `(function(){try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}try{if(sessionStorage.getItem("offduty-open")){history.scrollRestoration="manual";sessionStorage.removeItem("offduty-open");addEventListener("load",function(){scrollTo(0,0)},{once:true})}}catch(e){}})()`;
 
 export default function RootLayout({
   children,
