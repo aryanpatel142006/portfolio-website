@@ -9,6 +9,9 @@ import { offDuty } from "@/lib/content";
  * rounding error and this is a joke, not a ledger). No key → empty list; the
  * client always has the curated pool to fall back on.
  */
+// Prerendered at build and refreshed in the background, so the first visitor
+// after a deploy never waits on the upstream resolvers.
+export const dynamic = "force-static";
 export const revalidate = 43200;
 export const maxDuration = 20;
 
