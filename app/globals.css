@@ -291,7 +291,10 @@ html[data-theme="dark"] .offduty-world {
   }
 }
 .marquee-track {
-  animation: marquee 44s linear infinite;
+  /* holds still until the hero name has finished landing (~1.5s), then
+     rolls; the icons get their beat to load and nothing competes with the
+     entrance */
+  animation: marquee 44s 1.5s linear infinite;
   width: max-content;
   /* own GPU layer — iOS Safari can fail to composite an animated child
      inside a masked ancestor without this */
