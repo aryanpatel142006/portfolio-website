@@ -114,15 +114,20 @@ export default function OffDuty() {
     return () => window.removeEventListener("keydown", onKey);
   }, [unlocked]);
 
-  // Konami code listener — ↑↑↓↓←→←→ B A
+  // Arrow-key unlock: five ArrowDowns in a row, and only once per page load,
+  // so keyboard scrolling can never trip it twice and can never trip it by
+  // accident with a couple of taps.
   useEffect(() => {
     let i = 0;
+    let fired = false;
     const onKey = (e: KeyboardEvent) => {
+      if (fired || e.repeat) return;
       const expected = KONAMI_SEQUENCE[i];
       if (e.key.toLowerCase() === expected.toLowerCase()) {
         i += 1;
         if (i === KONAMI_SEQUENCE.length) {
           i = 0;
+          fired = true;
           unlockOffDuty(undefined, "keys");
         }
       } else {
@@ -253,7 +258,7 @@ export default function OffDuty() {
             <p className="mt-1.5 text-[13px] leading-snug text-foreground">
               {toastVia === "keys" ? (
                 <>
-                  Pressing <kbd>↓</kbd> <kbd>↓</kbd> opened the off-duty side of this site.
+                  Pressing <kbd>↓</kbd> five times opened the off-duty side of this site.
                 </>
               ) : (
                 <>
