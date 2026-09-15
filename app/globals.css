@@ -1601,6 +1601,37 @@ a:focus-visible .logo-hover-spin {
     0 0 28px -14px var(--accent);
 }
 
+/* guest book */
+.guest-book textarea:focus,
+.guest-book input:focus {
+  outline: none;
+}
+.guest-book .field-focus:focus-within {
+  border-color: color-mix(in oklab, var(--accent) 55%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 14%, transparent);
+}
+/* the honeypot lives off-canvas, not display:none, so bots still see it */
+.guest-book-hp {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.guest-book-thanks {
+  animation: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes guest-dot {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+.guest-book-dot::after {
+  content: "···";
+  letter-spacing: 0.1em;
+  animation: guest-dot 0.9s ease-in-out infinite;
+}
+
 /* Reduced-motion handling was removed on purpose (2026-09-14): the owner
    wants every animation to run for everyone. See lib/fx.ts. */
 

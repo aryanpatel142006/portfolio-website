@@ -7,6 +7,7 @@ import NonMainstream from "@/components/NonMainstream";
 import AnimeStats from "@/components/AnimeStats";
 import NightSky from "@/components/fx/NightSky";
 import ModelStage from "@/components/fx/ModelStage";
+import GuestBook from "@/components/GuestBook";
 import NightPicker from "@/components/fx/NightPicker";
 import { playCoin } from "@/lib/coin-sound";
 import { prefetchTracks } from "@/lib/tracks-client";
@@ -23,7 +24,7 @@ import {
   type UnlockVia,
 } from "@/lib/offduty";
 
-export default function OffDuty() {
+export default function OffDuty({ guestBook = false }: { guestBook?: boolean }) {
   // Session-only reveal — no persistence, so a reload returns to the teaser
   // and the easter egg can be found again.
   const [unlocked, setUnlocked] = useState(false);
@@ -348,6 +349,9 @@ export default function OffDuty() {
 
       {/* non-mainstream songs — Spotify-powered shelf */}
       <NonMainstream />
+
+      {/* guest book: only when the server has somewhere to keep the notes */}
+      {guestBook && <GuestBook />}
 
       {/* closing epigraph — the easter egg's mic drop */}
       <p className="mt-10 max-w-md font-serif text-[15px] italic leading-relaxed text-muted">
