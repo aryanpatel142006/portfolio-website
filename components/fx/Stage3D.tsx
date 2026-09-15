@@ -42,8 +42,13 @@ function usePalette() {
 }
 
 /** The GLB, centered and scaled to a ~2.3 unit box, shadows on. */
-function Model({ src }: { src: string }) {
+function Model({ src, onReady }: { src: string; onReady: () => void }) {
   const { scene } = useGLTF(src);
+  // this renders only once the GLB has resolved (Suspense), so mounting IS
+  // the ready signal; the loader's own counters are unreliable with Draco
+  useEffect(() => {
+    onReady();
+  }, [onReady]);
   const prepared = useMemo(() => {
     const root = scene.clone(true);
     // Sketchfab exports often ship a huge ground/shadow plane; hide it and
@@ -182,21 +187,7 @@ function useOnScreen(ref: React.RefObject<HTMLElement | null>) {
 /** "booting turntable… 62%" over the stage until the object and its
     textures are in; shows again briefly on every coin swap. */
 function Loading() {
-  const { active, progress } = useProgress();
-  const [gone, setGone] = useState(false);
-  useEffect(() => {
-    // done when the loader has finished, or when nothing needed loading at
-    // all (object already cached: progress stays 0, active stays false)
-    if (!active) {
-      const t = window.setTimeout(() => setGone(true), progress >= 100 ? 250 : 900);
-      return () => window.clearTimeout(t);
-    }
-  }, [active, progress]);
-  useEffect(() => {
-    const t = window.setTimeout(() => setGone(true), 8000); // never stick
-    return () => window.clearTimeout(t);
-  }, []);
-  if (gone) return null;
+  const { progress } = useProgress();
   return (
     <div className="stage-loading" aria-live="polite">
       <span className="stage-loading-ring" aria-hidden />
@@ -229,6 +220,7 @@ export default function Stage3D({ model }: { model: StageModel }) {
   const front = (parseFloat(thetaStr) * Math.PI) / 180;
   const polar = (parseFloat(phiStr) * Math.PI) / 180;
   // phones and small-core machines skip ambient occlusion and render at 1x
+  const [ready, setReady] = useState(false);
   const [light] = useState(
     () =>
       typeof window !== "undefined" &&
@@ -247,7 +239,7 @@ export default function Stage3D({ model }: { model: StageModel }) {
     >
       <Suspense fallback={null}>
         <Studio />
-        <Model src={model.src} />
+        <Model src={model.src} onReady={() => setReady(true)} />
       </Suspense>
       {/* key, fill, and two rim lights in the night's neon */}
       <ambientLight intensity={0.35} />
@@ -269,7 +261,7 @@ export default function Stage3D({ model }: { model: StageModel }) {
         <Vignette eskil={false} offset={0.25} darkness={0.6} />
       </EffectComposer>
     </Canvas>
-    <Loading />
+    {!ready && <Loading />}
     </div>
   );
 }
