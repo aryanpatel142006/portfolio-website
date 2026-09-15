@@ -2,6 +2,9 @@ import { offDuty } from "@/lib/content";
 import { comparisonLines, getAnimeStats, pickComparison } from "@/lib/anilist";
 
 // Stats change slowly — cache the resolved payload for an hour.
+// Prerendered at build and refreshed in the background, so the first visitor
+// after a deploy never waits on the upstream resolvers.
+export const dynamic = "force-static";
 export const revalidate = 3600;
 
 const PLACEHOLDER = "your-username";

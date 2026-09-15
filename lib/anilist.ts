@@ -71,7 +71,7 @@ export async function getAnimeStats(username: string): Promise<AnimeStats | null
         "User-Agent": "aryan.is-a.dev portfolio (+https://aryan.is-a.dev)",
       },
       body: JSON.stringify({ query: QUERY, variables: { name } }),
-      cache: "no-store",
+      next: { revalidate: 3600 },
     });
     if (!res.ok) return null;
     json = (await res.json()) as RawResponse;

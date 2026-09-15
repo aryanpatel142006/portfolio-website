@@ -167,8 +167,8 @@ export default function SiteHeader() {
           aria-label="Aryan Patel, back to top"
           className="hitbox text-foreground transition-opacity hover:opacity-70"
         >
-          {/* the glyph turns one full revolution over the length of the page */}
-          <LogoMark size={22} className="logo-scroll-spin block" />
+          {/* the glyph leans a few degrees on hover */}
+          <LogoMark size={22} className="logo-hover-spin block" />
         </a>
 
         <SectionNav />
