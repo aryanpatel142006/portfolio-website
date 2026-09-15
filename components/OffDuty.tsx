@@ -153,6 +153,10 @@ export default function OffDuty() {
       <div id={OFFDUTY_TEASER_ID} className="mt-16 flex justify-center scroll-mt-24">
         <button
           type="button"
+          // a hover on the teaser starts fetching the 3D stage's code, so the
+          // turntable is ready by the time the click lands
+          onPointerEnter={() => void import("@/components/fx/Stage3D")}
+          onFocus={() => void import("@/components/fx/Stage3D")}
           onClick={(e) => {
             const r = e.currentTarget.getBoundingClientRect();
             unlockOffDuty({ x: r.left + r.width / 2, y: r.top + r.height / 2 });

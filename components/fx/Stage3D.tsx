@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Center, ContactShadows, Environment, OrbitControls, useGLTF } from "@react-three/drei";
+import { Center, ContactShadows, Environment, Lightformer, OrbitControls, useGLTF, useProgress } from "@react-three/drei";
 import { Bloom, EffectComposer, N8AO, ToneMapping, Vignette } from "@react-three/postprocessing";
 import { ToneMappingMode } from "postprocessing";
 import * as THREE from "three";
@@ -165,22 +165,88 @@ function Rig({ front, polar }: { front: number; polar: number }) {
   );
 }
 
+/** Only render frames while the stage is on screen; the swing costs nothing
+    when the visitor is reading the songs below. */
+function useOnScreen(ref: React.RefObject<HTMLElement | null>) {
+  const [on, setOn] = useState(true);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setOn(e.isIntersecting), { rootMargin: "80px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ref]);
+  return on;
+}
+
+/** "booting turntable… 62%" over the stage until the object and its
+    textures are in; shows again briefly on every coin swap. */
+function Loading() {
+  const { active, progress } = useProgress();
+  const [gone, setGone] = useState(false);
+  useEffect(() => {
+    // done when the loader has finished, or when nothing needed loading at
+    // all (object already cached: progress stays 0, active stays false)
+    if (!active) {
+      const t = window.setTimeout(() => setGone(true), progress >= 100 ? 250 : 900);
+      return () => window.clearTimeout(t);
+    }
+  }, [active, progress]);
+  useEffect(() => {
+    const t = window.setTimeout(() => setGone(true), 8000); // never stick
+    return () => window.clearTimeout(t);
+  }, []);
+  if (gone) return null;
+  return (
+    <div className="stage-loading" aria-live="polite">
+      <span className="stage-loading-ring" aria-hidden />
+      <span className="font-arcade text-[9px] uppercase tracking-[0.18em] text-neon-2">
+        booting turntable… {Math.round(progress)}%
+      </span>
+    </div>
+  );
+}
+
+/** A studio built from light panels instead of a downloaded HDR: a big soft
+    key overhead, a cool fill, a warm kicker, a floor bounce. Rendered once
+    into a 256px environment map, so it costs no bytes and little GPU. */
+function Studio() {
+  return (
+    <Environment resolution={256} environmentIntensity={0.9}>
+      <Lightformer form="rect" intensity={6} position={[0, 4, 2]} rotation={[-Math.PI / 2, 0, 0]} scale={[6, 4, 1]} />
+      <Lightformer form="rect" intensity={2.5} color="#dfe9ff" position={[-5, 2, 1]} rotation={[0, Math.PI / 2.4, 0]} scale={[4, 3, 1]} />
+      <Lightformer form="rect" intensity={2} color="#ffe6c8" position={[5, 1.5, -1]} rotation={[0, -Math.PI / 2.4, 0]} scale={[3, 3, 1]} />
+      <Lightformer form="rect" intensity={1.2} color="#8f8fb0" position={[0, -3, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[8, 8, 1]} />
+    </Environment>
+  );
+}
+
 export default function Stage3D({ model }: { model: StageModel }) {
   const pal = usePalette();
+  const wrap = useRef<HTMLDivElement>(null);
+  const onScreen = useOnScreen(wrap);
   const [thetaStr, phiStr] = model.orbit.split(" ");
   const front = (parseFloat(thetaStr) * Math.PI) / 180;
   const polar = (parseFloat(phiStr) * Math.PI) / 180;
+  // phones and small-core machines skip ambient occlusion and render at 1x
+  const [light] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      (matchMedia("(pointer: coarse)").matches || (navigator.hardwareConcurrency ?? 8) < 6),
+  );
 
   return (
+    <div ref={wrap} className="relative h-full w-full">
     <Canvas
       shadows
-      dpr={[1, 1.5]}
+      dpr={light ? 1 : [1, 1.5]}
+      frameloop={onScreen ? "always" : "never"}
       camera={{ fov: 30, position: [0, 0.9, DIST], near: 0.1, far: 50 }}
-      gl={{ antialias: true, alpha: true, premultipliedAlpha: false, powerPreference: "high-performance" }}
+      gl={{ antialias: !light, alpha: true, premultipliedAlpha: false, powerPreference: "high-performance" }}
       style={{ width: "100%", height: "100%" }}
     >
       <Suspense fallback={null}>
-        <Environment files="/models/studio.hdr" environmentIntensity={0.9} />
+        <Studio />
         <Model src={model.src} />
       </Suspense>
       {/* key, fill, and two rim lights in the night's neon */}
@@ -197,11 +263,13 @@ export default function Stage3D({ model }: { model: StageModel }) {
       <ContactShadows position={[0, -0.96, 0]} opacity={0.55} scale={7} blur={2.6} far={3} />
       <Rig front={front} polar={polar} />
       <EffectComposer multisampling={0} frameBufferType={THREE.HalfFloatType}>
-        <N8AO aoRadius={0.45} intensity={2.2} distanceFalloff={0.7} quality="performance" />
+        {light ? <></> : <N8AO aoRadius={0.45} intensity={2.2} distanceFalloff={0.7} quality="performance" />}
         <Bloom intensity={0.6} luminanceThreshold={0.72} luminanceSmoothing={0.25} mipmapBlur />
         <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
         <Vignette eskil={false} offset={0.25} darkness={0.6} />
       </EffectComposer>
     </Canvas>
+    <Loading />
+    </div>
   );
 }
