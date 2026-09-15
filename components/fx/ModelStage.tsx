@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+import StageBoot from "./StageBoot";
 import { DEFAULT_MODEL, STAGE_MODELS } from "@/lib/models";
 import { OFFDUTY_COIN_EVENT } from "@/lib/offduty";
 
@@ -9,12 +10,31 @@ import { OFFDUTY_COIN_EVENT } from "@/lib/offduty";
    the unlock, never on the server. */
 const Stage3D = dynamic(() => import("./Stage3D"), {
   ssr: false,
-  loading: () => (
-    <div className="flex h-full w-full items-center justify-center font-mono text-[11px] text-muted">
-      loading the turntable…
-    </div>
-  ),
+  loading: () => <StageBoot />,
 });
+
+/** The unlock sweep runs 0.85s; the stage waits for it to finish and for
+    the main thread to go quiet before it compiles its shaders, so the
+    entrance never stutters. Capped so it still shows up within ~2s on a
+    busy tab. */
+function useArmed() {
+  const [armed, setArmed] = useState(false);
+  useEffect(() => {
+    let idle = 0;
+    const t = window.setTimeout(() => {
+      if ("requestIdleCallback" in window) {
+        idle = window.requestIdleCallback(() => setArmed(true), { timeout: 1000 });
+      } else {
+        setArmed(true);
+      }
+    }, 1000);
+    return () => {
+      window.clearTimeout(t);
+      if (idle) window.cancelIdleCallback(idle);
+    };
+  }, []);
+  return armed;
+}
 
 /** A turntable for one 3D object in the off-duty world. Lit and graded like
     a proper render (HDR, rim lights in the night's neon, bloom, ambient
@@ -23,6 +43,7 @@ const Stage3D = dynamic(() => import("./Stage3D"), {
     resumes. Each coin swaps the object for one of the others. */
 export default function ModelStage() {
   const [id, setId] = useState(DEFAULT_MODEL);
+  const armed = useArmed();
   const model = STAGE_MODELS.find((m) => m.id === id) ?? STAGE_MODELS[0];
 
   // a coin deals a different object onto the turntable
@@ -39,7 +60,7 @@ export default function ModelStage() {
   return (
     <div className="model-stage-wrap">
       <div className="model-stage">
-        <Stage3D key={model.id} model={model} />
+        {armed ? <Stage3D key={model.id} model={model} /> : <StageBoot />}
         <span aria-hidden className="model-stage-floor" />
       </div>
     </div>

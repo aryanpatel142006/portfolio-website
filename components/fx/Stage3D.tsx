@@ -1,13 +1,14 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Center, ContactShadows, Environment, Lightformer, OrbitControls, useGLTF, useProgress } from "@react-three/drei";
 import { Bloom, EffectComposer, N8AO, ToneMapping, Vignette } from "@react-three/postprocessing";
 import { ToneMappingMode } from "postprocessing";
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import type { StageModel } from "@/lib/models";
+import StageBoot from "./StageBoot";
 
 /* ─────────────────────────────────────────────────────────────────────────
    A Three.js stage for one object: HDR studio light, a key light with
@@ -44,11 +45,23 @@ function usePalette() {
 /** The GLB, centered and scaled to a ~2.3 unit box, shadows on. */
 function Model({ src, onReady }: { src: string; onReady: () => void }) {
   const { scene } = useGLTF(src);
-  // this renders only once the GLB has resolved (Suspense), so mounting IS
-  // the ready signal; the loader's own counters are unreliable with Draco
+  const { gl, scene: root, camera } = useThree();
+  // this renders only once the GLB has resolved (Suspense); the object then
+  // gets its shaders compiled off the main thread where the driver allows
+  // (KHR_parallel_shader_compile) and only THEN counts as ready, so the
+  // reveal never lands on a half-built frame. The loader's own progress
+  // counters are unreliable with Draco, so they only decorate the overlay.
   useEffect(() => {
-    onReady();
-  }, [onReady]);
+    let alive = true;
+    gl.compileAsync(root, camera)
+      .catch(() => {})
+      .finally(() => {
+        if (alive) onReady();
+      });
+    return () => {
+      alive = false;
+    };
+  }, [gl, root, camera, onReady]);
   const prepared = useMemo(() => {
     const root = scene.clone(true);
     // Sketchfab exports often ship a huge ground/shadow plane; hide it and
@@ -170,6 +183,32 @@ function Rig({ front, polar }: { front: number; polar: number }) {
   );
 }
 
+/** Watches the first seconds after the reveal: a machine that cannot hold
+    ~40fps with the full stack gets the lighter one (no ambient occlusion,
+    1x pixels) once, for the rest of the session. */
+function Governor({ active, onSlow }: { active: boolean; onSlow: () => void }) {
+  const setDpr = useThree((s) => s.setDpr);
+  const samples = useRef<number[]>([]);
+  const elapsed = useRef(0);
+  const done = useRef(false);
+  useFrame((_, delta) => {
+    if (!active || done.current) return;
+    samples.current.push(delta * 1000);
+    elapsed.current += delta * 1000;
+    // judge after ~1.5s of wall time (a struggling machine produces few
+    // frames in that window, so the count alone would wait far too long)
+    if (elapsed.current < 1500 || samples.current.length < 12) return;
+    done.current = true;
+    const sorted = [...samples.current].sort((a, b) => a - b);
+    const median = sorted[Math.floor(sorted.length / 2)];
+    if (median > 25) {
+      setDpr(1);
+      onSlow();
+    }
+  });
+  return null;
+}
+
 /** Only render frames while the stage is on screen; the swing costs nothing
     when the visitor is reading the songs below. */
 function useOnScreen(ref: React.RefObject<HTMLElement | null>) {
@@ -188,14 +227,7 @@ function useOnScreen(ref: React.RefObject<HTMLElement | null>) {
     textures are in; shows again briefly on every coin swap. */
 function Loading() {
   const { progress } = useProgress();
-  return (
-    <div className="stage-loading" aria-live="polite">
-      <span className="stage-loading-ring" aria-hidden />
-      <span className="font-arcade text-[9px] uppercase tracking-[0.18em] text-neon-2">
-        booting turntable… {Math.round(progress)}%
-      </span>
-    </div>
-  );
+  return <StageBoot progress={progress} />;
 }
 
 /** A studio built from light panels instead of a downloaded HDR: a big soft
@@ -221,6 +253,7 @@ export default function Stage3D({ model }: { model: StageModel }) {
   const polar = (parseFloat(phiStr) * Math.PI) / 180;
   // phones and small-core machines skip ambient occlusion and render at 1x
   const [ready, setReady] = useState(false);
+  const [slow, setSlow] = useState(false);
   const [light] = useState(
     () =>
       typeof window !== "undefined" &&
@@ -228,7 +261,11 @@ export default function Stage3D({ model }: { model: StageModel }) {
   );
 
   return (
-    <div ref={wrap} className="relative h-full w-full">
+    <div
+      ref={wrap}
+      className={`stage-reveal relative h-full w-full ${ready ? "is-ready" : ""}`}
+      data-quality={light || slow ? "light" : "full"}
+    >
     <Canvas
       shadows
       dpr={light ? 1 : [1, 1.5]}
@@ -240,6 +277,9 @@ export default function Stage3D({ model }: { model: StageModel }) {
       <Suspense fallback={null}>
         <Studio />
         <Model src={model.src} onReady={() => setReady(true)} />
+        {/* the camera orbits and the object stays put, so the contact shadow
+            is rendered once per object instead of on every frame */}
+        <ContactShadows frames={1} position={[0, -0.96, 0]} opacity={0.55} scale={7} blur={2.6} far={3} />
       </Suspense>
       {/* key, fill, and two rim lights in the night's neon */}
       <ambientLight intensity={0.35} />
@@ -252,10 +292,10 @@ export default function Stage3D({ model }: { model: StageModel }) {
       />
       <pointLight position={[-3.2, 2.2, -2.4]} color={pal.accent} intensity={18} distance={12} />
       <pointLight position={[3.4, 0.8, -3]} color={pal.neon2} intensity={14} distance={12} />
-      <ContactShadows position={[0, -0.96, 0]} opacity={0.55} scale={7} blur={2.6} far={3} />
       <Rig front={front} polar={polar} />
+      <Governor active={ready} onSlow={() => setSlow(true)} />
       <EffectComposer multisampling={0} frameBufferType={THREE.HalfFloatType}>
-        {light ? <></> : <N8AO aoRadius={0.45} intensity={2.2} distanceFalloff={0.7} quality="performance" />}
+        {light || slow ? <></> : <N8AO aoRadius={0.45} intensity={2.2} distanceFalloff={0.7} quality="performance" />}
         <Bloom intensity={0.6} luminanceThreshold={0.72} luminanceSmoothing={0.25} mipmapBlur />
         <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
         <Vignette eskil={false} offset={0.25} darkness={0.6} />

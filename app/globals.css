@@ -418,7 +418,10 @@ html[data-mood="offduty"] body {
   }
 }
 .marquee-track {
-  animation: marquee 44s linear infinite;
+  /* holds still until the hero name has finished landing (~1.5s), then
+     rolls; the icons get their beat to load and nothing competes with the
+     entrance */
+  animation: marquee 44s 1.5s linear infinite;
   width: max-content;
   /* own GPU layer — iOS Safari can fail to composite an animated child
      inside a masked ancestor without this */
@@ -1468,6 +1471,15 @@ a:focus-visible .logo-hover-spin {
 }
 
 /* turntable boot overlay */
+/* the canvas stays invisible until the object is in and its shaders are
+   compiled, then fades up under the departing overlay */
+.stage-reveal canvas {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.stage-reveal.is-ready canvas {
+  opacity: 1;
+}
 .stage-loading {
   position: absolute;
   inset: 0;
