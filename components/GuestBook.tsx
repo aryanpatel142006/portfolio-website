@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { NIGHT_PALETTES } from "@/lib/night-palettes";
 
 /* A guest book at the bottom of the off-duty world: one note, an optional
    name, nothing else. Notes go to a private table only the owner reads;
@@ -11,6 +12,56 @@ const SENT_KEY = "guestbook-sent";
 const NOTE_MAX = 800;
 
 type Status = "idle" | "sending" | "sent" | "error" | "limited";
+type Signed = { id: number; note: string; name: string | null; night: string | null; at: string };
+
+const NIGHT_COLOR = Object.fromEntries(NIGHT_PALETTES.map((p) => [p.id, p.swatch[0]]));
+
+/** Notes the owner approved, pinned under the form like pages of a signed
+    guest book. Fetched once when the card mounts. */
+function Wall() {
+  const [notes, setNotes] = useState<Signed[] | null>(null);
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/feedback/approved")
+      .then((r) => (r.ok ? r.json() : { notes: [] }))
+      .then((d: { notes: Signed[] }) => {
+        if (alive) setNotes(d.notes ?? []);
+      })
+      .catch(() => {
+        if (alive) setNotes([]);
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+  if (!notes || notes.length === 0) return null;
+  return (
+    <div className="mt-8">
+      <p className="mb-3 font-mono text-[11px] uppercase tracking-wider text-muted">
+        from the book
+        <span className="ml-2 normal-case tracking-normal text-muted/70">· {notes.length} signed</span>
+      </p>
+      <ul className="guest-wall grid gap-3 sm:grid-cols-2">
+        {notes.map((n, i) => (
+          <li key={n.id} className="guest-leaf rounded-xl border border-border p-4" style={{ ["--i" as string]: i }}>
+            <p className="font-serif text-[15px] italic leading-relaxed text-foreground">&ldquo;{n.note}&rdquo;</p>
+            <p className="mt-3 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-muted">
+              {n.night && (
+                <span
+                  aria-hidden
+                  className="inline-block h-1.5 w-1.5 rounded-full"
+                  style={{ background: NIGHT_COLOR[n.night] ?? "currentColor" }}
+                />
+              )}
+              <span className="text-muted-strong">{n.name || "anonymous"}</span>
+              <span>{new Date(n.at).toLocaleDateString("en-US", { month: "short", year: "numeric" })}</span>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export default function GuestBook() {
   const [note, setNote] = useState("");
@@ -72,7 +123,7 @@ export default function GuestBook() {
           <div className="guest-book-thanks" role="status" aria-live="polite">
             <p className="font-arcade text-[9px] uppercase tracking-[0.18em] text-neon-2">note saved</p>
             <p className="mt-2 max-w-md text-[14px] leading-relaxed text-foreground">
-              thank you. it went straight to Aryan, nowhere else.
+              thank you. it went straight to Aryan; if he pins it, it shows up on the wall below.
             </p>
             <button
               type="button"
@@ -89,8 +140,8 @@ export default function GuestBook() {
         ) : (
           <form onSubmit={submit} className="flex flex-col gap-3">
             <p className="max-w-lg text-[14px] leading-relaxed text-muted-strong">
-              what worked, what got in the way, what you would change. read by Aryan only; a few
-              notes may be quoted on a future page, first name at most.
+              what worked, what got in the way, what you would change. read by Aryan only; the
+              ones he pins show up below, name or handle as you typed it.
             </p>
 
             <label className="sr-only" htmlFor="guest-note">
@@ -164,6 +215,7 @@ export default function GuestBook() {
           </form>
         )}
       </div>
+      <Wall />
     </div>
   );
 }

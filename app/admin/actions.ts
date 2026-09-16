@@ -27,6 +27,7 @@ export async function toggleApproved(formData: FormData) {
   const next = formData.get("next") === "1";
   if (Number.isFinite(id)) await setApproved(id, next);
   revalidatePath("/admin");
+  revalidatePath("/api/feedback/approved");
 }
 
 export async function removeNote(formData: FormData) {
@@ -34,4 +35,5 @@ export async function removeNote(formData: FormData) {
   const id = Number(formData.get("id"));
   if (Number.isFinite(id)) await deleteFeedback(id);
   revalidatePath("/admin");
+  revalidatePath("/api/feedback/approved");
 }
