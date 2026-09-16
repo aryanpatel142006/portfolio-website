@@ -46,7 +46,7 @@ function Gate({ wrong }: { wrong: boolean }) {
       <h1 className="display text-3xl text-foreground">guest book</h1>
       <form action={signIn} className="mt-8 flex flex-col gap-3">
         <label htmlFor="token" className="font-mono text-[11px] uppercase tracking-wider text-muted">
-          read token
+          password
         </label>
         <div className="field-focus flex items-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2.5">
           <span className="font-mono text-accent" aria-hidden>
@@ -60,7 +60,7 @@ function Gate({ wrong }: { wrong: boolean }) {
             required
             autoFocus
             className="min-w-0 flex-1 bg-transparent font-mono text-[13px] text-foreground placeholder:text-muted"
-            placeholder="paste FEEDBACK_READ_TOKEN"
+            placeholder="••••••••"
           />
         </div>
         {wrong && (

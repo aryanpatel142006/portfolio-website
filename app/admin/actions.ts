@@ -2,17 +2,17 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { grantAdmin, isAdmin, revokeAdmin, tokenMatches } from "@/lib/admin";
+import { grantAdmin, isAdmin, passwordMatches, revokeAdmin } from "@/lib/admin";
 import { deleteFeedback, setApproved } from "@/lib/feedback";
 
 export async function signIn(formData: FormData) {
-  const token = String(formData.get("token") ?? "").trim();
-  if (!tokenMatches(token)) {
-    // a small pause makes guessing pointless without needing a lockout
-    await new Promise((r) => setTimeout(r, 800));
+  const password = String(formData.get("token") ?? "").trim();
+  if (!passwordMatches(password)) {
+    // a pause on every miss keeps guessing slow without a lockout
+    await new Promise((r) => setTimeout(r, 1500));
     redirect("/admin?wrong=1");
   }
-  await grantAdmin(token);
+  await grantAdmin();
   redirect("/admin");
 }
 
