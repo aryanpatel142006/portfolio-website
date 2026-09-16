@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useSyncExternalStore } from "react";
+import { usePathname } from "next/navigation";
 import { Moon, SunMedium } from "lucide-react";
 import { motion } from "motion/react";
 import LogoMark from "./LogoMark";
@@ -71,12 +72,14 @@ function SectionNav() {
     };
   }, []);
 
+  // from any other page (/admin) the anchors have to travel home first
+  const onHome = usePathname() === "/";
   return (
     <nav aria-label="Sections" className="flex items-center gap-4 sm:gap-5">
       {NAV.map(([label, href]) => (
         <a
           key={href}
-          href={href}
+          href={onHome ? href : `/${href}`}
           aria-current={active === href ? "true" : undefined}
           className="draw-link hitbox relative font-mono text-[11px] lowercase tracking-[0.1em] text-muted transition-colors hover:text-foreground aria-[current]:text-foreground"
         >
@@ -174,12 +177,13 @@ function ThemeToggle() {
 }
 
 export default function SiteHeader() {
+  const onHome = usePathname() === "/";
   const nightOn = useNightOn();
   return (
     <header className="header-in sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex w-[94%] items-center justify-between py-3 sm:w-[90%] lg:w-[82%] xl:w-[70%] 2xl:w-[58%]">
         <a
-          href="#top"
+          href={onHome ? "#top" : "/"}
           aria-label="Aryan Patel, back to top"
           className="hitbox text-foreground transition-opacity hover:opacity-70"
         >

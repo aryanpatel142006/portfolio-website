@@ -1,5 +1,6 @@
 import { isNight } from "@/lib/night-palettes";
 import { feedbackEnabled, hashIp, insertFeedback, listFeedback, recentCount } from "@/lib/feedback";
+import { isAdmin, tokenMatches } from "@/lib/admin";
 
 /* The off-duty guest book.
    POST: one note from a visitor (no login; length caps, a honeypot, and a
@@ -60,10 +61,10 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: Request) {
-  const token = process.env.FEEDBACK_READ_TOKEN;
   const url = new URL(req.url);
   const given = req.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ?? url.searchParams.get("token");
-  if (!token || !given || given !== token) {
+  // the bearer token, or the /admin cookie
+  if (!tokenMatches(given) && !(await isAdmin())) {
     return new Response("not found", { status: 404 });
   }
   if (!feedbackEnabled()) return Response.json({ enabled: false, rows: [] });

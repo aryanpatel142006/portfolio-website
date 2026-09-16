@@ -109,3 +109,28 @@ export async function hashIp(ip: string): Promise<string> {
   const digest = await crypto.subtle.digest("SHA-256", bytes);
   return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("");
 }
+
+/** Flip the showcase flag on one note. */
+export async function setApproved(id: number, approved: boolean): Promise<void> {
+  const e = env();
+  if (!e) throw new Error("feedback disabled");
+  const res = await fetch(`${e.url}/rest/v1/${TABLE}?id=eq.${Number(id)}`, {
+    method: "PATCH",
+    headers: headers(e.key, { Prefer: "return=minimal" }),
+    body: JSON.stringify({ approved }),
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`supabase patch ${res.status}`);
+}
+
+/** Remove one note for good. */
+export async function deleteFeedback(id: number): Promise<void> {
+  const e = env();
+  if (!e) throw new Error("feedback disabled");
+  const res = await fetch(`${e.url}/rest/v1/${TABLE}?id=eq.${Number(id)}`, {
+    method: "DELETE",
+    headers: headers(e.key, { Prefer: "return=minimal" }),
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`supabase delete ${res.status}`);
+}
