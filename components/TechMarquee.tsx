@@ -1,4 +1,5 @@
 import SectionHeading from "./SectionHeading";
+import MarqueeSpeed from "./fx/MarqueeSpeed";
 
 // Devicon glyphs are an icon font that inherits `currentColor`, so we style them
 // monochrome ink instead of their default brand colors. Each entry uses the
@@ -38,6 +39,7 @@ export default function TechMarquee() {
   return (
     <section aria-label="Tech stack">
       <SectionHeading index="01" label="the toolkit" />
+      <MarqueeSpeed />
 
       {/* Compact belt, the header row of the skills exhibit below. The
           hovered icon's name appears as a caption BELOW it, inside the belt's

@@ -45,7 +45,7 @@ export default function HeroPhoto({
     if (count.current >= CLICKS_TO_UNLOCK) {
       count.current = 0;
       // the unlock event shows the cat itself — don't toggle it back off
-      unlockOffDuty({ x: e.clientX, y: e.clientY });
+      unlockOffDuty({ x: e.clientX, y: e.clientY }, "photo");
       return;
     }
     if (photoHover) setShowCat((c) => !c);

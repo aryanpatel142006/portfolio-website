@@ -2,6 +2,7 @@ import { opensNewTab, profile, socials } from "@/lib/content";
 import Magnetic from "./Magnetic";
 import Reveal from "./Reveal";
 import { ArrowUpRight } from "./icons";
+import SplitText from "./fx/SplitText";
 
 export default function Footer() {
   const email = socials
@@ -14,14 +15,19 @@ export default function Footer() {
       <hr className="divider divider-draw" />
 
       <Reveal className="py-16 sm:py-20">
-        <h2 className="display relative text-5xl text-foreground sm:text-6xl md:text-7xl">
+        <h2
+          data-repel-zone
+          className="display relative text-5xl text-foreground sm:text-6xl md:text-7xl"
+        >
           <span aria-hidden className="folio sm:top-[1.4rem] md:top-[1.75rem]">
             06
           </span>
-          Looking for a
+          <SplitText text="Looking for a" stagger={22} />
           <br />
-          <span className="draw-word italic text-accent">summer 2027</span>{" "}
-          internship.
+          <span className="draw-word italic text-accent">
+            <SplitText text="summer 2027" delay={280} stagger={22} />
+          </span>{" "}
+          <SplitText text="internship." delay={540} stagger={22} />
         </h2>
 
         <p className="mt-6 max-w-md text-[14px] leading-relaxed text-muted-strong">

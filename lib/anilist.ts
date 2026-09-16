@@ -71,7 +71,7 @@ export async function getAnimeStats(username: string): Promise<AnimeStats | null
         "User-Agent": "aryan.is-a.dev portfolio (+https://aryan.is-a.dev)",
       },
       body: JSON.stringify({ query: QUERY, variables: { name } }),
-      cache: "no-store",
+      next: { revalidate: 3600 },
     });
     if (!res.ok) return null;
     json = (await res.json()) as RawResponse;
@@ -118,13 +118,62 @@ type Comparison = { hours: number; line: string };
 
 // Ordered by threshold. pickComparison filters to entries whose hours ≤ actual.
 const MILESTONES: Comparison[] = [
-  { hours: 40, line: "could've learned to solve a rubik's cube blindfolded" },
-  { hours: 100, line: "could've gotten conversational in spanish" },
-  { hours: 250, line: "could've run 10 marathons (with training)" },
+  // the table starts at 300 hours: the total only grows, and a comparison
+  // only lands when the feat takes roughly as long as the hours watched
+  { hours: 300, line: "could've hiked the appalachian trail. the whole thing" },
+  { hours: 300, line: "could've memorized pi to a thousand digits and had time left over" },
+  { hours: 350, line: "could've learned enough japanese to skip the subtitles" },
+  { hours: 400, line: "could've gotten an amateur radio license and called the iss" },
+  { hours: 400, line: "could've baked ten thousand cookies. i checked the math" },
+  { hours: 450, line: "could've watched the sun rise every day for over a year" },
   { hours: 500, line: "could've gotten a private pilot license" },
+  { hours: 500, line: "could've learned to draw well enough to make my own anime" },
+  { hours: 550, line: "could've done a full semester of college classes, twice" },
+  { hours: 600, line: "could've learned to sail and crossed the atlantic" },
+  { hours: 600, line: "could've trained for and finished an ironman" },
+  { hours: 700, line: "could've built a cabin from scratch. a small one" },
+  { hours: 750, line: "could've become fluent in gujarati folk lyrics. all of them" },
+  { hours: 800, line: "could've watched every mcu movie fifteen times, which nobody should" },
+  { hours: 800, line: "could've learned to speak python fluently. oh wait, i did" },
+  { hours: 900, line: "could've driven from new jersey to california twelve times" },
   { hours: 1000, line: "could've built this website ~200 times" },
+  { hours: 1000, line: "could've earned a black belt in judo" },
+  { hours: 1000, line: "could've learned to play the piano properly, not just the intro" },
+  { hours: 1100, line: "could've written three novels and regretted all of them" },
+  { hours: 1200, line: "could've listened to every song ever released in a year. roughly" },
+  { hours: 1200, line: "could've become a certified sommelier and still not liked wine" },
+  { hours: 1300, line: "could've restored a vintage car with no prior experience" },
+  // thousands
+  { hours: 1500, line: "could've gotten a commercial pilot license and flown myself to japan" },
+  { hours: 1500, line: "could've learned mandarin to a working level" },
+  { hours: 1800, line: "could've completed an entire coding bootcamp, twice" },
   { hours: 2000, line: "could've walked across the US" },
+  { hours: 2000, line: "could've trained for the olympics. results not guaranteed" },
+  { hours: 2500, line: "could've earned a master's degree. a real one" },
+  { hours: 3000, line: "could've become a licensed electrician" },
+  { hours: 4000, line: "could've done the 10,000-hour rule, almost halfway" },
+  { hours: 5000, line: "could've circumnavigated the globe on foot, if oceans allowed" },
 ];
+
+/** Every milestone line the hours qualify for, shortest first. The client
+    deals a new one each time a coin drops. */
+/** A comparison lands when the feat takes roughly as long as the hours
+    watched: keep milestones between 40% of the total and the total itself.
+    If that band is somehow empty, fall back to everything smaller. */
+function eligible(hours: number, table: Comparison[]): Comparison[] {
+  const band = table.filter((m) => m.hours <= hours && m.hours >= hours * 0.4);
+  const pool = band.length > 0 ? band : table.filter((m) => m.hours <= hours);
+  return [...pool].sort((a, b) => a.hours - b.hours);
+}
+
+export function comparisonLines(
+  minutes: number,
+  custom?: Comparison[],
+): { hours: number; lines: string[] } {
+  const hours = Math.round(minutes / 60);
+  const table = custom && custom.length > 0 ? custom : MILESTONES;
+  return { hours, lines: eligible(hours, table).map((m) => m.line) };
+}
 
 /**
  * Build the playful "that's N hours — i could've X instead lol" line. Picks
@@ -140,16 +189,14 @@ export function pickComparison(
   if (hours <= 0) return null;
 
   const table = custom && custom.length > 0 ? custom : MILESTONES;
-  const eligible = table
-    .filter((m) => hours >= m.hours)
-    .sort((a, b) => a.hours - b.hours);
-  if (eligible.length === 0) return null;
+  const pool = eligible(hours, table);
+  if (pool.length === 0) return null;
 
   // Rotate daily among the eligible milestones.
   const now = new Date();
   const start = new Date(now.getFullYear(), 0, 0);
   const dayOfYear = Math.floor((now.getTime() - start.getTime()) / 86_400_000);
-  const pick = eligible[dayOfYear % eligible.length];
+  const pick = pool[dayOfYear % pool.length];
 
   return { hours, line: pick.line };
 }

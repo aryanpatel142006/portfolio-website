@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import CountUp from "./fx/CountUp";
+import { OFFDUTY_COIN_EVENT } from "@/lib/offduty";
 
 type AnimeData = {
   enabled: boolean;
@@ -9,7 +11,50 @@ type AnimeData = {
   stats?: { count: number; episodesWatched: number; minutesWatched: number };
   watchingCount?: number;
   comparison?: { hours: number; line: string } | null;
+  comparisons?: string[]; // every line the hours qualify for
 };
+
+/** "that's N hours. i could've X instead lol", re-dealt on every coin with a
+    quick slide so the change reads as a new card being turned over. */
+function Comparison({ hours, first, pool }: { hours: number; first: string; pool: string[] }) {
+  const [line, setLine] = useState(first);
+  const [deal, setDeal] = useState(0);
+  const [fresh, setFresh] = useState<string[]>([]);
+
+  // a dozen model-written lines join the curated pool once they arrive
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/quips")
+      .then((r) => (r.ok ? r.json() : { lines: [] }))
+      .then((d: { lines?: string[] }) => {
+        if (alive && d.lines?.length) setFresh(d.lines);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const all = [...new Set([...pool, ...fresh])];
+    const onCoin = () => {
+      const others = all.filter((l) => l !== line);
+      if (others.length === 0) return;
+      setLine(others[Math.floor(Math.random() * others.length)]);
+      setDeal((d) => d + 1);
+    };
+    window.addEventListener(OFFDUTY_COIN_EVENT, onCoin);
+    return () => window.removeEventListener(OFFDUTY_COIN_EVENT, onCoin);
+  }, [pool, fresh, line]);
+  return (
+    <p
+      key={deal}
+      className={`mt-3 max-w-md font-serif text-[15px] italic leading-relaxed text-muted-strong ${deal ? "line-deal" : ""}`}
+    >
+      that&rsquo;s {nf.format(hours)} hours. i {line} instead lol
+    </p>
+  );
+}
 
 // "2026-09-09" → "Sep 2026" (month-level is honest enough for a fallback)
 function formatSynced(iso: string): string {
@@ -31,9 +76,15 @@ const nf = new Intl.NumberFormat("en-US");
 
 function Figure({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex flex-1 flex-col gap-1 rounded-lg border border-border bg-card px-4 py-3 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:border-accent/40 hover:bg-accent/[0.08]">
-      <span className="font-serif text-2xl text-foreground">{value}</span>
-      <span className="font-mono text-[10px] uppercase leading-tight tracking-wide text-muted">
+    <div
+      data-replay-host
+      className="arcade-card card-shimmer group relative flex min-w-0 flex-col gap-2 overflow-hidden rounded-lg border border-border px-4 py-3 transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:scale-[1.02] hover:border-neon-3/60 hover:shadow-[0_0_44px_-10px_var(--accent)]"
+    >
+      <CountUp
+        value={value}
+        className="font-arcade text-[17px] leading-tight text-neon-3 transition-[text-shadow,letter-spacing] duration-300 group-hover:tracking-wider group-hover:[text-shadow:0_0_14px_var(--neon-3)] sm:text-[19px]"
+      />
+      <span className="font-mono text-[10px] uppercase leading-tight tracking-wide text-muted transition-colors duration-300 group-hover:text-neon-2">
         {label}
       </span>
     </div>
@@ -42,11 +93,11 @@ function Figure({ label, value }: { label: string; value: string }) {
 
 function StripSkeleton() {
   return (
-    <div className="flex gap-2">
-      {[0, 1, 2].map((i) => (
+    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      {[0, 1, 2, 3].map((i) => (
         <div
           key={i}
-          className="flex flex-1 flex-col gap-2 rounded-lg border border-border bg-card px-4 py-3"
+          className="flex min-w-0 flex-col gap-2 rounded-lg border border-border bg-card px-4 py-3"
         >
           <span className="h-6 w-16 animate-pulse rounded bg-card-hover" />
           <span className="h-2.5 w-20 animate-pulse rounded bg-card-hover" />
@@ -92,7 +143,7 @@ export default function AnimeStats() {
   // Hide entirely when disabled, private, or errored — never look broken.
   if (!data?.enabled || !data.stats) return null;
 
-  const { stats, watchingCount, comparison, live, syncedAt } = data;
+  const { stats, watchingCount, comparison, comparisons, live, syncedAt } = data;
 
   return (
     <div className="mb-8">
@@ -105,7 +156,8 @@ export default function AnimeStats() {
         )}
       </p>
 
-      <div className="flex flex-wrap gap-2">
+      {/* two by two on phones so the arcade digits never get clipped */}
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <Figure label="animes finished" value={nf.format(stats.count)} />
         <Figure label="episodes watched" value={nf.format(stats.episodesWatched)} />
         <Figure label="time watched" value={formatWatchTime(stats.minutesWatched)} />
@@ -115,10 +167,11 @@ export default function AnimeStats() {
       </div>
 
       {comparison && (
-        <p className="mt-3 max-w-md font-serif text-[15px] italic leading-relaxed text-muted-strong">
-          that&rsquo;s {nf.format(comparison.hours)} hours. i {comparison.line}{" "}
-          instead lol
-        </p>
+        <Comparison
+          hours={comparison.hours}
+          first={comparison.line}
+          pool={comparisons ?? [comparison.line]}
+        />
       )}
     </div>
   );

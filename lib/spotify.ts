@@ -7,12 +7,25 @@
  * by free (non-Premium) accounts, even on public endpoints. No token needed.
  */
 
+import type { SongEntry, SongLang } from "@/lib/content";
+
 export type Track = {
   title: string;
   artist: string;
   albumArt: string | null;
   url: string | null;
+  previewUrl: string | null; // ~30s clip (Spotify's own, else iTunes) for hover previews
+  lang?: SongLang; // from the content entry, shown as a chip
+  scene?: string;
 };
+
+/** Normalize a content entry to its lookup string + tags. */
+export function entrySrc(e: SongEntry): string {
+  return typeof e === "string" ? e : e.src;
+}
+function entryTags(e: SongEntry): { lang?: SongLang; scene?: string } {
+  return typeof e === "string" ? {} : { lang: e.lang, scene: e.scene };
+}
 
 // ── parsing ────────────────────────────────────────────────────────────────
 
@@ -48,14 +61,33 @@ type EmbedEntity = {
   subtitle?: string;
   artists?: EmbedArtist[];
   visualIdentity?: { image?: EmbedImage[] };
+  audioPreview?: { url?: string | null } | null;
 };
 
-/** Pick the largest album-art URL from the embed's image set. */
+/** iTunes Search is the fallback source for preview clips when Spotify's
+    embed data doesn't carry one. Best-effort: any failure is just null. */
+async function itunesPreview(term: string): Promise<string | null> {
+  try {
+    const res = await fetch(
+      `${ITUNES}?term=${encodeURIComponent(term)}&entity=song&limit=1`,
+      { next: { revalidate: 86400 } },
+    );
+    if (!res.ok) return null;
+    const json = (await res.json()) as { results?: { previewUrl?: string }[] };
+    return json.results?.[0]?.previewUrl ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** Pick the SMALLEST album art that is still crisp at 48px on a 2x screen
+    (≥ 96px wide). The 640px covers were ~150KB each for a thumbnail. */
 function bestImage(images: EmbedImage[] | undefined): string | null {
   if (!images?.length) return null;
   const withUrl = images.filter((i) => i.url);
   if (!withUrl.length) return null;
-  return withUrl.reduce((a, b) => ((b.maxWidth ?? 0) > (a.maxWidth ?? 0) ? b : a)).url ?? null;
+  const fit = withUrl.filter((i) => (i.maxWidth ?? 0) >= 96).sort((a, b) => (a.maxWidth ?? 0) - (b.maxWidth ?? 0));
+  return (fit[0] ?? withUrl.reduce((a, b) => ((b.maxWidth ?? 0) > (a.maxWidth ?? 0) ? b : a))).url ?? null;
 }
 
 /** Resolve a Spotify track URL/URI to a card via its embed page (no auth). */
@@ -67,7 +99,7 @@ async function resolveByUrl(input: string): Promise<Track | null> {
   let html: string | null = null;
   for (let attempt = 0; attempt < 3; attempt++) {
     const res = await fetch(`https://open.spotify.com/embed/track/${id}`, {
-      cache: "no-store",
+      next: { revalidate: 86400 },
       headers: { "User-Agent": "Mozilla/5.0" },
     });
     if (res.ok) {
@@ -105,6 +137,8 @@ async function resolveByUrl(input: string): Promise<Track | null> {
     artist,
     albumArt: bestImage(entity.visualIdentity?.image),
     url: spotifyUrl,
+    previewUrl:
+      entity.audioPreview?.url ?? (await itunesPreview(`${entity.title} ${artist}`)),
   };
 }
 
@@ -113,6 +147,7 @@ type ITunesResult = {
   artistName?: string;
   artworkUrl100?: string;
   trackViewUrl?: string;
+  previewUrl?: string;
 };
 
 /** Resolve a plain "Song — Artist" name to a card via the iTunes Search API. */
@@ -121,7 +156,7 @@ async function resolveByName(query: string): Promise<Track | null> {
   const term = query.replace(/\s+[—–-]\s+/g, " ").trim();
   const res = await fetch(
     `${ITUNES}?term=${encodeURIComponent(term)}&entity=song&limit=1`,
-    { cache: "no-store" },
+    { next: { revalidate: 86400 } },
   );
   if (!res.ok) return null;
   const json = (await res.json()) as { results?: ITunesResult[] };
@@ -131,8 +166,9 @@ async function resolveByName(query: string): Promise<Track | null> {
     title: r.trackName,
     artist: r.artistName ?? "",
     // Bump the 100px thumbnail up to a crisp 300px cover.
-    albumArt: r.artworkUrl100?.replace(/100x100bb\.jpg$/, "300x300bb.jpg") ?? null,
+    albumArt: r.artworkUrl100 ?? null, // 100px is plenty for a 48px thumbnail
     url: r.trackViewUrl ?? null,
+    previewUrl: r.previewUrl ?? null,
   };
 }
 
@@ -143,19 +179,21 @@ async function resolveByName(query: string): Promise<Track | null> {
  * card). URL entries are resolved in small batches with a short gap to stay
  * polite; order is preserved by resolving against the original indices.
  */
-export async function getTracks(list: string[]): Promise<Track[]> {
+export async function getTracks(list: SongEntry[]): Promise<Track[]> {
   const results = new Array<Track | null>(list.length).fill(null);
   const BATCH = 4;
 
   for (let i = 0; i < list.length; i += BATCH) {
     const slice = list.slice(i, i + BATCH);
     const resolved = await Promise.all(
-      slice.map((entry) =>
-        parseTrackId(entry) ? resolveByUrl(entry) : resolveByName(entry),
-      ),
+      slice.map(async (entry) => {
+        const src = entrySrc(entry);
+        const t = parseTrackId(src) ? await resolveByUrl(src) : await resolveByName(src);
+        return t ? { ...t, ...entryTags(entry) } : null;
+      }),
     );
     resolved.forEach((t, j) => (results[i + j] = t));
-    if (i + BATCH < list.length) await sleep(300);
+    if (i + BATCH < list.length) await sleep(150);
   }
 
   return results.filter((t): t is Track => t !== null);

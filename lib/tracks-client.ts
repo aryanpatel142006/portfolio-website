@@ -13,6 +13,9 @@ export type Track = {
   artist: string;
   albumArt: string | null;
   url: string | null;
+  previewUrl: string | null;
+  lang?: "en" | "hi" | "gu" | "pa" | "ta" | "jp";
+  scene?: string;
 };
 
 let tracksPromise: Promise<Track[]> | null = null;

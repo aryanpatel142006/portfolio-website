@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
       // API routes and the analytics proxy carry nothing worth indexing.
-      disallow: ["/api/", "/ingest/"],
+      disallow: ["/api/", "/ingest/", "/admin"],
     },
     sitemap: `${SITE}/sitemap.xml`,
   };

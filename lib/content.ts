@@ -355,7 +355,12 @@ export type NowItem = {
 
 // A song for the "non-mainstream songs" shelf. Paste a Spotify link/URI, OR a
 // plain "Song Name — Artist" string (resolved via Spotify search server-side).
-export type SongEntry = string;
+export type SongLang = "en" | "hi" | "gu" | "pa" | "ta" | "jp";
+/** A Spotify link or a plain "Song — Artist" name, plus the language it's
+    sung in (rendered as a small chip) and, optionally, the scene it's from. */
+export type SongEntry =
+  | string
+  | { src: string; lang: SongLang; scene?: string };
 
 export const offDuty = {
   // A short, human intro line shown under the heading.
@@ -376,25 +381,60 @@ export const offDuty = {
   //    (open.spotify.com/track/… or spotify:track:…) OR plain "Song — Artist"
   //    names. Server resolves album art + artist via the Spotify API. ──
   nonMainstream: [
-    "https://open.spotify.com/track/3StShCGECtZMW2yp9XkFYv", // THER IT IS
-    "https://open.spotify.com/track/1Xp2sxCBpDFCcerKKh1ik7", // MAJJA NI LIFE
-    "https://open.spotify.com/track/4N7LGbba3i05Ymt3lUN4IT", // car keys — Tsumyoki, Venserto, lil help
-    "https://open.spotify.com/track/6vH6xKa1vh9ihWrLYZAmU8?autoplay_ok=1", // Banda kaam ka
-    "https://open.spotify.com/track/0pMACt1jSBlH8mKdaE1TSv", // Don't even text - gini
-    "https://open.spotify.com/track/4TFYFMssJiMwREPUauwWbt", // SAVEEREN
+    { src: "https://open.spotify.com/track/3StShCGECtZMW2yp9XkFYv", lang: "en" }, // There It Is
+    { src: "https://open.spotify.com/track/1Xp2sxCBpDFCcerKKh1ik7", lang: "gu" }, // Majja Ni Life
+    { src: "https://open.spotify.com/track/4N7LGbba3i05Ymt3lUN4IT", lang: "en" }, // car keys — Tsumyoki
+    { src: "https://open.spotify.com/track/6vH6xKa1vh9ihWrLYZAmU8", lang: "hi" }, // Banda Kaam Ka
+    { src: "https://open.spotify.com/track/0pMACt1jSBlH8mKdaE1TSv", lang: "en" }, // Don't Even Text — gini
+    { src: "https://open.spotify.com/track/4TFYFMssJiMwREPUauwWbt", lang: "hi" }, // Saanvare
 
     // ── desi indie / bollymood deep cuts ──
-    "https://open.spotify.com/track/2oSnGQbI4tZxImmCs2c4PP", // Nasamajh — Aditya Rikhari
-    "https://open.spotify.com/track/7eQoMQdE4JqngwYDOqLBU0", // Superstar — dox, JASKARAN, Rita Kim
-    // ── japanese city pop (JAP) ──
-    "https://open.spotify.com/album/48I17j8JwxGEe2FQAiQ75P", // STAY WITH ME
-    "https://open.spotify.com/track/3x4378ztiLvFmm2nuzEI0C", // EVENGELION
-    "https://open.spotify.com/track/0kdqcbwei4MDWFEX5f33yG", // bling bang bang born
-    "https://open.spotify.com/track/1rN9QoVxw5U7TJkyaUR8C1", // TOKYO GOHUL OPENING
-    "https://open.spotify.com/track/6bfjEGSR7DyC8MK8cp3ZCp", // Blood Blockade Battlefront (S1 ED)
+    { src: "https://open.spotify.com/track/2oSnGQbI4tZxImmCs2c4PP", lang: "hi" }, // Nasamajh — Aditya Rikhari
+    { src: "https://open.spotify.com/track/7eQoMQdE4JqngwYDOqLBU0", lang: "pa" }, // Superstar — dox, JASKARAN, Rita Kim
+    { src: "Samjho Na — Aditya Rikhari", lang: "hi" },
+    { src: "Girlfriend — Dino James", lang: "hi", scene: "rap" },
+    { src: "I Guess — KR$NA", lang: "hi", scene: "rap" },
+    { src: "https://open.spotify.com/track/1g6nQTE5x7eLJX7tXCTiSz", lang: "hi", scene: "rap" }, // Boom Shaka — KR$NA, Dhanda Nyoliwala
+    { src: "Big Dawgs — Hanumankind", lang: "en", scene: "rap" },
+    { src: "RAAT KHATAM — Dashmusic", lang: "hi" }, // feat. KAAR; say so if you meant the Neil-Niraj film song
+    { src: "Nafrat — Seedhe Maut", lang: "hi", scene: "rap" }, // Darshan Raval also has a "Nafrat"; swap the artist if that's the one
+    { src: "Gujju Pataka — Meet Bros", lang: "hi" }, // from Satyaprem Ki Katha; Hindi with Gujarati flavor, retag "gu" if you'd rather
+    { src: "Aaj Na — Ritviz", lang: "hi" },
+    { src: "https://open.spotify.com/track/7hSPAHaEqQwfRvJ0QtvSeu", lang: "hi" }, // Gaya Gaya — Dorwin John
+    { src: "https://open.spotify.com/track/1u3KTMxSOXMX0cbb5BKGdc", lang: "hi", scene: "rap" }, // LOVESEXDHOKA!!! — Chaar Diwaari (not on iTunes)
+    { src: "Animals — Martin Garrix", lang: "en" },
+    { src: "https://open.spotify.com/track/420E2n9BEBXL8J7uYAWXtR", lang: "en", scene: "chutney" }, // Hunter — Vedesh Sookoo, Rajneesh, Shyamoo, Munna
+    // ── punjabi ──
+    { src: "Wavy — Karan Aujla", lang: "pa" },
+    { src: "For A Reason — Karan Aujla", lang: "pa" },
+    { src: "Dil Nu — AP Dhillon", lang: "pa" }, // AP Dhillon & Shinda Kahlon; say so if you meant Maninder Buttar's
+    { src: "Boyfriend — Karan Aujla", lang: "pa" },
+    { src: "9:45 — Prabh Singh", lang: "pa" }, // Prabh Singh & Jay Trak
+    { src: "Tauba Tauba — Karan Aujla", lang: "pa" }, // from Bad Newz
+    { src: "Lover — Diljit Dosanjh", lang: "pa" },
+    // ── japanese: city pop + anime ──
+    { src: "Stay With Me — Miki Matsubara", lang: "jp", scene: "city pop" }, // (album links don't resolve; the name does)
+    { src: "https://open.spotify.com/track/3x4378ztiLvFmm2nuzEI0C", lang: "jp", scene: "anime op" }, // Cruel Angel's Thesis
+    { src: "https://open.spotify.com/track/0kdqcbwei4MDWFEX5f33yG", lang: "jp", scene: "anime op" }, // Bling-Bang-Bang-Born
+    { src: "https://open.spotify.com/track/1rN9QoVxw5U7TJkyaUR8C1", lang: "jp", scene: "anime op" }, // unravel (Tokyo Ghoul)
+    { src: "https://open.spotify.com/track/6bfjEGSR7DyC8MK8cp3ZCp", lang: "jp", scene: "anime ed" }, // Sugar Song to Bitter Step
     // ── rap ──
-    "https://open.spotify.com/track/1Jsos1mzwTwYGOndYN5h8V", // Farebi — Chaar Diwaari, Raftaar
-    "https://open.spotify.com/track/7CVw4gVPpH1TPQttQGVmhZ", // Maharani — Karun, Lambo Drive, Arpit Bala
+    { src: "https://open.spotify.com/track/1Jsos1mzwTwYGOndYN5h8V", lang: "hi", scene: "rap" }, // Farebi — Chaar Diwaari, Raftaar
+    { src: "https://open.spotify.com/track/7CVw4gVPpH1TPQttQGVmhZ", lang: "hi", scene: "rap" }, // Maharani — Karun, Lambo Drive
+
+    // ── gujarati ──
+    { src: "Luv Ni Love Storys — Aditya Gadhvi", lang: "gu" },
+    { src: "Tari Madh Mithi Madh Mithi Vaate", lang: "gu" },
+    { src: "Mane Malje", lang: "gu" },
+    { src: "Ramo Re", lang: "gu" },
+    { src: "Gori Radha Ne Kalo Kaan — Kirtidan Gadhvi", lang: "gu", scene: "garba" }, // the artist keeps it off the covers
+    { src: "Khalasi — Aditya Gadhvi", lang: "gu" },
+    { src: "Radha Ne Kaan Kare Vaat — Aditya Gadhvi", lang: "gu", scene: "garba" },
+    { src: "Maar To Mele", lang: "gu" }, // resolves to the Ishani Dave cut; add "— Geeta Rabari" if you meant hers
+    { src: "Dwarikadhish Ne Khamma", lang: "gu" },
+    { src: "Helo Maro — Sachin-Jigar", lang: "gu" },
+    { src: "Dakla 2 Extended Mix — Bandish Projekt", lang: "gu", scene: "garba" }, // plain "Dakla 2" lands on the original Dakla
+
   ] as SongEntry[],
 
   // ── anime stats — live from AniList (public profile, no auth needed). ──

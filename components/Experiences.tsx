@@ -24,7 +24,9 @@ export default function Experiences() {
         </p>
       </Reveal>
 
-      <div className="flex flex-col">
+      <div className="relative flex flex-col">
+        {/* the timeline rule draws itself down the gutter as the list is read */}
+        <span aria-hidden className="timeline hidden sm:block" />
         {experiences.map((exp, i) => (
           <Reveal
             key={exp.role + exp.org}

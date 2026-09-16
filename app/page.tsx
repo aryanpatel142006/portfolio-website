@@ -9,6 +9,7 @@ import Recognition from "@/components/Recognition";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import OffDuty from "@/components/OffDuty";
+import { feedbackEnabled } from "@/lib/feedback";
 
 export default function Home() {
   return (
@@ -45,7 +46,7 @@ export default function Home() {
       </Reveal>
 
       {/* Hidden until unlocked (⌘K "whoami" · tap the photo 5× · Konami code) */}
-      <OffDuty />
+      <OffDuty guestBook={feedbackEnabled()} />
 
       <Footer />
     </main>

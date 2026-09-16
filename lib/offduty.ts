@@ -8,11 +8,23 @@
  */
 
 import { flushSync } from "react-dom";
+import { DEFAULT_NIGHT, NIGHT_KEY, isNight } from "@/lib/night-palettes";
 
 export const OFFDUTY_UNLOCK_EVENT = "offduty:unlock";
 export const OFFDUTY_RELOCK_EVENT = "offduty:relock";
 export const OFFDUTY_ANCHOR_LABEL = "Off duty";
 export const OFFDUTY_TEASER_ID = "offduty";
+/** "insert coin": reshuffles the shelf, replays the counters, throws sparks */
+export const OFFDUTY_COIN_EVENT = "offduty:coin";
+/** generic spark burst request: detail { x, y, count? } */
+export const FX_SPARKS_EVENT = "fx:sparks";
+
+/** How the unlock happened. Deliberate routes (the teaser button, the ⌘K
+    command) need no explanation; the two that can fire by accident (arrow
+    keys while scrolling, repeated taps on the photo) get a toast that says
+    what just happened and how to get back. */
+export type UnlockVia = "click" | "palette" | "keys" | "photo";
+export type UnlockDetail = { x?: number; y?: number; via: UnlockVia };
 
 /* ── Mood: the whole page changes theme the moment off-duty opens ──────
    html[data-mood="offduty"] re-tints every token (see globals.css) and the
@@ -21,11 +33,33 @@ export const OFFDUTY_TEASER_ID = "offduty";
 const MOOD = "offduty";
 let themeBeforeOffDuty: string | undefined;
 
+/** Which palette the night opens on: ?night= in the URL wins, then the
+    remembered choice, then the default. */
+function currentNight(): string {
+  try {
+    const q = new URLSearchParams(location.search).get(NIGHT_KEY);
+    if (isNight(q)) return q;
+    const saved = localStorage.getItem(NIGHT_KEY);
+    if (isNight(saved)) return saved;
+  } catch {}
+  return DEFAULT_NIGHT;
+}
+
+/** Re-pigment the night world. Remembered for next time. */
+export function setNight(id: string) {
+  if (!isNight(id)) return;
+  document.documentElement.dataset.night = id;
+  try {
+    localStorage.setItem(NIGHT_KEY, id);
+  } catch {}
+}
+
 function enterMood() {
   const root = document.documentElement;
   if (root.dataset.mood === MOOD) return;
   themeBeforeOffDuty = root.dataset.theme;
   root.dataset.mood = MOOD;
+  root.dataset.night = currentNight();
   root.dataset.theme = "dark";
   try {
     sessionStorage.setItem(OFFDUTY_SESSION_KEY, "1");
@@ -36,6 +70,7 @@ function leaveMood() {
   const root = document.documentElement;
   if (root.dataset.mood !== MOOD) return;
   delete root.dataset.mood;
+  delete root.dataset.night;
   try {
     sessionStorage.removeItem(OFFDUTY_SESSION_KEY);
   } catch {}
@@ -78,10 +113,16 @@ function sweep(
     the state flip AND an instant jump to the section happen inside the
     transition, so the sweep uncovers the lamplight world already in place.
     Without the API (or when already unlocked) it's the plain event. */
-export function unlockOffDuty(origin?: { x: number; y: number }) {
+export function unlockOffDuty(
+  origin?: { x: number; y: number },
+  via: UnlockVia = "click",
+) {
   const fire = () => {
     enterMood();
-    window.dispatchEvent(new CustomEvent(OFFDUTY_UNLOCK_EVENT));
+    // the origin rides along so the spark burst can start where the click
+    // was; `via` lets the section explain an accidental unlock
+    const detail: UnlockDetail = { ...origin, via };
+    window.dispatchEvent(new CustomEvent(OFFDUTY_UNLOCK_EVENT, { detail }));
   };
 
   const alreadyUnlocked = !!document.querySelector(

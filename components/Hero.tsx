@@ -2,30 +2,38 @@ import { opensNewTab, profile, statusBadges, socials } from "@/lib/content";
 import HeroPhoto from "./HeroPhoto";
 import LogoMark from "./LogoMark";
 import { ArrowUpRight } from "./icons";
+import SplitText from "./fx/SplitText";
+import Scramble from "./fx/Scramble";
+import Tilt from "./fx/Tilt";
 
 export default function Hero() {
   return (
     <section aria-label="Introduction" className="pt-4 sm:pt-10">
       <p className="rise kicker">
-        portfolio · {profile.location.toLowerCase()}
+        <Scramble text={`portfolio · ${profile.location.toLowerCase()}`} />
       </p>
 
       <div className="mt-6 flex flex-col-reverse items-start gap-10 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-3xl">
-          <h1 className="display text-[17vw] text-foreground sm:text-7xl md:text-8xl xl:text-[7rem]">
+          <h1
+            data-repel-zone
+            className="display text-[17vw] text-foreground sm:text-7xl md:text-8xl xl:text-[7rem]"
+          >
             <span className="sr-only">Aryan Patel.</span>
             {/* visual layer: the hand-drawn glyph stands in for the first A;
-                each line rises out of its own mask, the period lands last */}
+                every other glyph rises out of the line's mask on its own
+                beat and leans away from the pointer once it's landed */}
             <span aria-hidden>
               <span className="line-mask">
-                <span className="line-rise">
+                <span className="inline-block">
                   <LogoMark size="0.74em" className="inline-block mr-[-0.1em]" />
-                  ryan
+                  <SplitText text="ryan" delay={90} stagger={45} repel />
                 </span>
               </span>
               <span className="line-mask">
-                <span className="line-rise line-rise-2">
-                  Patel<span className="dot-pop text-accent">.</span>
+                <span className="inline-block">
+                  <SplitText text="Patel" delay={330} stagger={45} repel />
+                  <span className="dot-pop text-accent">.</span>
                 </span>
               </span>
             </span>
@@ -78,11 +86,13 @@ export default function Hero() {
 
         {profile.photo && (
           <div className="polaroid-in">
-            <HeroPhoto
-              photo={profile.photo}
-              photoHover={profile.photoHover}
-              name={profile.name}
-            />
+            <Tilt max={7} glare={false}>
+              <HeroPhoto
+                photo={profile.photo}
+                photoHover={profile.photoHover}
+                name={profile.name}
+              />
+            </Tilt>
           </div>
         )}
       </div>
