@@ -67,6 +67,7 @@ export default function GuestBook() {
   const [note, setNote] = useState("");
   const [name, setName] = useState("");
   const [website, setWebsite] = useState(""); // honeypot
+  const [anon, setAnon] = useState(false);
   // a visitor who already wrote this session sees the thank-you, not a
   // blank form, when they scroll back. This card only ever mounts after the
   // client-side unlock, so reading sessionStorage here cannot mismatch SSR.
@@ -91,6 +92,7 @@ export default function GuestBook() {
           note: text,
           name: name.trim(),
           website,
+          anonymous: anon,
           night: document.documentElement.dataset.night ?? null,
           path: location.pathname,
         }),
@@ -130,6 +132,7 @@ export default function GuestBook() {
               onClick={() => {
                 setNote("");
                 setName("");
+                setAnon(false);
                 setStatus("idle");
               }}
               className="mt-3 font-mono text-[11px] text-muted transition-colors hover:text-foreground"
@@ -189,6 +192,17 @@ export default function GuestBook() {
                 autoComplete="off"
               />
             </div>
+
+            <label className="guest-anon inline-flex w-fit cursor-pointer items-center gap-2.5 font-mono text-[11px] text-muted-strong">
+              <input
+                type="checkbox"
+                checked={anon}
+                onChange={(e) => setAnon(e.target.checked)}
+                className="peer sr-only"
+              />
+              <span aria-hidden className="guest-check" />
+              keep me anonymous if it gets pinned
+            </label>
 
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               <button

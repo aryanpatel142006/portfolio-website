@@ -1619,6 +1619,43 @@ a:focus-visible .logo-hover-spin {
   height: 1px;
   overflow: hidden;
 }
+/* the anonymity check: a small square that fills with the accent */
+.guest-check {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  border: 1px solid color-mix(in oklab, var(--accent) 55%, var(--border));
+  background: color-mix(in oklab, var(--surface) 60%, transparent);
+  transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.guest-check::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid var(--accent-contrast);
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.peer:checked ~ .guest-check {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.peer:checked ~ .guest-check::after {
+  transform: rotate(45deg) scale(1);
+}
+.peer:focus-visible ~ .guest-check {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 25%, transparent);
+}
+.guest-anon:hover .guest-check {
+  border-color: var(--accent);
+}
+
 /* signed pages: each leaf fades in on its own beat, tinted by the night */
 .guest-leaf {
   background: color-mix(in oklab, var(--surface) 70%, transparent);

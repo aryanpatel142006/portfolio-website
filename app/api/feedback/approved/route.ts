@@ -13,7 +13,13 @@ export async function GET() {
   try {
     const rows = await listFeedback({ approvedOnly: true, limit: 24 });
     return Response.json({
-      notes: rows.map((r) => ({ id: r.id, note: r.note, name: r.name, night: r.night, at: r.created_at })),
+      notes: rows.map((r) => ({
+        id: r.id,
+        note: r.note,
+        name: r.anonymous ? null : r.name,
+        night: r.night,
+        at: r.created_at,
+      })),
     });
   } catch {
     return Response.json({ notes: [] });

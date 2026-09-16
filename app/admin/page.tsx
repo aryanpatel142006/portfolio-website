@@ -85,6 +85,11 @@ function Note({ row }: { row: FeedbackRow }) {
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <p className="flex flex-wrap items-baseline gap-x-2 font-mono text-[11px] text-muted">
           <span className="text-foreground">{row.name || "anonymous"}</span>
+          {row.anonymous && (
+            <span className="rounded-full border border-border px-1.5 py-px text-[10px] uppercase tracking-wider">
+              wants anon
+            </span>
+          )}
           <span>{when(row.created_at)}</span>
           {row.night && (
             <span className="inline-flex items-center gap-1.5">

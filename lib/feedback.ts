@@ -12,6 +12,7 @@ export type FeedbackRow = {
   path: string | null;
   ua: string | null;
   approved: boolean;
+  anonymous: boolean; // show "anonymous" on the wall even if a name was given
 };
 
 export type FeedbackInsert = Omit<FeedbackRow, "id" | "created_at" | "approved"> & {
@@ -77,7 +78,7 @@ export async function listFeedback(opts: { approvedOnly?: boolean; limit?: numbe
   const e = env();
   if (!e) return [];
   const q = new URLSearchParams({
-    select: "id,created_at,note,name,night,path,ua,approved",
+    select: "id,created_at,note,name,night,path,ua,approved,anonymous",
     order: "created_at.desc",
     limit: String(Math.min(opts.limit ?? 500, 1000)),
   });

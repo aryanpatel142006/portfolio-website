@@ -11,7 +11,8 @@ create table if not exists public.feedback (
   path        text,                 -- page path, for a future multi-page site
   ua          text,                 -- browser, truncated
   ip_hash     text,                 -- salted sha-256 of the IP, for rate limits only
-  approved    boolean not null default false  -- flip by hand to feature a note
+  approved    boolean not null default false, -- flip by hand to feature a note
+  anonymous   boolean not null default false  -- visitor asked to be unnamed on the wall
 );
 
 create index if not exists feedback_created_at_idx on public.feedback (created_at desc);

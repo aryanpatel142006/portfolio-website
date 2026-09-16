@@ -16,7 +16,14 @@ const NOTE_MAX = 800;
 const NAME_MAX = 40;
 const PER_HOUR = 3;
 
-type Body = { note?: unknown; name?: unknown; night?: unknown; path?: unknown; website?: unknown };
+type Body = {
+  note?: unknown;
+  name?: unknown;
+  night?: unknown;
+  path?: unknown;
+  website?: unknown;
+  anonymous?: unknown;
+};
 
 function clientIp(req: Request): string {
   const fwd = req.headers.get("x-forwarded-for");
@@ -46,13 +53,14 @@ export async function POST(req: Request) {
   const night = typeof body.night === "string" && isNight(body.night) ? body.night : null;
   const path = typeof body.path === "string" ? body.path.slice(0, 120) : null;
   const ua = req.headers.get("user-agent")?.slice(0, 200) ?? null;
+  const anonymous = body.anonymous === true;
 
   try {
     const ip_hash = await hashIp(clientIp(req));
     if ((await recentCount(ip_hash, 60 * 60 * 1000)) >= PER_HOUR) {
       return Response.json({ ok: false, reason: "slow down" }, { status: 429 });
     }
-    await insertFeedback({ note, name: name || null, night, path, ua, ip_hash });
+    await insertFeedback({ note, name: name || null, night, path, ua, ip_hash, anonymous });
     return Response.json({ ok: true });
   } catch (err) {
     console.error("[feedback]", err);
